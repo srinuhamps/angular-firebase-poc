@@ -1,0 +1,236 @@
+@use '../admin-shared' as adm;
+
+// ─── Page ─────────────────────────────────────────────────────────────────────
+
+.gallery-page {
+  @include adm.page-base;
+
+  &__header  { @include adm.page-header; }
+  &__title   { @include adm.page-title; }
+  &__subtitle{ @include adm.page-subtitle; }
+  &__msg {
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.9rem;
+    margin-top: 2rem;
+    text-align: center;
+  }
+}
+
+// ─── Upload Card ──────────────────────────────────────────────────────────────
+
+.upload-card {
+  background: #1a1512;
+  border: 1px solid rgba(212, 175, 100, 0.15);
+  border-radius: 12px;
+  padding: 1.75rem 2rem;
+  margin-bottom: 2.5rem;
+
+  &__heading {
+    font-family: var(--font-heading, 'Roboto Slab', serif);
+    font-size: 1.1rem;
+    color: var(--color-gold, #d4af64);
+    margin: 0 0 1.5rem;
+  }
+
+  &__body {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 2rem;
+    align-items: start;
+
+    @media (max-width: 600px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__preview {
+    width: 160px;
+    height: 160px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid rgba(212, 175, 100, 0.2);
+    background: #111;
+
+    @media (max-width: 600px) {
+      width: 100%;
+      height: 200px;
+    }
+  }
+
+  &__thumb {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  &__placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    color: rgba(255, 255, 255, 0.3);
+    font-size: 0.8rem;
+  }
+
+  &__placeholder-icon {
+    font-size: 2rem;
+    opacity: 0.4;
+  }
+
+  &__fields {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  &__error {
+    color: #e57373;
+    font-size: 0.82rem;
+    margin: 0;
+  }
+}
+
+// ─── Field styles ─────────────────────────────────────────────────────────────
+
+.field-label {
+  @include adm.form-label;
+}
+
+.field-file {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.7);
+  padding: 0.5rem 0;
+  cursor: pointer;
+
+  &:disabled { opacity: 0.55; cursor: not-allowed; }
+
+  &::file-selector-button {
+    background: rgba(212, 175, 100, 0.1);
+    border: 1px solid rgba(212, 175, 100, 0.3);
+    color: var(--color-gold, #d4af64);
+    padding: 0.3rem 0.8rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    margin-right: 0.75rem;
+    transition: background 0.15s;
+
+    &:hover { background: rgba(212, 175, 100, 0.2); }
+  }
+}
+
+.field-input {
+  @include adm.form-input;
+}
+
+// ─── Upload progress ──────────────────────────────────────────────────────────
+
+.upload-progress {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 0.25rem;
+
+  &__bar {
+    height: 100%;
+    background: var(--color-gold, #d4af64);
+    border-radius: 4px;
+    transition: width 0.2s linear;
+  }
+}
+
+.upload-progress__label {
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.45);
+  margin: 0.25rem 0 0;
+}
+
+// ─── Buttons ──────────────────────────────────────────────────────────────────
+
+.btn-upload {
+  @include adm.action-btn;
+  align-self: flex-start;
+  margin-top: 0.5rem;
+}
+
+.btn-copy {
+  @include adm.tbl-btn;
+  @include adm.tbl-btn-edit;
+
+  &--done {
+    background: rgba(100, 212, 150, 0.12);
+    border-color: rgba(100, 212, 150, 0.35);
+    color: #81c995;
+  }
+}
+
+.btn-delete {
+  @include adm.tbl-btn;
+  @include adm.tbl-btn-del;
+}
+
+// ─── Media Grid ───────────────────────────────────────────────────────────────
+
+.media-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1.25rem;
+}
+
+.media-card {
+  background: #1a1512;
+  border: 1px solid rgba(212, 175, 100, 0.12);
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: border-color 0.2s;
+
+  &:hover { border-color: rgba(212, 175, 100, 0.3); }
+
+  &__img-wrap {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: #111;
+    flex-shrink: 0;
+  }
+
+  &__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease;
+
+    .media-card:hover & { transform: scale(1.04); }
+  }
+
+  &__body {
+    padding: 0.85rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    flex: 1;
+  }
+
+  &__title {
+    font-size: 0.88rem;
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+}

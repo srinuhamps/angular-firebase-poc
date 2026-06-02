@@ -1,0 +1,202 @@
+:host { display: block; }
+
+.page-hero {
+  position: relative;
+  padding: 9rem 0 5rem;
+  text-align: center;
+  &__overlay { position: absolute; inset: 0; background: rgba(10,10,10,0.55); }
+  &__content {
+    position: relative; z-index: 1;
+    display: flex; flex-direction: column; align-items: center; gap: 1rem;
+    animation: fadeInUp 0.8s var(--ease-smooth) both;
+  }
+}
+
+.contact-hero {
+  background:
+    linear-gradient(180deg, rgba(10,10,10,0.8) 0%, rgba(10,10,10,0.55) 100%),
+    url('https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?w=1920&q=80')
+    center/cover no-repeat;
+}
+
+// Main layout
+.ct-main {
+  &__inner {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 5rem;
+    align-items: start;
+  }
+}
+
+// Info panel
+.ct-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+
+  &__block {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  &__icon {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: rgba(201,169,110,0.1);
+    border: 1px solid var(--color-border);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--color-gold);
+    flex-shrink: 0;
+  }
+
+  &__label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-gold);
+    margin-bottom: 0.25rem;
+  }
+
+  &__val {
+    font-size: 0.925rem;
+    color: var(--color-text-dim);
+    line-height: 1.65;
+  }
+
+  &__link {
+    font-size: 0.925rem;
+    color: var(--color-text-dim);
+    transition: color var(--t-base);
+    &:hover { color: var(--color-gold); }
+  }
+}
+
+// Hours table
+.ct-hours {
+  background: var(--color-dark);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  padding: 1.25rem 1.5rem;
+
+  &__title {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--color-gold);
+    margin-bottom: 1rem;
+  }
+
+  &__row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.45rem 0;
+    border-bottom: 1px solid var(--color-border-light);
+
+    &:last-child { border-bottom: none; }
+
+    &.closed {
+      .ct-hours__day, .ct-hours__time { color: var(--color-text-muted); }
+    }
+  }
+
+  &__day {
+    font-size: 0.82rem;
+    color: var(--color-text-dim);
+    font-weight: 500;
+  }
+
+  &__time {
+    font-size: 0.82rem;
+    color: var(--color-cream);
+    font-weight: 500;
+  }
+}
+
+// Form card
+.ct-form-card {
+  padding: 2.5rem;
+}
+
+.ct-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  margin-top: 1.5rem;
+
+  &__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  &__error {
+    color: #f87171;
+    font-size: 0.75rem;
+    margin-top: 0.35rem;
+  }
+}
+
+// Success state
+.ct-form__success {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1rem;
+  padding: 2rem 0;
+
+  &-icon {
+    width: 64px; height: 64px;
+    border-radius: 50%;
+    background: rgba(201,169,110,0.12);
+    border: 2px solid var(--color-gold);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.75rem;
+    color: var(--color-gold);
+    font-family: var(--font-heading);
+  }
+}
+
+// Map
+.ct-map {
+  height: 380px;
+  background: var(--color-charcoal);
+  border-top: 1px solid var(--color-border-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &__placeholder {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  &__addr {
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    color: var(--color-cream);
+  }
+
+  &__note {
+    font-size: 0.78rem;
+    color: var(--color-text-muted);
+    font-style: italic;
+  }
+}
+
+@media (max-width: 900px) {
+  .ct-main__inner { grid-template-columns: 1fr; gap: 3rem; }
+}
+
+@media (max-width: 560px) {
+  .ct-form__row { grid-template-columns: 1fr; }
+  .ct-form-card { padding: 1.5rem; }
+}

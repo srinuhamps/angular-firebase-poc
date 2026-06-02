@@ -1,0 +1,118 @@
+:host { display: block; }
+
+.booking-placeholder {
+  position: relative;
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  background:
+    linear-gradient(160deg, rgba(10,10,10,0.92) 0%, rgba(20,14,6,0.88) 100%),
+    url('https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=1920&q=80')
+    center/cover no-repeat;
+
+  &__overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(10,10,10,0.5);
+  }
+
+  &__content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 2rem;
+    padding: 6rem 0 4rem;
+    animation: fadeInUp 0.9s var(--ease-smooth) both;
+  }
+
+  &__badge {
+    display: inline-block;
+    padding: 0.45rem 1.25rem;
+    border-radius: var(--radius-full);
+    background: rgba(201,169,110,0.12);
+    border: 1px solid rgba(201,169,110,0.35);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-gold);
+  }
+
+  &__cta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+    margin-top: 1rem;
+  }
+
+  &__cta-text {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    letter-spacing: 0.05em;
+  }
+
+  &__btns {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+
+    .btn { display: flex; align-items: center; gap: 0.5rem; }
+  }
+}
+
+// Steps
+.booking-steps {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 2rem 0;
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  &__num {
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    background: rgba(201,169,110,0.1);
+    border: 1.5px solid rgba(201,169,110,0.4);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-gold);
+  }
+
+  &__label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    text-align: center;
+  }
+
+  &__divider {
+    color: var(--color-gold);
+    opacity: 0.4;
+    font-size: 1.25rem;
+    align-self: flex-start;
+    margin-top: 1rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .booking-steps { gap: 0.5rem; }
+  .booking-steps__divider { display: none; }
+  .booking-placeholder__btns { flex-direction: column; }
+}

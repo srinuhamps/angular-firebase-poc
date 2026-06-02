@@ -1,0 +1,56 @@
+<!-- Page Hero -->
+<section class="page-hero products-hero">
+  <div class="page-hero__overlay"></div>
+  <div class="container page-hero__content">
+    <p class="eyebrow">Beauty Supply</p>
+    <h1 class="heading-1">Premium Products</h1>
+    <p class="subheading">
+      Curated hair care essentials, braiding hair, extensions, and accessories.
+      <br>Everything your hair loves — all in one place.
+    </p>
+  </div>
+</section>
+
+<!-- Filters -->
+<div class="prd-filters">
+  <div class="container prd-filters__inner">
+    @for (f of filters; track f.value) {
+      <button
+        class="prd-filters__btn"
+        [class.active]="activeFilter() === f.value"
+        (click)="setFilter(f.value)"
+      >{{ f.label }}</button>
+    }
+  </div>
+</div>
+
+<!-- Products Grid -->
+<section class="section bg-dark">
+  <div class="container">
+    @if (filteredProducts.length > 0) {
+      <div class="prd-grid">
+        @for (product of filteredProducts; track product.id; let i = $index) {
+          <div class="reveal reveal-d{{ (i % 4) + 1 }}">
+            <app-product-card [product]="product" />
+          </div>
+        }
+      </div>
+    } @else {
+      <div class="prd-empty">No products found in this category.</div>
+    }
+  </div>
+</section>
+
+<!-- Visit In-Store Banner -->
+<section class="section prd-store bg-charcoal reveal">
+  <div class="container prd-store__inner">
+    <div class="prd-store__icon" aria-hidden="true">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    </div>
+    <div class="prd-store__text">
+      <h3 class="heading-3">Visit Our Beauty Supply</h3>
+      <p class="subheading">Come browse our full selection in-store. We carry many more products than shown here, and our staff can help find the perfect match for your hair type.</p>
+    </div>
+    <a class="btn btn-primary btn-lg" [routerLink]="'/contact'">Get Directions</a>
+  </div>
+</section>

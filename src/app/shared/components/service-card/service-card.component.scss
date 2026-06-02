@@ -1,0 +1,148 @@
+:host { display: block; height: 100%; }
+
+.service-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-dark);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: transform var(--t-base), box-shadow var(--t-base), border-color var(--t-base);
+
+  &:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--color-border);
+
+    .service-card__img { transform: scale(1.06); }
+  }
+
+  &.featured { border-color: rgba(201, 169, 110, 0.25); }
+
+  // Image
+  &__img-wrap {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 16/10;
+    flex-shrink: 0;
+  }
+
+  &__img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform 0.7s var(--ease-smooth);
+  }
+
+  &__badge {
+    position: absolute;
+    top: 1rem; left: 1rem;
+  }
+
+  &__unavailable {
+    position: absolute;
+    inset: 0;
+    background: rgba(10,10,10,0.65);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-text-dim);
+  }
+
+  &__category {
+    position: absolute;
+    bottom: 0.75rem; right: 0.75rem;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--color-black);
+    background: var(--color-gold);
+    padding: 0.25rem 0.65rem;
+    border-radius: var(--radius-full);
+  }
+
+  // Body
+  &__body {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    flex: 1;
+  }
+
+  &__name {
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--color-cream);
+    line-height: 1.3;
+  }
+
+  &__desc {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    line-height: 1.6;
+    flex: 1;
+  }
+
+  // Meta row
+  &__meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.75rem 0;
+    border-top: 1px solid var(--color-border-light);
+    border-bottom: 1px solid var(--color-border-light);
+  }
+
+  &__meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.8rem;
+    color: var(--color-text-dim);
+
+    svg { color: var(--color-gold); flex-shrink: 0; }
+  }
+
+  &__price {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+  }
+
+  &__price-from {
+    font-size: 0.65rem;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  &__price-value {
+    font-family: var(--font-heading);
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: var(--color-gold);
+    line-height: 1;
+  }
+
+  // Actions
+  &__actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: auto;
+
+    .btn { flex: 1; justify-content: center; }
+
+    .disabled {
+      opacity: 0.45;
+      pointer-events: none;
+    }
+  }
+}

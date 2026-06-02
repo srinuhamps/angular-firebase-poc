@@ -1,0 +1,187 @@
+:host { display: block; }
+
+.page-hero {
+  position: relative;
+  padding: 9rem 0 5rem;
+  text-align: center;
+  &__overlay { position: absolute; inset: 0; background: rgba(10,10,10,0.55); }
+  &__content {
+    position: relative; z-index: 1;
+    display: flex; flex-direction: column; align-items: center; gap: 1rem;
+    animation: fadeInUp 0.8s var(--ease-smooth) both;
+  }
+}
+
+.gallery-hero {
+  background:
+    linear-gradient(180deg, rgba(10,10,10,0.75) 0%, rgba(10,10,10,0.5) 100%),
+    url('https://images.unsplash.com/photo-1562322140-8baeececf3df?w=1920&q=80')
+    center/cover no-repeat;
+}
+
+.gal-filters {
+  background: var(--color-charcoal);
+  border-bottom: 1px solid var(--color-border-light);
+  position: sticky;
+  top: 70px;
+  z-index: var(--z-above);
+
+  &__inner {
+    display: flex;
+    gap: 0.25rem;
+    overflow-x: auto;
+    padding: 0.75rem 0;
+    scrollbar-width: none;
+    &::-webkit-scrollbar { display: none; }
+  }
+
+  &__btn {
+    padding: 0.55rem 1.25rem;
+    border-radius: var(--radius-full);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    background: transparent;
+    border: 1px solid transparent;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all var(--t-base);
+
+    &:hover { color: var(--color-gold); border-color: var(--color-border); }
+    &.active { color: var(--color-black); background: var(--color-gold); border-color: var(--color-gold); }
+  }
+}
+
+.gal-grid {
+  columns: 4;
+  column-gap: 1rem;
+  @media (max-width: 1100px) { columns: 3; }
+  @media (max-width: 768px)  { columns: 2; }
+  @media (max-width: 480px)  { columns: 1; }
+}
+
+.gal-item {
+  display: block;
+  position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  cursor: pointer;
+  margin-bottom: 1rem;
+  break-inside: avoid;
+  border: none;
+  padding: 0;
+  background: transparent;
+  width: 100%;
+
+  img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.6s var(--ease-smooth);
+  }
+
+  &:hover img { transform: scale(1.05); }
+  &:hover .gal-item__overlay { opacity: 1; }
+
+  &__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 30%, rgba(10,10,10,0.88) 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-start;
+    padding: 1rem;
+    gap: 0.4rem;
+    opacity: 0;
+    transition: opacity var(--t-base);
+  }
+
+  &__title {
+    font-family: var(--font-heading);
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--color-cream);
+    text-align: left;
+  }
+
+  &__cat { text-transform: capitalize; font-size: 0.65rem; }
+
+  &__zoom {
+    position: absolute;
+    top: 0.75rem; right: 0.75rem;
+    color: var(--color-gold);
+    opacity: 0.9;
+  }
+}
+
+.gal-empty {
+  text-align: center;
+  padding: 4rem;
+  color: var(--color-text-muted);
+  font-family: var(--font-subheading);
+  font-style: italic;
+}
+
+// Lightbox
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: calc(var(--z-modal, 900) + 10);
+  background: rgba(5, 4, 3, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.25s var(--ease-smooth) both;
+  cursor: pointer;
+
+  &__close {
+    position: absolute;
+    top: 1.25rem; right: 1.25rem;
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid var(--color-border-light);
+    color: var(--color-cream);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background var(--t-base), color var(--t-base);
+    z-index: 1;
+
+    &:hover { background: var(--color-gold); color: var(--color-black); border-color: var(--color-gold); }
+  }
+
+  &__inner {
+    cursor: default;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    max-width: 90vw;
+    max-height: 90vh;
+  }
+
+  &__img {
+    max-width: 100%;
+    max-height: 78vh;
+    border-radius: var(--radius-lg);
+    object-fit: contain;
+    box-shadow: 0 32px 64px rgba(0,0,0,0.8);
+  }
+
+  &__caption {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  &__caption-title {
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    color: var(--color-cream);
+  }
+}

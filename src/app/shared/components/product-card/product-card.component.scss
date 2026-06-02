@@ -1,0 +1,116 @@
+:host { display: block; height: 100%; }
+
+.product-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-dark);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: transform var(--t-base), box-shadow var(--t-base), border-color var(--t-base);
+
+  &:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--color-border);
+
+    .product-card__img   { transform: scale(1.07); }
+    .product-card__overlay { opacity: 1; }
+  }
+
+  // Image
+  &__img-wrap {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 1;
+    flex-shrink: 0;
+    background: var(--color-dark-2);
+  }
+
+  &__img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform 0.7s var(--ease-smooth);
+  }
+
+  &__badge {
+    position: absolute;
+    top: 0.75rem; left: 0.75rem;
+  }
+
+  &__oos {
+    position: absolute;
+    inset: 0;
+    background: rgba(10,10,10,0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-text-dim);
+  }
+
+  &__overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(10,10,10,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity var(--t-base);
+    backdrop-filter: blur(4px);
+  }
+
+  // Body
+  &__body {
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 1;
+  }
+
+  &__brand {
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+
+  &__name {
+    font-family: var(--font-heading);
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: var(--color-cream);
+    line-height: 1.35;
+  }
+
+  &__desc {
+    font-size: 0.825rem;
+    color: var(--color-text-muted);
+    line-height: 1.55;
+    flex: 1;
+  }
+
+  &__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding-top: 0.75rem;
+    margin-top: auto;
+    border-top: 1px solid var(--color-border-light);
+  }
+
+  &__price {
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--color-gold);
+  }
+}

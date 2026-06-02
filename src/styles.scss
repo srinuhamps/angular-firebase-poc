@@ -1,0 +1,533 @@
+/* ============================================================
+   CAROLLE HAIR STUDIO — Global Styles
+   Luxury Hair Services & Beauty Supply
+   ============================================================ */
+
+/* ============================================================
+   CSS Design Tokens (Custom Properties)
+   ============================================================ */
+:root {
+  /* --- Brand Colors --- */
+  --color-black:        #0a0a0a;
+  --color-charcoal:     #141414;
+  --color-dark:         #1c1c1c;
+  --color-dark-2:       #262626;
+  --color-dark-3:       #303030;
+
+  --color-gold:         #c9a96e;
+  --color-gold-light:   #e0c48a;
+  --color-gold-lighter: #eddcaa;
+  --color-gold-dark:    #a8874d;
+
+  --color-rose-gold:    #d4a5a5;
+  --color-rose-light:   #e8c4c4;
+
+  --color-cream:        #f5f0e8;
+  --color-ivory:        #faf8f4;
+  --color-white:        #ffffff;
+
+  --color-text-muted:   #7a7a7a;
+  --color-text-dim:     #aaaaaa;
+  --color-text-light:   #d0c8bb;
+
+  --color-border:       rgba(201, 169, 110, 0.18);
+  --color-border-light: rgba(255, 255, 255, 0.07);
+  --color-border-mid:   rgba(255, 255, 255, 0.12);
+
+  /* --- Typography --- */
+  --font-heading:    'Roboto Slab', Georgia, 'Times New Roman', serif;
+  --font-subheading: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body:       'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-script:     'Dancing Script', cursive; /* brand logo script — no Roboto equivalent */
+
+  /* --- Spacing Scale --- */
+  --space-1:   0.25rem;
+  --space-2:   0.5rem;
+  --space-3:   0.75rem;
+  --space-4:   1rem;
+  --space-5:   1.25rem;
+  --space-6:   1.5rem;
+  --space-8:   2rem;
+  --space-10:  2.5rem;
+  --space-12:  3rem;
+  --space-16:  4rem;
+  --space-20:  5rem;
+  --space-24:  6rem;
+  --space-32:  8rem;
+
+  /* --- Border Radius --- */
+  --radius-sm:   4px;
+  --radius-md:   8px;
+  --radius-lg:   16px;
+  --radius-xl:   24px;
+  --radius-2xl:  32px;
+  --radius-full: 9999px;
+
+  /* --- Shadows --- */
+  --shadow-sm:      0 2px 8px rgba(0, 0, 0, 0.35);
+  --shadow-md:      0 4px 24px rgba(0, 0, 0, 0.45);
+  --shadow-lg:      0 8px 48px rgba(0, 0, 0, 0.55);
+  --shadow-xl:      0 16px 64px rgba(0, 0, 0, 0.6);
+  --shadow-gold:    0 4px 24px rgba(201, 169, 110, 0.25);
+  --shadow-gold-lg: 0 8px 48px rgba(201, 169, 110, 0.35);
+
+  /* --- Transitions --- */
+  --ease-smooth:  cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out:  cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-bounce:  cubic-bezier(0.34, 1.56, 0.64, 1);
+  --t-fast:   0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --t-base:   0.3s  cubic-bezier(0.4, 0, 0.2, 1);
+  --t-slow:   0.6s  cubic-bezier(0.16, 1, 0.3, 1);
+  --t-slower: 0.9s  cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* --- Layout --- */
+  --container-max:     1280px;
+  --container-padding: clamp(1rem, 4vw, 2rem);
+  --section-padding:   clamp(4rem, 8vw, 7rem);
+
+  /* --- Z-Index Scale --- */
+  --z-base:  1;
+  --z-above: 10;
+  --z-modal: 100;
+  --z-nav:   1000;
+  --z-toast: 9999;
+}
+
+/* ============================================================
+   Light Theme Overrides
+   Applied via [data-theme="light"] on <html>
+   Gold accents are identical in both themes — only surfaces & text flip.
+   ============================================================ */
+[data-theme="light"] {
+  /* ── Surfaces (warm ivory / cream scale) ── */
+  --color-black:        #faf8f4;
+  --color-charcoal:     #f0ebe1;
+  --color-dark:         #e8e2d8;
+  --color-dark-2:       #ddd6c8;
+  --color-dark-3:       #d2cab9;
+
+  /* ── Text (espresso / warm dark brown) ── */
+  --color-cream:        #1a110a;
+  --color-ivory:        #0f0904;
+  --color-white:        #000000;
+  --color-text-muted:   #907860;
+  --color-text-dim:     #5a3e28;
+  --color-text-light:   #2e1c0c;
+
+  /* ── Borders ── */
+  --color-border:       rgba(140, 100, 50, 0.22);
+  --color-border-light: rgba(0, 0, 0, 0.08);
+  --color-border-mid:   rgba(0, 0, 0, 0.14);
+
+  /* ── Shadows (much softer on light backgrounds) ── */
+  --shadow-sm:      0 2px 8px  rgba(0, 0, 0, 0.07);
+  --shadow-md:      0 4px 24px rgba(0, 0, 0, 0.10);
+  --shadow-lg:      0 8px 48px rgba(0, 0, 0, 0.14);
+  --shadow-xl:      0 16px 64px rgba(0, 0, 0, 0.18);
+  --shadow-gold:    0 4px 24px rgba(201, 169, 110, 0.18);
+  --shadow-gold-lg: 0 8px 48px rgba(201, 169, 110, 0.28);
+
+  /* ── Component-specific surface vars ── */
+  --glass-bg:       rgba(250, 248, 244, 0.75);
+  --form-ctrl-bg:   rgba(0, 0, 0, 0.03);
+  --btn-ghost-bg:   rgba(0, 0, 0, 0.05);
+  --btn-ghost-hover-bg: rgba(0, 0, 0, 0.09);
+  --btn-ghost-border: rgba(0, 0, 0, 0.12);
+  --navbar-scrolled-bg: rgba(250, 248, 244, 0.94);
+
+  /* ── Scrollbar ── */
+  scrollbar-color: var(--color-gold) var(--color-charcoal);
+
+  /* ── Global overrides for hardcoded rgba values ── */
+  .badge-dark {
+    background: rgba(0, 0, 0, 0.07);
+    color: var(--color-text-dim);
+    border-color: rgba(0, 0, 0, 0.1);
+  }
+
+  ::-webkit-scrollbar-track { background: var(--color-charcoal); }
+}
+
+/* ── Default dark values for the component-specific vars ── */
+:root {
+  --glass-bg:           rgba(28, 28, 28, 0.65);
+  --form-ctrl-bg:       rgba(255, 255, 255, 0.04);
+  --btn-ghost-bg:       rgba(255, 255, 255, 0.07);
+  --btn-ghost-hover-bg: rgba(255, 255, 255, 0.13);
+  --btn-ghost-border:   var(--color-border-mid);
+  --navbar-scrolled-bg: rgba(10, 10, 10, 0.94);
+}
+
+/* ============================================================
+   Reset & Base
+   ============================================================ */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-black);
+  color: var(--color-cream);
+  line-height: 1.65;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.35s ease, color 0.35s ease;
+}
+
+img, video { max-width: 100%; height: auto; display: block; }
+a { text-decoration: none; color: inherit; }
+button { cursor: pointer; border: none; background: none; font-family: inherit; }
+ul, ol { list-style: none; }
+input, textarea, select { font-family: inherit; }
+
+/* ============================================================
+   Custom Scrollbar
+   ============================================================ */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--color-black); }
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--color-gold), var(--color-gold-dark));
+  border-radius: var(--radius-full);
+}
+
+/* ============================================================
+   Typography System
+   ============================================================ */
+.heading-hero {
+  font-family: var(--font-heading);
+  font-size: clamp(3.5rem, 10vw, 8rem);
+  font-weight: 600;
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+}
+
+.heading-1 {
+  font-family: var(--font-heading);
+  font-size: clamp(2.25rem, 5vw, 3.5rem);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+
+.heading-2 {
+  font-family: var(--font-heading);
+  font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.heading-3 {
+  font-family: var(--font-heading);
+  font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.subheading {
+  font-family: var(--font-subheading);
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  font-weight: 300;
+  line-height: 1.7;
+  color: var(--color-text-dim);
+}
+
+.eyebrow {
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+}
+
+.script-accent {
+  font-family: var(--font-script);
+  font-size: 1.4em;
+  color: var(--color-gold);
+}
+
+/* ============================================================
+   Layout Utilities
+   ============================================================ */
+.container {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
+  width: 100%;
+}
+
+.section {
+  padding: var(--section-padding) 0;
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ============================================================
+   Button System
+   ============================================================ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.875rem 2rem;
+  border-radius: var(--radius-full);
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: transform var(--t-base), box-shadow var(--t-base), background var(--t-base);
+  cursor: pointer;
+  white-space: nowrap;
+  position: relative;
+  overflow: hidden;
+
+  &:active { transform: scale(0.98) !important; }
+
+  &-primary {
+    background: linear-gradient(135deg, var(--color-gold-light) 0%, var(--color-gold) 50%, var(--color-gold-dark) 100%);
+    color: var(--color-black);
+    box-shadow: var(--shadow-gold);
+    &:hover { transform: translateY(-2px); box-shadow: var(--shadow-gold-lg); }
+  }
+
+  &-outline {
+    background: transparent;
+    color: var(--color-gold);
+    border: 1.5px solid var(--color-gold);
+    &:hover { background: rgba(201, 169, 110, 0.08); transform: translateY(-2px); box-shadow: var(--shadow-gold); }
+  }
+
+  &-ghost {
+    background: var(--btn-ghost-bg);
+    color: var(--color-cream);
+    border: 1px solid var(--btn-ghost-border);
+    backdrop-filter: blur(8px);
+    &:hover { background: var(--btn-ghost-hover-bg); transform: translateY(-2px); }
+  }
+
+  &-dark {
+    background: var(--color-dark-2);
+    color: var(--color-cream);
+    border: 1px solid var(--color-border-light);
+    &:hover { background: var(--color-dark-3); transform: translateY(-2px); }
+  }
+
+  &-sm  { padding: 0.625rem 1.375rem; font-size: 0.72rem; }
+  &-lg  { padding: 1.1rem 2.75rem;   font-size: 0.85rem; }
+  &-xl  { padding: 1.25rem 3.25rem;  font-size: 0.9rem;  }
+}
+
+/* ============================================================
+   Card Base
+   ============================================================ */
+.card {
+  background: var(--color-dark);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: transform var(--t-base), box-shadow var(--t-base), border-color var(--t-base);
+
+  &:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--color-border);
+  }
+}
+
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-lg);
+}
+
+/* ============================================================
+   Dividers & Accents
+   ============================================================ */
+.gold-line {
+  display: block;
+  width: 48px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--color-gold), transparent);
+  border-radius: var(--radius-full);
+}
+
+.gold-line-center {
+  display: block;
+  width: 48px;
+  height: 2px;
+  margin: 0 auto;
+  background: linear-gradient(90deg, transparent, var(--color-gold), transparent);
+  border-radius: var(--radius-full);
+}
+
+/* ============================================================
+   Scroll Reveal
+   ============================================================ */
+.reveal {
+  opacity: 0;
+  transform: translateY(36px);
+  transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+
+  &.visible           { opacity: 1; transform: translateY(0); }
+  &-left              { transform: translateX(-40px); }
+  &-left.visible      { transform: translateX(0);     }
+  &-right             { transform: translateX(40px);  }
+  &-right.visible     { transform: translateX(0);     }
+  &-scale             { transform: scale(0.88);       }
+  &-scale.visible     { transform: scale(1);          }
+
+  &-d1 { transition-delay: 0.1s; }
+  &-d2 { transition-delay: 0.2s; }
+  &-d3 { transition-delay: 0.3s; }
+  &-d4 { transition-delay: 0.4s; }
+  &-d5 { transition-delay: 0.5s; }
+  &-d6 { transition-delay: 0.6s; }
+}
+
+/* ============================================================
+   Animation Keyframes
+   ============================================================ */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0);    }
+  50%       { transform: translateY(-12px); }
+}
+@keyframes pulseGold {
+  0%, 100% { box-shadow: 0 0 0 0  rgba(201, 169, 110, 0.5); }
+  50%       { box-shadow: 0 0 0 14px rgba(201, 169, 110, 0); }
+}
+@keyframes rotateSlow {
+  from { transform: rotate(0deg);   }
+  to   { transform: rotate(360deg); }
+}
+
+/* ============================================================
+   Gradient Text
+   ============================================================ */
+.text-gradient-gold {
+  background: linear-gradient(135deg, var(--color-gold-lighter) 0%, var(--color-gold) 50%, var(--color-gold-dark) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ============================================================
+   Stars Rating
+   ============================================================ */
+.stars {
+  display: inline-flex;
+  gap: 2px;
+  color: var(--color-gold);
+  font-size: 0.9rem;
+}
+
+/* ============================================================
+   Badges
+   ============================================================ */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3rem 0.85rem;
+  border-radius: var(--radius-full);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+
+  &-gold  { background: rgba(201, 169, 110, 0.12); color: var(--color-gold);  border: 1px solid rgba(201, 169, 110, 0.25); }
+  &-dark  { background: rgba(255,255,255, 0.06);   color: var(--color-text-dim); border: 1px solid var(--color-border-light); }
+  &-green { background: rgba(74,222,128, 0.1);  color: #4ade80; border: 1px solid rgba(74,222,128,0.2);  }
+  &-red   { background: rgba(248,113,113, 0.1); color: #f87171; border: 1px solid rgba(248,113,113,0.2); }
+}
+
+/* ============================================================
+   Form Elements
+   ============================================================ */
+.form-group { display: flex; flex-direction: column; gap: var(--space-2); }
+
+.form-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-dim);
+}
+
+.form-control {
+  width: 100%;
+  padding: 0.875rem 1.25rem;
+  background: var(--form-ctrl-bg);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
+  color: var(--color-cream);
+  font-size: 0.925rem;
+  transition: border-color var(--t-base), box-shadow var(--t-base);
+  outline: none;
+
+  &::placeholder { color: var(--color-text-muted); }
+  &:focus { border-color: var(--color-gold); box-shadow: 0 0 0 3px rgba(201, 169, 110, 0.12); }
+  &.ng-invalid.ng-touched { border-color: #f87171; box-shadow: 0 0 0 3px rgba(248,113,113,0.1); }
+}
+textarea.form-control { resize: vertical; min-height: 130px; }
+
+/* ============================================================
+   Utilities
+   ============================================================ */
+.bg-black    { background-color: var(--color-black);    }
+.bg-dark     { background-color: var(--color-dark);     }
+.bg-charcoal { background-color: var(--color-charcoal); }
+.text-gold   { color: var(--color-gold);       }
+.text-cream  { color: var(--color-cream);      }
+.text-muted  { color: var(--color-text-muted); }
+.text-dim    { color: var(--color-text-dim);   }
+.text-center { text-align: center;             }
+.text-uppercase { text-transform: uppercase; letter-spacing: 0.12em; }
+.mt-auto { margin-top: auto; }
+.w-full  { width: 100%; }
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0;
+  margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0;
+}
+
+/* ============================================================
+   Responsive
+   ============================================================ */
+@media (max-width: 1024px) {
+  :root { --section-padding: clamp(3.5rem, 7vw, 5.5rem); }
+}
+@media (max-width: 768px) {
+  :root { --container-padding: 1rem; --section-padding: clamp(3rem, 8vw, 4.5rem); }
+}
+@media (max-width: 480px) {
+  :root { --section-padding: 2.5rem; }
+}

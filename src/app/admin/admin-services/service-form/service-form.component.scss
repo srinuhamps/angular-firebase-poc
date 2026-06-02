@@ -1,0 +1,129 @@
+@use '../../admin-shared' as adm;
+
+.admin-page {
+  @include adm.page-base;
+}
+
+.admin-page__header {
+  @include adm.page-header;
+}
+
+.admin-page__title {
+  @include adm.page-title;
+}
+
+.action-btn {
+  @include adm.action-btn;
+
+  &--outline { @include adm.action-btn-outline; }
+
+  &--danger {
+    background: #c0392b;
+    color: #fff;
+    border-color: transparent;
+    &:hover:not(:disabled) { background: #a93226; }
+  }
+}
+
+.form-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+}
+
+// ─── Confirm dialog ───────────────────────────────────────────────────────────
+
+.confirm-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.confirm-dialog {
+  background: #1e1812;
+  border: 1px solid rgba(212, 175, 100, 0.25);
+  border-radius: 12px;
+  padding: 2rem 2.25rem;
+  max-width: 420px;
+  width: 100%;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+
+  &__title {
+    font-family: var(--font-heading, 'Roboto Slab', serif);
+    font-size: 1.2rem;
+    color: var(--color-gold, #d4af64);
+    margin: 0 0 0.75rem;
+  }
+
+  &__body {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.65);
+    margin: 0 0 1.5rem;
+    line-height: 1.55;
+  }
+
+  &__actions {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+}
+
+.svc-form {
+  max-width: 760px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+
+  &--full   { grid-column: 1 / -1; }
+  &--checks { grid-column: 1 / -1; flex-direction: row; flex-wrap: wrap; gap: 1.5rem; }
+}
+
+.form-label {
+  @include adm.form-label;
+}
+
+.form-input {
+  @include adm.form-input;
+
+  &--select { cursor: pointer; }
+  &--textarea { resize: vertical; }
+}
+
+.check-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.88rem;
+  cursor: pointer;
+
+  input[type="checkbox"] { accent-color: var(--color-gold, #d4af64); }
+}
+
+.form-error {
+  @include adm.form-error;
+}
+
+.form-actions {
+  margin-top: 1.75rem;
+}

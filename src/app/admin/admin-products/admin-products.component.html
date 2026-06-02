@@ -1,0 +1,63 @@
+<div class="admin-page">
+  <header class="admin-page__header">
+    <div>
+      <h1 class="admin-page__title">Products</h1>
+      <p class="admin-page__subtitle">{{ products().length }} total</p>
+    </div>
+    <a class="action-btn" [routerLink]="'/admin/products/new'">+ Add Product</a>
+  </header>
+
+  @if (loading()) {
+    <p class="admin-loading">Loading products…</p>
+  } @else if (products().length === 0) {
+    <p class="admin-empty">No products yet. <a [routerLink]="'/admin/products/new'">Add one</a> or seed from the dashboard.</p>
+  } @else {
+    <div class="admin-table-wrap">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Brand</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Stock</th>
+            <th>In Stock</th>
+            <th>Featured</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (prd of products(); track prd.id) {
+            <tr [class.row--out]="!prd.inStock">
+              <td class="cell--name">{{ prd.name }}</td>
+              <td>{{ prd.brand }}</td>
+              <td><span class="badge">{{ prd.category }}</span></td>
+              <td>${{ prd.price }}</td>
+              <td>{{ prd.stockQuantity }}</td>
+              <td>
+                <button
+                  class="toggle-btn"
+                  [class.toggle-btn--on]="prd.inStock"
+                  (click)="toggleStock(prd)"
+                >{{ prd.inStock ? 'Yes' : 'No' }}</button>
+              </td>
+              <td>
+                <span class="featured-dot" [class.featured-dot--on]="prd.isFeatured">
+                  {{ prd.isFeatured ? '★' : '☆' }}
+                </span>
+              </td>
+              <td class="cell--actions">
+                <a class="tbl-btn tbl-btn--edit" [routerLink]="['/admin/products/edit', prd.id]">Edit</a>
+                <button
+                  class="tbl-btn tbl-btn--del"
+                  (click)="delete(prd.id)"
+                  [disabled]="deleting() === prd.id"
+                >{{ deleting() === prd.id ? '…' : 'Delete' }}</button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

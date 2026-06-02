@@ -1,0 +1,50 @@
+<article class="service-card" [class.featured]="service.isFeatured">
+  <!-- Image -->
+  <div class="service-card__img-wrap">
+    <img
+      [src]="service.imageUrl"
+      [alt]="service.name"
+      class="service-card__img"
+      loading="lazy"
+    >
+    @if (service.isFeatured) {
+      <span class="service-card__badge badge badge-gold">Featured</span>
+    }
+    @if (!service.isAvailable) {
+      <div class="service-card__unavailable">Currently Unavailable</div>
+    }
+    <!-- Category tag -->
+    <span class="service-card__category">{{ service.category | titlecase }}</span>
+  </div>
+
+  <!-- Content -->
+  <div class="service-card__body">
+    <h3 class="service-card__name">{{ service.name }}</h3>
+    <p class="service-card__desc">{{ service.shortDescription }}</p>
+
+    <div class="service-card__meta">
+      <div class="service-card__meta-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+        </svg>
+        <span>{{ formatDuration(service.duration) }}</span>
+      </div>
+      <div class="service-card__price">
+        <span class="service-card__price-from">Starting at</span>
+        <span class="service-card__price-value">${{ service.price }}</span>
+      </div>
+    </div>
+
+    <div class="service-card__actions">
+      <a
+        class="btn btn-primary btn-sm"
+        routerLink="/booking"
+        [queryParams]="{ service: service.id }"
+        [class.disabled]="!service.isAvailable || !service.bookingEnabled"
+      >
+        Book Now
+      </a>
+      <a class="btn btn-ghost btn-sm" routerLink="/services">Details</a>
+    </div>
+  </div>
+</article>

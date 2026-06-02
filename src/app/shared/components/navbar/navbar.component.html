@@ -1,0 +1,96 @@
+<nav class="navbar" [class.scrolled]="isScrolled()" role="navigation" aria-label="Main navigation">
+  <div class="navbar__inner container">
+
+    <!-- Logo -->
+    <a class="navbar__logo" routerLink="/" (click)="closeMenu()" aria-label="Carolle Hair Studio — Home">
+      <span class="navbar__logo-script">Carolle</span>
+      <span class="navbar__logo-sub">Hair Studio</span>
+    </a>
+
+    <!-- Desktop links -->
+    <ul class="navbar__links" role="list">
+      @for (link of navLinks; track link.path) {
+        <li>
+          <a
+            class="navbar__link"
+            [routerLink]="link.path"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: link.path === '/' }"
+          >{{ link.label }}</a>
+        </li>
+      }
+      @if (isAdmin()) {
+        <li>
+          <a class="navbar__link navbar__link--admin" routerLink="/admin/dashboard" routerLinkActive="active">
+            Admin
+          </a>
+        </li>
+      }
+    </ul>
+
+    <!-- Desktop CTA -->
+    <a class="btn btn-primary btn-sm navbar__cta" routerLink="/booking">
+      Book Now
+    </a>
+
+    <!-- Theme toggle -->
+    <app-theme-toggle class="navbar__theme-toggle" />
+
+    <!-- Hamburger (mobile) -->
+    <button
+      class="navbar__hamburger"
+      [class.open]="menuOpen()"
+      (click)="toggleMenu()"
+      aria-label="Toggle navigation menu"
+      [attr.aria-expanded]="menuOpen()"
+    >
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile Overlay Menu -->
+<div
+  class="mobile-menu"
+  [class.open]="menuOpen()"
+  role="dialog"
+  aria-label="Mobile navigation"
+  [attr.aria-hidden]="!menuOpen()"
+>
+  <div class="mobile-menu__backdrop" (click)="closeMenu()"></div>
+  <nav class="mobile-menu__panel">
+    <div class="mobile-menu__header">
+      <span class="navbar__logo-script">Carolle</span>
+      <app-theme-toggle />
+    </div>
+    <ul class="mobile-menu__links" role="list">
+      @for (link of navLinks; track link.path) {
+        <li>
+          <a
+            class="mobile-menu__link"
+            [routerLink]="link.path"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: link.path === '/' }"
+            (click)="closeMenu()"
+          >{{ link.label }}</a>
+        </li>
+      }
+      @if (isAdmin()) {
+        <li>
+          <a class="mobile-menu__link mobile-menu__link--admin" routerLink="/admin/dashboard" routerLinkActive="active" (click)="closeMenu()">
+            Admin
+          </a>
+        </li>
+      }
+    </ul>
+    <a class="btn btn-primary w-full" routerLink="/booking" (click)="closeMenu()">
+      Book an Appointment
+    </a>
+    <div class="mobile-menu__footer">
+      <a href="https://instagram.com/carollehairstudio" target="_blank" rel="noopener" aria-label="Instagram">IG</a>
+      <a href="https://facebook.com/carollehairstudio"  target="_blank" rel="noopener" aria-label="Facebook">FB</a>
+    </div>
+  </nav>
+</div>

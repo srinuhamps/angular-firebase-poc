@@ -1,0 +1,307 @@
+<!-- ══════════════════════════════════════════════════════════
+     HERO SECTION
+     ══════════════════════════════════════════════════════════ -->
+<section class="hero" aria-label="Hero">
+  <div class="hero__bg"></div>
+  <div class="hero__overlay"></div>
+
+  <!-- Floating decorative orb -->
+  <div class="hero__orb hero__orb--1" aria-hidden="true"></div>
+  <div class="hero__orb hero__orb--2" aria-hidden="true"></div>
+
+  <div class="container hero__content">
+    <div class="hero__text">
+      <p class="hero__eyebrow">Where Beauty Meets Artistry</p>
+      <h1 class="hero__title">
+        <span class="hero__title-script">Carolle</span>
+        <span class="hero__title-main">Hair<br>Studio</span>
+      </h1>
+      <p class="hero__subtitle">
+        Premium protective styles, natural hair care &<br class="br-desktop">
+        luxury beauty supply — all in one destination.
+      </p>
+      <div class="hero__actions">
+        <a class="btn btn-primary btn-xl" routerLink="/booking">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Book Appointment
+        </a>
+        <a class="btn btn-outline btn-xl" routerLink="/services">Explore Services</a>
+        <a class="btn btn-ghost btn-xl" routerLink="/products">Shop Products</a>
+      </div>
+    </div>
+
+    <!-- Right side stats card -->
+    <div class="hero__stats-card glass-card">
+      @for (stat of stats; track stat.label) {
+        <div class="hero__stat">
+          <span class="hero__stat-value">{{ stat.value }}</span>
+          <span class="hero__stat-label">{{ stat.label }}</span>
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- Scroll indicator -->
+  <div class="hero__scroll" aria-hidden="true">
+    <div class="hero__scroll-line"></div>
+    <span>Scroll</span>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     FEATURES BAR
+     ══════════════════════════════════════════════════════════ -->
+<div class="features-bar">
+  <div class="container features-bar__inner">
+    @for (feat of features; track feat.label) {
+      <div class="features-bar__item">
+        <span class="features-bar__icon" aria-hidden="true">{{ feat.icon }}</span>
+        <span class="features-bar__label">{{ feat.label }}</span>
+      </div>
+    }
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     SERVICES SECTION
+     ══════════════════════════════════════════════════════════ -->
+<section class="section services-preview bg-dark" aria-labelledby="services-heading">
+  <div class="container">
+    <div class="services-preview__header reveal">
+      <app-section-title
+        eyebrow="What We Do"
+        heading="Signature Services"
+        subheading="Every strand crafted with precision, artistry, and care. Discover our most beloved protective styles."
+      />
+      <a class="btn btn-outline" routerLink="/services">View All Services</a>
+    </div>
+
+    <div class="services-preview__grid">
+      @for (service of featuredServices; track service.id; let i = $index) {
+        <div class="reveal reveal-d{{ i + 1 }}">
+          <app-service-card [service]="service" />
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     ABOUT PREVIEW
+     ══════════════════════════════════════════════════════════ -->
+<section class="section about-preview" aria-labelledby="about-heading">
+  <div class="container about-preview__inner">
+    <div class="about-preview__image-wrap reveal reveal-left">
+      <div class="about-preview__img-frame">
+        <img
+          src="https://images.unsplash.com/photo-1560066984-138dadb4c035?w=800&q=80"
+          alt="Carolle Hair Studio interior — luxury salon"
+          class="about-preview__img"
+          loading="lazy"
+        >
+      </div>
+      <div class="about-preview__img-accent" aria-hidden="true"></div>
+    </div>
+
+    <div class="about-preview__text reveal reveal-right">
+      <app-section-title
+        eyebrow="Our Story"
+        heading="Luxury Hair Care, Redefined"
+      />
+      <p class="about-preview__body subheading">
+        Carolle Hair Studio was born from a passion for transforming hair and elevating confidence.
+        Founded in the heart of Atlanta, we've grown into a full-service luxury hair studio and
+        beauty supply destination.
+      </p>
+      <p class="about-preview__body subheading">
+        Our team of expert stylists brings years of craft, creativity, and care to every appointment.
+        Whether you're starting your loc journey, refreshing your braids, or discovering the best
+        products for your hair — you'll find it all here.
+      </p>
+
+      <div class="about-preview__pillars">
+        @for (pillar of ['Premium Quality', 'Expert Stylists', 'Natural Hair First', 'Your Comfort']; track pillar) {
+          <div class="about-preview__pillar">
+            <span class="about-preview__pillar-dot" aria-hidden="true"></span>
+            {{ pillar }}
+          </div>
+        }
+      </div>
+
+      <a class="btn btn-primary" routerLink="/about">Learn Our Story</a>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     PRODUCTS SECTION
+     ══════════════════════════════════════════════════════════ -->
+<section class="section products-preview bg-charcoal" aria-labelledby="products-heading">
+  <div class="container">
+    <div class="products-preview__header reveal">
+      <app-section-title
+        eyebrow="Beauty Supply"
+        heading="Premium Products"
+        subheading="Handpicked hair care essentials. From edges to ends, we carry what your hair needs."
+      />
+      <a class="btn btn-outline" routerLink="/products">Shop All Products</a>
+    </div>
+
+    <div class="products-preview__grid">
+      @for (product of featuredProducts; track product.id; let i = $index) {
+        <div class="reveal reveal-d{{ i + 1 }}">
+          <app-product-card [product]="product" />
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     TESTIMONIALS SECTION
+     ══════════════════════════════════════════════════════════ -->
+<section class="section testimonials bg-dark" aria-labelledby="testimonials-heading">
+  <div class="container">
+    <div class="reveal">
+      <app-section-title
+        eyebrow="Client Love"
+        heading="What Our Clients Say"
+        subheading="Real reviews from our amazing community of clients. Their words mean everything to us."
+        [centered]="true"
+      />
+    </div>
+
+    @if (featuredTestimonials.length > 0) {
+      <div class="testimonials__carousel">
+        <div class="testimonials__track" [style.transform]="'translateX(-' + (activeTestimonial * 100) + '%)'">
+          @for (t of featuredTestimonials; track t.id) {
+            <div class="testimonials__slide">
+              <app-testimonial-card [testimonial]="t" />
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Controls -->
+      <div class="testimonials__controls">
+        <button class="testimonials__arrow" (click)="prevTestimonial()" aria-label="Previous testimonial">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <div class="testimonials__dots">
+          @for (t of featuredTestimonials; track t.id; let i = $index) {
+            <button
+              class="testimonials__dot"
+              [class.active]="i === activeTestimonial"
+              (click)="setTestimonial(i)"
+              [attr.aria-label]="'Testimonial ' + (i + 1)"
+            ></button>
+          }
+        </div>
+        <button class="testimonials__arrow" (click)="nextTestimonial()" aria-label="Next testimonial">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      </div>
+    }
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     GALLERY PREVIEW
+     ══════════════════════════════════════════════════════════ -->
+<section class="section gallery-preview" aria-labelledby="gallery-heading">
+  <div class="container">
+    <div class="gallery-preview__header reveal">
+      <app-section-title
+        eyebrow="Our Work"
+        heading="Style Gallery"
+        subheading="A glimpse into the artistry we create every day. Braids, locs, weaves, and so much more."
+      />
+      <a class="btn btn-outline" routerLink="/gallery">View Full Gallery</a>
+    </div>
+
+    <div class="gallery-preview__grid">
+      @for (image of featuredGallery; track image.id; let i = $index) {
+        <a
+          class="gallery-preview__item reveal reveal-d{{ (i % 3) + 1 }}"
+          routerLink="/gallery"
+          [attr.aria-label]="image.title"
+        >
+          <img
+            [src]="image.thumbnailUrl"
+            [alt]="image.title"
+            loading="lazy"
+            class="gallery-preview__img"
+          >
+          <div class="gallery-preview__item-overlay">
+            <span class="gallery-preview__item-title">{{ image.title }}</span>
+            <span class="gallery-preview__item-cat badge badge-gold">{{ image.category }}</span>
+          </div>
+        </a>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     CTA BANNER
+     ══════════════════════════════════════════════════════════ -->
+<section class="cta-banner" aria-label="Call to action">
+  <div class="cta-banner__bg"></div>
+  <div class="cta-banner__overlay"></div>
+  <div class="container cta-banner__content reveal">
+    <p class="eyebrow">Ready to Transform?</p>
+    <h2 class="heading-1">Book Your Appointment Today</h2>
+    <p class="cta-banner__sub subheading">
+      Reserve your spot with one of our expert stylists.<br>
+      Luxury hair care is just one click away.
+    </p>
+    <div class="cta-banner__actions">
+      <a class="btn btn-primary btn-xl" routerLink="/booking">Book Now</a>
+      <a class="btn btn-ghost btn-xl" routerLink="/contact">Contact Us</a>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     QUICK CONTACT INFO
+     ══════════════════════════════════════════════════════════ -->
+<section class="quick-info bg-charcoal">
+  <div class="container quick-info__inner">
+    <div class="quick-info__item reveal">
+      <div class="quick-info__icon" aria-hidden="true">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      </div>
+      <div>
+        <p class="quick-info__label">Visit Us</p>
+        <p class="quick-info__value">1247 Peachtree St NE, Suite 201</p>
+        <p class="quick-info__value">Atlanta, GA 30309</p>
+      </div>
+    </div>
+
+    <div class="quick-info__divider" aria-hidden="true"></div>
+
+    <div class="quick-info__item reveal reveal-d2">
+      <div class="quick-info__icon" aria-hidden="true">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.45 2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.86a16 16 0 0 0 6 6l.86-.86a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+      </div>
+      <div>
+        <p class="quick-info__label">Call Us</p>
+        <a href="tel:+14045550192" class="quick-info__value quick-info__link">(404) 555-0192</a>
+        <a href="mailto:hello@carollehairstudio.com" class="quick-info__value quick-info__link">hello&#64;carollehairstudio.com</a>
+      </div>
+    </div>
+
+    <div class="quick-info__divider" aria-hidden="true"></div>
+
+    <div class="quick-info__item reveal reveal-d3">
+      <div class="quick-info__icon" aria-hidden="true">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </div>
+      <div>
+        <p class="quick-info__label">Studio Hours</p>
+        <p class="quick-info__value">Mon – Fri: 9:00 AM – 7:00 PM</p>
+        <p class="quick-info__value">Saturday: 8:00 AM – 6:00 PM</p>
+      </div>
+    </div>
+  </div>
+</section>

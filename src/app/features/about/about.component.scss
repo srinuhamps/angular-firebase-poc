@@ -1,0 +1,249 @@
+:host { display: block; }
+
+.about-hero {
+  position: relative;
+  padding: 9rem 0 5rem;
+  text-align: center;
+  background:
+    linear-gradient(180deg, rgba(10,10,10,0.8) 0%, rgba(10,10,10,0.55) 100%),
+    url('https://images.unsplash.com/photo-1560066984-138dadb4c035?w=1920&q=80')
+    center/cover no-repeat;
+
+  &__overlay { position: absolute; inset: 0; background: rgba(10,10,10,0.45); }
+
+  &__content {
+    position: relative; z-index: 1;
+    display: flex; flex-direction: column; align-items: center; gap: 1rem;
+    animation: fadeInUp 0.8s var(--ease-smooth) both;
+  }
+}
+
+// Story
+.story {
+  &__inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: start;
+  }
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  &__image { position: relative; }
+
+  &__img-wrap {
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    aspect-ratio: 3/4;
+    box-shadow: var(--shadow-xl);
+
+    img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+  }
+
+  &__img-quote {
+    position: absolute;
+    bottom: -1.5rem; left: -1.5rem;
+    padding: 1.5rem;
+    max-width: 280px;
+  }
+
+  &__quote-text {
+    font-family: var(--font-subheading);
+    font-style: italic;
+    font-size: 0.95rem;
+    color: var(--color-cream);
+    line-height: 1.6;
+    margin-bottom: 0.75rem;
+  }
+
+  &__quote-author {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    color: var(--color-gold);
+    text-transform: uppercase;
+  }
+}
+
+// Values
+.values {
+  background: var(--color-black);
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+
+  &__card {
+    padding: 2rem 1.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    transition: transform var(--t-base), box-shadow var(--t-base), border-color var(--t-base);
+
+    &:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); border-color: var(--color-border); }
+  }
+
+  &__card-num {
+    font-family: var(--font-heading);
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--color-gold);
+    opacity: 0.25;
+    line-height: 1;
+  }
+
+  &__card-title {
+    font-family: var(--font-heading);
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: var(--color-cream);
+  }
+
+  &__card-desc {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    line-height: 1.65;
+  }
+}
+
+// Team
+.team {
+  &__grid {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    margin-top: 3rem;
+  }
+
+  &__card {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 3rem;
+    align-items: start;
+    background: var(--color-dark);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    transition: border-color var(--t-base);
+
+    &:hover { border-color: var(--color-border); }
+
+    &:nth-child(even) {
+      grid-template-columns: 1fr 300px;
+      .team__img-wrap { order: 2; }
+      .team__info     { order: 1; }
+    }
+  }
+
+  &__img-wrap {
+    aspect-ratio: 3/4;
+    overflow: hidden;
+
+    img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+  }
+
+  &__info {
+    padding: 2.5rem 2.5rem 2.5rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  &__name {
+    font-family: var(--font-heading);
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: var(--color-cream);
+  }
+
+  &__title {
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-gold);
+  }
+
+  &__exp {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    font-style: italic;
+  }
+
+  &__bio {
+    font-family: var(--font-subheading);
+    font-size: 1rem;
+    font-weight: 300;
+    line-height: 1.75;
+    color: var(--color-text-dim);
+    margin: 0.5rem 0;
+  }
+
+  &__specialties { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+}
+
+// Why Us
+.why-us {
+  background: var(--color-charcoal);
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+  }
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  &__icon { font-size: 1.25rem; }
+
+  &__title {
+    font-family: var(--font-heading);
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--color-cream);
+  }
+
+  &__desc {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    line-height: 1.65;
+  }
+}
+
+// CTA
+.about-cta {
+  &__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1.5rem;
+  }
+
+  &__btns { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+}
+
+// Responsive
+@media (max-width: 900px) {
+  .story__inner { grid-template-columns: 1fr; gap: 3rem; }
+  .story__img-quote { position: static; max-width: 100%; margin-top: 1rem; }
+
+  .team__card,
+  .team__card:nth-child(even) {
+    grid-template-columns: 1fr;
+    .team__img-wrap { order: 0; max-height: 320px; }
+    .team__info { order: 0; padding: 1.5rem; }
+  }
+}

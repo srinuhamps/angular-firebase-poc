@@ -1,0 +1,34 @@
+<article class="product-card">
+  <div class="product-card__img-wrap">
+    <img
+      [src]="product.imageUrl"
+      [alt]="product.name"
+      class="product-card__img"
+      loading="lazy"
+    >
+    @if (product.isFeatured) {
+      <span class="product-card__badge badge badge-gold">Bestseller</span>
+    }
+    @if (!product.inStock) {
+      <div class="product-card__oos">Out of Stock</div>
+    }
+    <div class="product-card__overlay">
+      <a class="btn btn-ghost btn-sm" routerLink="/products">View Details</a>
+    </div>
+  </div>
+
+  <div class="product-card__body">
+    <span class="product-card__brand">{{ product.brand }}</span>
+    <h3 class="product-card__name">{{ product.name }}</h3>
+    <p class="product-card__desc">{{ product.shortDescription }}</p>
+
+    <div class="product-card__footer">
+      <span class="product-card__price">${{ product.price.toFixed(2) }}</span>
+      @if (product.inStock) {
+        <span class="badge badge-green">In Stock</span>
+      } @else {
+        <span class="badge badge-red">Out of Stock</span>
+      }
+    </div>
+  </div>
+</article>

@@ -1,0 +1,62 @@
+<!-- Hero -->
+<section class="page-hero gallery-hero">
+  <div class="page-hero__overlay"></div>
+  <div class="container page-hero__content">
+    <p class="eyebrow">Inspiration & Work</p>
+    <h1 class="heading-1">Our Gallery</h1>
+    <p class="subheading">A visual journey through our finest work. Every style tells a story.</p>
+  </div>
+</section>
+
+<!-- Filters -->
+<div class="gal-filters">
+  <div class="container gal-filters__inner">
+    @for (f of filters; track f.value) {
+      <button
+        class="gal-filters__btn"
+        [class.active]="activeFilter() === f.value"
+        (click)="setFilter(f.value)"
+      >{{ f.label }}</button>
+    }
+  </div>
+</div>
+
+<!-- Gallery Grid -->
+<section class="section gal-grid-section bg-dark">
+  <div class="container">
+    @if (filteredImages.length > 0) {
+      <div class="gal-grid">
+        @for (img of filteredImages; track img.id) {
+          <button class="gal-item reveal" (click)="openLightbox(img)">
+            <img [src]="img.imageUrl" [alt]="img.title" loading="lazy">
+            <div class="gal-item__overlay">
+              <p class="gal-item__title">{{ img.title }}</p>
+              <span class="badge badge-dark gal-item__cat">{{ img.category }}</span>
+              <span class="gal-item__zoom" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+              </span>
+            </div>
+          </button>
+        }
+      </div>
+    } @else {
+      <div class="gal-empty">No images found in this category.</div>
+    }
+  </div>
+</section>
+
+<!-- Lightbox -->
+@if (lightboxImage()) {
+  <div class="lightbox" (click)="closeLightbox()">
+    <button class="lightbox__close" aria-label="Close lightbox" (click)="closeLightbox()">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <div class="lightbox__inner" (click)="$event.stopPropagation()">
+      <img class="lightbox__img" [src]="lightboxImage()!.imageUrl" [alt]="lightboxImage()!.title" loading="eager">
+      <div class="lightbox__caption">
+        <p class="lightbox__caption-title">{{ lightboxImage()!.title }}</p>
+        <span class="badge badge-gold">{{ lightboxImage()!.category }}</span>
+      </div>
+    </div>
+  </div>
+}

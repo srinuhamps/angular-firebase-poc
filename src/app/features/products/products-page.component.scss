@@ -1,0 +1,112 @@
+:host { display: block; }
+
+.page-hero {
+  position: relative;
+  padding: 9rem 0 5rem;
+  text-align: center;
+
+  &__overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(10,10,10,0.6);
+  }
+
+  &__content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    animation: fadeInUp 0.8s var(--ease-smooth) both;
+  }
+}
+
+.products-hero {
+  background:
+    linear-gradient(180deg, rgba(10,10,10,0.8) 0%, rgba(10,10,10,0.5) 100%),
+    url('https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=1920&q=80')
+    center/cover no-repeat;
+}
+
+.prd-filters {
+  background: var(--color-charcoal);
+  border-bottom: 1px solid var(--color-border-light);
+  position: sticky;
+  top: 70px;
+  z-index: var(--z-above);
+
+  &__inner {
+    display: flex;
+    gap: 0.25rem;
+    overflow-x: auto;
+    padding: 0.75rem 0;
+    scrollbar-width: none;
+    &::-webkit-scrollbar { display: none; }
+  }
+
+  &__btn {
+    padding: 0.55rem 1.25rem;
+    border-radius: var(--radius-full);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    background: transparent;
+    border: 1px solid transparent;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all var(--t-base);
+
+    &:hover { color: var(--color-gold); border-color: var(--color-border); }
+    &.active { color: var(--color-black); background: var(--color-gold); border-color: var(--color-gold); }
+  }
+}
+
+.prd-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr));
+  gap: 1.75rem;
+}
+
+.prd-empty {
+  text-align: center;
+  padding: 4rem;
+  color: var(--color-text-muted);
+  font-family: var(--font-subheading);
+  font-style: italic;
+}
+
+.prd-store {
+  &__inner {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+
+  &__icon {
+    width: 72px; height: 72px;
+    border-radius: 50%;
+    background: rgba(201,169,110,0.1);
+    border: 1px solid var(--color-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-gold);
+    flex-shrink: 0;
+  }
+
+  &__text {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    min-width: 240px;
+  }
+}
+
+@media (max-width: 640px) {
+  .prd-store__inner { flex-direction: column; align-items: flex-start; }
+}

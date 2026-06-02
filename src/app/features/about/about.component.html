@@ -1,0 +1,127 @@
+<!-- Hero -->
+<section class="about-hero">
+  <div class="about-hero__overlay"></div>
+  <div class="container about-hero__content">
+    <p class="eyebrow">Our Story</p>
+    <h1 class="heading-1">About Carolle Hair Studio</h1>
+    <p class="subheading">A sanctuary for beauty, artistry, and authentic hair care.</p>
+  </div>
+</section>
+
+<!-- Story Section -->
+<section class="section story bg-dark">
+  <div class="container story__inner">
+    <div class="story__text reveal reveal-left">
+      <app-section-title eyebrow="How It Started" heading="Born From Passion" />
+      <p class="subheading">
+        Carolle Hair Studio was founded with a single, powerful vision: to create a space where
+        every woman feels celebrated. A place where hair care isn't just a service — it's an experience.
+      </p>
+      <p class="subheading">
+        After over a decade of perfecting the art of protective styling, founder Carolle Mensah
+        opened her studio doors in Atlanta and quickly became the city's most sought-after hair destination.
+      </p>
+      <p class="subheading">
+        What started as a one-chair studio has grown into a full luxury salon with an in-house
+        beauty supply section, a team of expert stylists, and thousands of happy clients.
+      </p>
+    </div>
+    <div class="story__image reveal reveal-right">
+      <div class="story__img-wrap">
+        <img
+          src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=800&q=80"
+          alt="Carolle, founder of Carolle Hair Studio"
+          loading="lazy"
+        >
+      </div>
+      <div class="story__img-quote glass-card">
+        <p class="story__quote-text">"Hair is the crown you never take off. It deserves to be treated like royalty."</p>
+        <p class="story__quote-author">— Carolle Mensah, Founder</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Values -->
+<section class="section values">
+  <div class="container">
+    <div class="reveal">
+      <app-section-title eyebrow="What We Stand For" heading="Our Core Values" [centered]="true" />
+    </div>
+    <div class="values__grid">
+      @for (val of values; track val.title; let i = $index) {
+        <div class="values__card glass-card reveal reveal-d{{ i + 1 }}">
+          <div class="values__card-num">0{{ i + 1 }}</div>
+          <h3 class="values__card-title">{{ val.title }}</h3>
+          <p class="values__card-desc">{{ val.desc }}</p>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- Team Section -->
+<section class="section team bg-dark">
+  <div class="container">
+    <div class="reveal">
+      <app-section-title eyebrow="The Artists" heading="Meet Our Stylists" subheading="Talented, passionate, and dedicated to transforming your hair journey." [centered]="true" />
+    </div>
+    <div class="team__grid">
+      @for (stylist of stylists; track stylist.id; let i = $index) {
+        <div class="team__card reveal reveal-d{{ i + 1 }}">
+          <div class="team__img-wrap">
+            <img [src]="stylist.imageUrl" [alt]="stylist.name" loading="lazy">
+          </div>
+          <div class="team__info">
+            <h3 class="team__name">{{ stylist.name }}</h3>
+            <p class="team__title">{{ stylist.title }}</p>
+            <p class="team__exp">{{ stylist.yearsExperience }} years experience</p>
+            <p class="team__bio">{{ stylist.bio }}</p>
+            <div class="team__specialties">
+              @for (sp of stylist.specialties.slice(0, 3); track sp) {
+                <span class="badge badge-gold">{{ sp }}</span>
+              }
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- Why Choose Us -->
+<section class="section why-us">
+  <div class="container">
+    <div class="reveal">
+      <app-section-title eyebrow="Why Carolle" heading="The Carolle Difference" subheading="We are not just another salon. We are your hair care destination." [centered]="true" />
+    </div>
+    <div class="why-us__grid">
+      @for (item of [
+        { icon: '◈', title: 'Premium Products Only', desc: 'Every product we use and sell is carefully vetted for quality.' },
+        { icon: '◈', title: 'Certified Stylists',    desc: 'Our team undergoes continuous training in the latest techniques.' },
+        { icon: '◈', title: 'Comfortable Studio',    desc: 'A clean, modern, and relaxing environment designed for your comfort.' },
+        { icon: '◈', title: 'Hair Health First',     desc: 'We assess your hair health before every appointment to protect your natural hair.' },
+        { icon: '◈', title: 'Flexible Booking',      desc: 'Convenient online booking with evening and weekend availability.' },
+        { icon: '◈', title: 'Beauty Supply Onsite',  desc: 'Shop for your favorite products right in the studio after your appointment.' }
+      ]; track item.title; let i = $index) {
+        <div class="why-us__item reveal reveal-d{{ (i % 3) + 1 }}">
+          <span class="why-us__icon text-gold" aria-hidden="true">{{ item.icon }}</span>
+          <h4 class="why-us__title">{{ item.title }}</h4>
+          <p class="why-us__desc">{{ item.desc }}</p>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="about-cta section bg-charcoal">
+  <div class="container about-cta__inner reveal">
+    <h2 class="heading-2">Experience the Studio</h2>
+    <p class="subheading">Ready to see what all the buzz is about? Book your first appointment today.</p>
+    <div class="about-cta__btns">
+      <a class="btn btn-primary btn-lg" [routerLink]="'/booking'">Book Now</a>
+      <a class="btn btn-outline btn-lg" [routerLink]="'/contact'">Visit Us</a>
+    </div>
+  </div>
+</section>

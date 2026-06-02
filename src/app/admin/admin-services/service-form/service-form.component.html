@@ -1,0 +1,155 @@
+<div class="admin-page">
+  <header class="admin-page__header">
+    <div>
+      <h1 class="admin-page__title">{{ editId() ? 'Edit Service' : 'Add Service' }}</h1>
+    </div>
+    <button type="button" class="action-btn action-btn--outline" (click)="cancel()">← Cancel</button>
+  </header>
+
+  <form class="svc-form" (ngSubmit)="save()" #f="ngForm">
+    <div class="form-grid">
+      <!-- Name -->
+      <div class="form-group form-group--full">
+        <label class="form-label" for="name">Name *</label>
+        <input
+          id="name" class="form-input" type="text" name="name"
+          [ngModel]="form().name" (ngModelChange)="setField('name', $event)"
+          placeholder="e.g. Box Braids – Full Head" required
+        />
+      </div>
+
+      <!-- Category -->
+      <div class="form-group">
+        <label class="form-label" for="category">Category</label>
+        <select
+          id="category" class="form-input form-input--select" name="category"
+          [ngModel]="form().category" (ngModelChange)="setField('category', $event)"
+        >
+          @for (cat of categories; track cat) {
+            <option [value]="cat">{{ cat }}</option>
+          }
+        </select>
+      </div>
+
+      <!-- Price -->
+      <div class="form-group">
+        <label class="form-label" for="price">Price ($)</label>
+        <input
+          id="price" class="form-input" type="number" name="price" min="0"
+          [ngModel]="form().price" (ngModelChange)="setField('price', +$event)"
+        />
+      </div>
+
+      <!-- Duration -->
+      <div class="form-group">
+        <label class="form-label" for="duration">Duration (min)</label>
+        <input
+          id="duration" class="form-input" type="number" name="duration" min="0"
+          [ngModel]="form().duration" (ngModelChange)="setField('duration', +$event)"
+        />
+      </div>
+
+      <!-- Sort Order -->
+      <div class="form-group">
+        <label class="form-label" for="sortOrder">Sort Order</label>
+        <input
+          id="sortOrder" class="form-input" type="number" name="sortOrder" min="0"
+          [ngModel]="form().sortOrder" (ngModelChange)="setField('sortOrder', +$event)"
+        />
+      </div>
+
+      <!-- Short Description -->
+      <div class="form-group form-group--full">
+        <label class="form-label" for="shortDesc">Short Description *</label>
+        <input
+          id="shortDesc" class="form-input" type="text" name="shortDescription"
+          [ngModel]="form().shortDescription" (ngModelChange)="setField('shortDescription', $event)"
+          placeholder="One-line description shown on cards"
+        />
+      </div>
+
+      <!-- Description -->
+      <div class="form-group form-group--full">
+        <label class="form-label" for="desc">Full Description</label>
+        <textarea
+          id="desc" class="form-input form-input--textarea" name="description" rows="4"
+          [ngModel]="form().description" (ngModelChange)="setField('description', $event)"
+          placeholder="Detailed description for the service page"
+        ></textarea>
+      </div>
+
+      <!-- Image URL -->
+      <div class="form-group form-group--full">
+        <label class="form-label" for="imageUrl">Image URL</label>
+        <input
+          id="imageUrl" class="form-input" type="url" name="imageUrl"
+          [ngModel]="form().imageUrl" (ngModelChange)="setField('imageUrl', $event)"
+          placeholder="https://…"
+        />
+      </div>
+
+      <!-- Tags -->
+      <div class="form-group form-group--full">
+        <label class="form-label" for="tags">Tags (comma-separated)</label>
+        <input
+          id="tags" class="form-input" type="text" name="tags"
+          [ngModel]="tagsRaw()" (ngModelChange)="tagsRaw.set($event)"
+          placeholder="braids, cornrows, protective"
+        />
+      </div>
+
+      <!-- Toggles -->
+      <div class="form-group form-group--checks">
+        <label class="check-label">
+          <input
+            type="checkbox" name="isAvailable"
+            [ngModel]="form().isAvailable" (ngModelChange)="setField('isAvailable', $event)"
+          />
+          Available
+        </label>
+        <label class="check-label">
+          <input
+            type="checkbox" name="isFeatured"
+            [ngModel]="form().isFeatured" (ngModelChange)="setField('isFeatured', $event)"
+          />
+          Featured
+        </label>
+        <label class="check-label">
+          <input
+            type="checkbox" name="bookingEnabled"
+            [ngModel]="form().bookingEnabled" (ngModelChange)="setField('bookingEnabled', $event)"
+          />
+          Booking Enabled
+        </label>
+      </div>
+    </div>
+
+    @if (error()) {
+      <p class="form-error" role="alert">{{ error() }}</p>
+    }
+
+    <div class="form-actions">
+      <button class="action-btn" type="submit" [disabled]="saving()">
+        @if (saving()) { Saving… } @else { Save Service }
+      </button>
+      <button class="action-btn action-btn--outline" type="button" [disabled]="saving()" (click)="cancel()">
+        Cancel
+      </button>
+    </div>
+  </form>
+
+  <!-- Unsaved-changes dialog -->
+  @if (showCancelDialog()) {
+    <div class="confirm-overlay" (click)="dismissDialog()">
+      <div class="confirm-dialog" (click)="$event.stopPropagation()" role="dialog" aria-modal="true" aria-labelledby="dlg-title">
+        <h2 class="confirm-dialog__title" id="dlg-title">Discard changes?</h2>
+        <p class="confirm-dialog__body">You have unsaved changes. If you leave now they will be lost.</p>
+        <div class="confirm-dialog__actions">
+          <button class="action-btn action-btn--danger" type="button" (click)="confirmCancel()">Discard</button>
+          <button class="action-btn action-btn--outline" type="button" (click)="dismissDialog()">Keep editing</button>
+        </div>
+      </div>
+    </div>
+  }
+
+</div>

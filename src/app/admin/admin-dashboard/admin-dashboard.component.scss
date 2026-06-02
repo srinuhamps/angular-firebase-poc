@@ -1,0 +1,135 @@
+@use '../admin-shared' as adm;
+
+.admin-page {
+  @include adm.page-base;
+}
+
+.admin-page__header {
+  margin-bottom: 2rem;
+}
+
+.admin-page__title {
+  font-family: var(--font-heading, 'Roboto Slab', serif);
+  font-size: 1.8rem;
+  color: var(--color-gold, #d4af64);
+  margin: 0 0 0.25rem;
+}
+
+.admin-page__subtitle {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+// ─── Stats ────────────────────────────────────────────────────
+.dash-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+}
+
+.stat-card {
+  background: #1a1512;
+  border: 1px solid rgba(212, 175, 100, 0.18);
+  border-radius: 10px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.stat-card__value {
+  font-family: var(--font-heading, 'Roboto Slab', serif);
+  font-size: 2.4rem;
+  color: var(--color-gold, #d4af64);
+  line-height: 1;
+}
+
+.stat-card__label {
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.stat-card__link {
+  margin-top: 0.75rem;
+  font-size: 0.82rem;
+  color: var(--color-gold, #d4af64);
+  text-decoration: none;
+
+  &:hover { text-decoration: underline; }
+}
+
+// ─── Actions ──────────────────────────────────────────────────
+.dash-actions,
+.dash-seed {
+  margin-bottom: 2.5rem;
+}
+
+.dash-actions__heading,
+.dash-seed__heading {
+  font-family: var(--font-heading, 'Roboto Slab', serif);
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0 0 1rem;
+}
+
+.dash-actions__grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.action-btn {
+  display: inline-block;
+  padding: 0.65rem 1.4rem;
+  background: var(--color-gold, #d4af64);
+  color: #0e0b09;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  font-family: var(--font-body, 'Roboto', sans-serif);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  cursor: pointer;
+  transition: opacity 0.2s;
+
+  &:hover:not(:disabled) { opacity: 0.85; }
+
+  &:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
+  &--outline {
+    background: transparent;
+    border-color: var(--color-gold, #d4af64);
+    color: var(--color-gold, #d4af64);
+  }
+}
+
+// ─── Seed ─────────────────────────────────────────────────────
+.dash-seed__desc {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.88rem;
+  margin: 0 0 1rem;
+}
+
+.dash-seed__success {
+  color: #81c784;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.dash-seed__err {
+  color: #e57373;
+  font-size: 0.88rem;
+  background: rgba(229, 115, 115, 0.1);
+  border: 1px solid rgba(229, 115, 115, 0.3);
+  border-radius: 6px;
+  padding: 0.6rem 0.9rem;
+  margin: 0;
+}

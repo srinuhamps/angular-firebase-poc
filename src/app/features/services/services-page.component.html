@@ -1,0 +1,56 @@
+<!-- Page Hero -->
+<section class="page-hero">
+  <div class="page-hero__overlay"></div>
+  <div class="container page-hero__content">
+    <p class="eyebrow">What We Offer</p>
+    <h1 class="heading-1">Our Services</h1>
+    <p class="subheading">
+      From intricate protective braids to flawless locs — every service is crafted<br>
+      with expert precision and premium care.
+    </p>
+  </div>
+</section>
+
+<!-- Filter tabs -->
+<div class="svc-filters">
+  <div class="container svc-filters__inner">
+    @for (f of filters; track f.value) {
+      <button
+        class="svc-filters__btn"
+        [class.active]="activeFilter() === f.value"
+        (click)="setFilter(f.value)"
+      >{{ f.label }}</button>
+    }
+  </div>
+</div>
+
+<!-- Services Grid -->
+<section class="section svc-grid-section bg-dark">
+  <div class="container">
+    @if (filteredServices.length > 0) {
+      <div class="svc-grid">
+        @for (svc of filteredServices; track svc.id; let i = $index) {
+          <div class="reveal reveal-d{{ (i % 4) + 1 }}">
+            <app-service-card [service]="svc" />
+          </div>
+        }
+      </div>
+    } @else {
+      <div class="svc-empty">
+        <p>No services found in this category.</p>
+      </div>
+    }
+  </div>
+</section>
+
+<!-- Booking CTA -->
+<section class="svc-cta section bg-charcoal">
+  <div class="container svc-cta__inner reveal">
+    <div class="svc-cta__text">
+      <p class="eyebrow">Ready to Book?</p>
+      <h2 class="heading-2">Reserve Your Appointment</h2>
+      <p class="subheading">Select your service, choose a stylist, and pick your perfect time.</p>
+    </div>
+    <a class="btn btn-primary btn-lg" [routerLink]="'/booking'">Book Appointment</a>
+  </div>
+</section>

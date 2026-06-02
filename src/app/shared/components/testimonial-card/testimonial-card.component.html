@@ -1,0 +1,32 @@
+<div class="t-card glass-card">
+  <!-- Quote mark -->
+  <div class="t-card__quote" aria-hidden="true">&ldquo;</div>
+
+  <!-- Stars -->
+  <div class="t-card__stars" [attr.aria-label]="testimonial.rating + ' out of 5 stars'">
+    @for (s of stars; track s) {
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+      </svg>
+    }
+    @for (s of emptyStars; track s) {
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+      </svg>
+    }
+  </div>
+
+  <!-- Review text -->
+  <blockquote class="t-card__review">
+    {{ testimonial.review }}
+  </blockquote>
+
+  <!-- Footer: avatar + name + service -->
+  <div class="t-card__footer">
+    <div class="t-card__avatar" aria-hidden="true">{{ testimonial.customerInitials }}</div>
+    <div class="t-card__info">
+      <span class="t-card__name">{{ testimonial.customerName }}</span>
+      <span class="t-card__service">{{ testimonial.serviceReceived }}</span>
+    </div>
+  </div>
+</div>

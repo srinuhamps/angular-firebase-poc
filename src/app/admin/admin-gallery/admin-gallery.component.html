@@ -1,0 +1,103 @@
+<div class="gallery-page">
+
+  <!-- ─── Header ─────────────────────────────────────────────────────── -->
+  <div class="gallery-page__header">
+    <div>
+      <h1 class="gallery-page__title">Media Gallery</h1>
+      <p class="gallery-page__subtitle">Upload images and copy links for use in services, products, or any section.</p>
+    </div>
+  </div>
+
+  <!-- ─── Upload Card ─────────────────────────────────────────────────── -->
+  <div class="upload-card">
+    <h2 class="upload-card__heading">Upload Image</h2>
+
+    <div class="upload-card__body">
+      <!-- Preview -->
+      <div class="upload-card__preview">
+        @if (preview()) {
+          <img [src]="preview()" alt="Preview" class="upload-card__thumb" />
+        } @else {
+          <div class="upload-card__placeholder">
+            <span class="upload-card__placeholder-icon">🖼</span>
+            <span>No image selected</span>
+          </div>
+        }
+      </div>
+
+      <!-- Fields -->
+      <div class="upload-card__fields">
+        <label class="field-label" for="gallery-file-input">Image File</label>
+        <input
+          id="gallery-file-input"
+          type="file"
+          accept="image/*"
+          class="field-file"
+          (change)="onFileChange($event)"
+          [disabled]="uploading()"
+        />
+
+        <label class="field-label" for="gallery-title">Title</label>
+        <input
+          id="gallery-title"
+          type="text"
+          class="field-input"
+          placeholder="e.g. Balayage blonde"
+          [value]="title()"
+          (input)="title.set($any($event.target).value)"
+          [disabled]="uploading()"
+        />
+
+        @if (uploadErr()) {
+          <p class="upload-card__error">{{ uploadErr() }}</p>
+        }
+
+        @if (uploading()) {
+          <div class="upload-progress">
+            <div class="upload-progress__bar" [style.width.%]="progress()"></div>
+          </div>
+          <p class="upload-progress__label">Uploading… {{ progress() }}%</p>
+        }
+
+        <button
+          class="btn-upload"
+          [disabled]="uploading() || !file() || !title().trim()"
+          (click)="upload()"
+        >
+          @if (uploading()) { Uploading… } @else { Upload Image }
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── Grid ────────────────────────────────────────────────────────── -->
+  @if (loading()) {
+    <p class="gallery-page__msg">Loading gallery…</p>
+  } @else if (items().length === 0) {
+    <p class="gallery-page__msg">No images uploaded yet. Use the form above to add your first image.</p>
+  } @else {
+    <div class="media-grid">
+      @for (item of items(); track item.id) {
+        <div class="media-card">
+          <div class="media-card__img-wrap">
+            <img [src]="item.url" [alt]="item.title" class="media-card__img" loading="lazy" />
+          </div>
+          <div class="media-card__body">
+            <p class="media-card__title">{{ item.title }}</p>
+            <div class="media-card__actions">
+              <button
+                class="btn-copy"
+                [class.btn-copy--done]="copied() === item.id"
+                (click)="copyLink(item)"
+              >
+                {{ copied() === item.id ? '✓ Copied!' : 'Copy Link' }}
+              </button>
+              <button class="btn-delete" (click)="deleteItem(item)">Delete</button>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+</div>

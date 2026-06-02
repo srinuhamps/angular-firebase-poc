@@ -1,0 +1,52 @@
+<div class="admin-page">
+  <header class="admin-page__header">
+    <h1 class="admin-page__title">Dashboard</h1>
+    <p class="admin-page__subtitle">Welcome back, Carolle.</p>
+  </header>
+
+  <!-- Stats cards -->
+  <section class="dash-stats">
+    <div class="stat-card">
+      <span class="stat-card__value">{{ serviceCount() }}</span>
+      <span class="stat-card__label">Services</span>
+      <a class="stat-card__link" [routerLink]="'/admin/services'">Manage →</a>
+    </div>
+    <div class="stat-card">
+      <span class="stat-card__value">{{ productCount() }}</span>
+      <span class="stat-card__label">Products</span>
+      <a class="stat-card__link" [routerLink]="'/admin/products'">Manage →</a>
+    </div>
+  </section>
+
+  <!-- Quick actions -->
+  <section class="dash-actions">
+    <h2 class="dash-actions__heading">Quick Actions</h2>
+    <div class="dash-actions__grid">
+      <a class="action-btn" [routerLink]="'/admin/services/new'">+ Add Service</a>
+      <a class="action-btn" [routerLink]="'/admin/products/new'">+ Add Product</a>
+    </div>
+  </section>
+
+  <!-- Seed data utility -->
+  <section class="dash-seed">
+    <h2 class="dash-seed__heading">Data Seeding</h2>
+    <p class="dash-seed__desc">
+      Populate Firestore with the built-in demo data for services and products.
+      This only runs if a collection is currently empty.
+    </p>
+    @if (seedDone()) {
+      <p class="dash-seed__success">✓ Firestore seeded successfully.</p>
+    } @else if (seedError()) {
+      <p class="dash-seed__err" role="alert">✕ {{ seedError() }}</p>
+      <button class="action-btn action-btn--outline" (click)="seedData()" style="margin-top:0.75rem">Retry</button>
+    } @else {
+      <button
+        class="action-btn action-btn--outline"
+        (click)="seedData()"
+        [disabled]="seeding()"
+      >
+        @if (seeding()) { Seeding… } @else { Seed Demo Data }
+      </button>
+    }
+  </section>
+</div>

@@ -1,0 +1,62 @@
+<div class="admin-page">
+  <header class="admin-page__header">
+    <div>
+      <h1 class="admin-page__title">Services</h1>
+      <p class="admin-page__subtitle">{{ services().length }} total</p>
+    </div>
+    <a class="action-btn" [routerLink]="'/admin/services/new'">+ Add Service</a>
+  </header>
+
+  @if (loading()) {
+    <p class="admin-loading">Loading services…</p>
+  } @else if (services().length === 0) {
+    <p class="admin-empty">No services yet. <a [routerLink]="'/admin/services/new'">Add one</a> or seed from the dashboard.</p>
+  } @else {
+    <div class="admin-table-wrap">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Duration</th>
+            <th>Available</th>
+            <th>Featured</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (svc of services(); track svc.id) {
+            <tr [class.row--unavailable]="!svc.isAvailable">
+              <td class="cell--name">{{ svc.name }}</td>
+              <td><span class="badge">{{ svc.category }}</span></td>
+              <td>${{ svc.price }}</td>
+              <td>{{ svc.duration }} min</td>
+              <td>
+                <button
+                  class="toggle-btn"
+                  [class.toggle-btn--on]="svc.isAvailable"
+                  (click)="toggleAvailable(svc)"
+                  [attr.aria-label]="svc.isAvailable ? 'Disable' : 'Enable'"
+                >{{ svc.isAvailable ? 'Yes' : 'No' }}</button>
+              </td>
+              <td>
+                <span class="featured-dot" [class.featured-dot--on]="svc.isFeatured">
+                  {{ svc.isFeatured ? '★' : '☆' }}
+                </span>
+              </td>
+              <td class="cell--actions">
+                <a class="tbl-btn tbl-btn--edit" [routerLink]="['/admin/services/edit', svc.id]">Edit</a>
+                <button
+                  class="tbl-btn tbl-btn--del"
+                  (click)="delete(svc.id)"
+                  [disabled]="deleting() === svc.id"
+                >{{ deleting() === svc.id ? '…' : 'Delete' }}</button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>
