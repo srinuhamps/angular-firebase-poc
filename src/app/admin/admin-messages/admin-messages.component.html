@@ -1,0 +1,162 @@
+<div class="admin-page">
+  <header class="admin-page__header">
+    <div>
+      <h1 class="admin-page__title">Messages</h1>
+      <p class="admin-page__subtitle">
+        {{ filtered().length }} of {{ messages().length }} shown
+        @if (newCount() > 0) { • <span class="hdr-new">{{ newCount() }} new</span> }
+      </p>
+    </div>
+  </header>
+
+  <!-- Filter tabs -->
+  <div class="msg-filters">
+    @for (f of filters; track f.value) {
+      <button
+        class="msg-filters__btn"
+        [class.active]="statusFilter() === f.value"
+        (click)="statusFilter.set(f.value); closeDetail()"
+      >{{ f.label }}</button>
+    }
+  </div>
+
+  @if (loading()) {
+    <p class="admin-loading">Loading messages…</p>
+  } @else if (messages().length === 0) {
+    <p class="admin-empty">No contact messages yet. New submissions from the public contact form will appear here.</p>
+  } @else if (filtered().length === 0) {
+    <p class="admin-empty">No messages match this filter.</p>
+  } @else {
+    <div class="msg-layout" [class.msg-layout--detail-open]="!!selected()">
+      <!-- LIST -->
+      <ul class="msg-list" role="list">
+        @for (m of filtered(); track m.id) {
+          <li>
+            <button
+              class="msg-item"
+              [class.is-active]="selectedId() === m.id"
+              [class.is-unread]="m.status === 'new'"
+              (click)="select(m)"
+            >
+              <div class="msg-item__top">
+                <span class="msg-item__name">{{ m.name }}</span>
+                <span class="msg-item__when">{{ formatWhen(m.createdAt) }}</span>
+              </div>
+              <div class="msg-item__subject">{{ subjectLabel(m.subject) }}</div>
+              <div class="msg-item__preview">{{ m.message }}</div>
+              <div class="msg-item__meta">
+                <span class="status-badge status-badge--{{ m.status }}">{{ m.status }}</span>
+                @if (m.replies.length > 0) {
+                  <span class="msg-item__count">↩ {{ m.replies.length }}</span>
+                }
+              </div>
+            </button>
+          </li>
+        }
+      </ul>
+
+      <!-- DETAIL -->
+      @if (selected(); as msg) {
+        <section class="msg-detail" aria-label="Message detail">
+          <header class="msg-detail__header">
+            <div>
+              <h2 class="msg-detail__name">{{ msg.name }}</h2>
+              <div class="msg-detail__meta">
+                <a [href]="'mailto:' + msg.email" class="msg-detail__link">{{ msg.email }}</a>
+                @if (msg.phone) {
+                  <span> · </span>
+                  <a [href]="'tel:' + msg.phone" class="msg-detail__link">{{ msg.phone }}</a>
+                }
+              </div>
+              <div class="msg-detail__sub">
+                <span class="status-badge status-badge--{{ msg.status }}">{{ msg.status }}</span>
+                <span class="msg-detail__when">{{ formatWhen(msg.createdAt) }}</span>
+              </div>
+            </div>
+            <button class="msg-detail__close" type="button" (click)="closeDetail()" aria-label="Close">×</button>
+          </header>
+
+          <div class="msg-detail__subject">
+            <span class="msg-detail__label">Subject</span>
+            <span>{{ subjectLabel(msg.subject) }}</span>
+          </div>
+
+          <div class="msg-detail__body">
+            <span class="msg-detail__label">Message</span>
+            <p class="msg-detail__text">{{ msg.message }}</p>
+          </div>
+
+          @if (msg.replies.length > 0) {
+            <div class="msg-replies">
+              <span class="msg-detail__label">Replies ({{ msg.replies.length }})</span>
+              @for (r of msg.replies; track r.sentAt) {
+                <article class="msg-reply">
+                  <header class="msg-reply__head">
+                    <span class="msg-reply__from">{{ r.sentBy || 'Admin' }}</span>
+                    <span class="msg-reply__when">{{ formatWhen(r.sentAt) }}</span>
+                    @if (r.emailDelivered === true) {
+                      <span class="msg-reply__tag msg-reply__tag--ok">Emailed</span>
+                    } @else {
+                      <span class="msg-reply__tag msg-reply__tag--warn" title="Brevo not configured">Logged only</span>
+                    }
+                  </header>
+                  <p class="msg-reply__body">{{ r.body }}</p>
+                </article>
+              }
+            </div>
+          }
+
+          <!-- Reply composer -->
+          <div class="msg-compose">
+            <label class="msg-detail__label" for="msg-reply">Reply</label>
+            <textarea
+              id="msg-reply"
+              class="msg-compose__input"
+              rows="5"
+              [ngModel]="replyDraft()"
+              (ngModelChange)="replyDraft.set($event)"
+              [disabled]="busy()"
+              placeholder="Write your reply to {{ msg.name }}…"
+            ></textarea>
+
+            @if (replyNotice()) {
+              <p class="msg-compose__notice">{{ replyNotice() }}</p>
+            }
+            @if (replyError()) {
+              <p class="msg-compose__error" role="alert">{{ replyError() }}</p>
+            }
+
+            <div class="msg-compose__actions">
+              <button
+                class="action-btn"
+                type="button"
+                (click)="sendReply()"
+                [disabled]="busy() || !replyDraft().trim()"
+              >
+                @if (busy()) { Sending… } @else { Send Reply }
+              </button>
+
+              @if (msg.status !== 'archived') {
+                <button class="action-btn action-btn--outline" type="button" (click)="markStatus(msg, 'archived')" [disabled]="busy()">Archive</button>
+              } @else {
+                <button class="action-btn action-btn--outline" type="button" (click)="markStatus(msg, 'read')" [disabled]="busy()">Unarchive</button>
+              }
+
+              <button class="action-btn action-btn--danger" type="button" (click)="deleteMessage(msg)" [disabled]="busy()">Delete</button>
+            </div>
+
+            <p class="msg-compose__hint">
+              Replies are stored on the message immediately. Email delivery routes through Brevo
+              (pending integration) — until then the customer will not actually receive the email,
+              but the reply is logged here for your records.
+            </p>
+          </div>
+        </section>
+      } @else {
+        <section class="msg-empty">
+          <p>Select a message to view and reply.</p>
+        </section>
+      }
+    </div>
+  }
+</div>

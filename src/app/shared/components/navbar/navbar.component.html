@@ -2,9 +2,9 @@
   <div class="navbar__inner container">
 
     <!-- Logo -->
-    <a class="navbar__logo" routerLink="/" (click)="closeMenu()" aria-label="Carolle Hair Studio — Home">
-      <span class="navbar__logo-script">Carolle</span>
-      <span class="navbar__logo-sub">Hair Studio</span>
+    <a class="navbar__logo" routerLink="/" (click)="closeMenu()" [attr.aria-label]="fullName() + ' — Home'">
+      <span class="navbar__logo-script">{{ brand().script || 'Labelle' }}</span>
+      <span class="navbar__logo-sub">{{ brand().sub || 'Braids BB' }}</span>
     </a>
 
     <!-- Desktop links -->

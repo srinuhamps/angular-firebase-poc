@@ -136,11 +136,25 @@
 
 <!-- Map Placeholder -->
 <div class="ct-map">
-  <div class="ct-map__placeholder">
-    <p class="eyebrow">Our Location</p>
-    <p class="ct-map__addr">1247 Peachtree St NE Suite 201, Atlanta, GA 30309</p>
-    <p class="ct-map__note">
-      Interactive map will be embedded in Phase 3.
-    </p>
-  </div>
+  @if (mapEmbedSafe) {
+    <iframe
+      [src]="mapEmbedSafe"
+      class="ct-map__frame"
+      loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade"
+      title="Studio location map"
+    ></iframe>
+  } @else {
+    <div class="ct-map__placeholder">
+      <p class="eyebrow">Our Location</p>
+      @if (businessInfo) {
+        <p class="ct-map__addr">
+          {{ businessInfo.address }}, {{ businessInfo.city }}, {{ businessInfo.state }} {{ businessInfo.zip }}
+        </p>
+      }
+      <p class="ct-map__note">
+        Add a Google Maps embed URL in Admin → Settings to display an interactive map.
+      </p>
+    </div>
+  }
 </div>

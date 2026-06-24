@@ -1,0 +1,210 @@
+@use '../admin-shared' as adm;
+
+.admin-page        { @include adm.page-base; }
+.admin-page__header { @include adm.page-header; }
+.admin-page__title  { @include adm.page-title; }
+.admin-page__subtitle { @include adm.page-subtitle; }
+
+.muted {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.85rem;
+}
+
+.action-btn {
+  @include adm.action-btn;
+  &--outline { @include adm.action-btn-outline; }
+}
+
+.form-label  { @include adm.form-label; }
+.form-input  {
+  @include adm.form-input;
+  &--textarea { resize: vertical; }
+}
+.form-error  { @include adm.form-error; }
+.form-success {
+  color: #81c784;
+  font-size: 0.9rem;
+  margin-top: 1rem;
+}
+
+.settings-form {
+  max-width: 900px;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.settings-section {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(212, 175, 100, 0.12);
+  border-radius: 12px;
+  padding: 1.5rem 1.75rem;
+
+  &__heading {
+    font-family: var(--font-heading, 'Roboto Slab', serif);
+    font-size: 1.1rem;
+    color: var(--color-gold, #d4af64);
+    margin: 0 0 0.5rem;
+  }
+
+  &__hint {
+    margin: 0 0 1.25rem;
+    font-size: 0.82rem;
+    color: rgba(255, 255, 255, 0.45);
+    line-height: 1.5;
+
+    code {
+      background: rgba(212, 175, 100, 0.12);
+      color: var(--color-gold, #d4af64);
+      padding: 0.05em 0.4em;
+      border-radius: 3px;
+      font-size: 0.85em;
+    }
+  }
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.1rem;
+
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+
+  &--full { grid-column: 1 / -1; }
+}
+
+// ─── Weekly Hours ───────────────────────────────────────────────────────────
+
+.hours-table {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.hours-row {
+  display: grid;
+  grid-template-columns: 100px 110px 1fr 16px 1fr;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.55rem 0.75rem;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+
+  &.closed {
+    opacity: 0.55;
+  }
+
+  &__day {
+    color: #fff;
+    font-weight: 500;
+    font-size: 0.9rem;
+  }
+
+  &__toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.65);
+    cursor: pointer;
+
+    input[type='checkbox'] {
+      accent-color: var(--color-gold, #d4af64);
+    }
+  }
+
+  &__sep {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.35);
+  }
+
+  &__time {
+    padding: 0.5rem 0.7rem;
+    font-size: 0.85rem;
+
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+  }
+
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr 1fr;
+
+    &__sep { display: none; }
+  }
+}
+
+// ─── Holidays ───────────────────────────────────────────────────────────────
+
+.holiday-add {
+  display: grid;
+  grid-template-columns: 180px 1fr auto;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.holiday-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.65rem 0.9rem;
+    background: rgba(0, 0, 0, 0.22);
+    border: 1px solid rgba(212, 175, 100, 0.12);
+    border-radius: 8px;
+  }
+
+  &__date {
+    color: var(--color-gold, #d4af64);
+    font-family: monospace;
+    font-size: 0.85rem;
+    min-width: 110px;
+  }
+
+  &__label {
+    flex: 1;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.9rem;
+  }
+
+  &__remove {
+    background: transparent;
+    border: 1px solid rgba(229, 115, 115, 0.4);
+    color: #e57373;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.1rem;
+    line-height: 1;
+
+    &:hover { background: rgba(229, 115, 115, 0.15); }
+  }
+}
+
+.form-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}

@@ -8,3 +8,4 @@ export * from './gallery-image.model';
 export * from './business-info.model';
 export * from './payment-config.model';
 export * from './media-item.model';
+export * from './contact-message.model';

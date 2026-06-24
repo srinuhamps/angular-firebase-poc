@@ -1,0 +1,73 @@
+<div class="admin-page">
+  <header class="admin-page__header">
+    <div>
+      <h1 class="admin-page__title">Stylists</h1>
+      <p class="admin-page__subtitle">{{ stylists().length }} total</p>
+    </div>
+    <a class="action-btn" [routerLink]="'/admin/stylists/new'">+ Add Stylist</a>
+  </header>
+
+  @if (loading()) {
+    <p class="admin-loading">Loading stylists…</p>
+  } @else if (stylists().length === 0) {
+    <p class="admin-empty">No stylists yet. <a [routerLink]="'/admin/stylists/new'">Add one</a> or seed from the dashboard.</p>
+  } @else {
+    <div class="admin-table-wrap">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Name</th>
+            <th>Title</th>
+            <th>Experience</th>
+            <th>Specialties</th>
+            <th>Available</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (sty of stylists(); track sty.id) {
+            <tr [class.row--unavailable]="!sty.isAvailable">
+              <td>
+                @if (sty.imageUrl) {
+                  <img class="avatar" [src]="sty.imageUrl" [alt]="sty.name" loading="lazy">
+                } @else {
+                  <div class="avatar avatar--placeholder" aria-hidden="true">{{ sty.name.charAt(0) }}</div>
+                }
+              </td>
+              <td class="cell--name">{{ sty.name }}</td>
+              <td>{{ sty.title }}</td>
+              <td>{{ sty.yearsExperience }} yrs</td>
+              <td>
+                <div class="badges">
+                  @for (sp of sty.specialties.slice(0, 3); track sp) {
+                    <span class="badge">{{ sp }}</span>
+                  }
+                  @if (sty.specialties.length > 3) {
+                    <span class="badges__more">+{{ sty.specialties.length - 3 }}</span>
+                  }
+                </div>
+              </td>
+              <td>
+                <button
+                  class="toggle-btn"
+                  [class.toggle-btn--on]="sty.isAvailable"
+                  (click)="toggleAvailable(sty)"
+                  [attr.aria-label]="sty.isAvailable ? 'Mark unavailable' : 'Mark available'"
+                >{{ sty.isAvailable ? 'Yes' : 'No' }}</button>
+              </td>
+              <td class="cell--actions">
+                <a class="tbl-btn tbl-btn--edit" [routerLink]="['/admin/stylists/edit', sty.id]">Edit</a>
+                <button
+                  class="tbl-btn tbl-btn--del"
+                  (click)="delete(sty.id)"
+                  [disabled]="deleting() === sty.id"
+                >{{ deleting() === sty.id ? '…' : 'Delete' }}</button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

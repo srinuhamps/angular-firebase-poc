@@ -1,0 +1,30 @@
+@if (confirmSvc.pending(); as p) {
+  <div class="cf-backdrop" (click)="confirmSvc.resolve(false)" aria-hidden="true"></div>
+  <div
+    class="cf-modal"
+    role="dialog"
+    aria-modal="true"
+    [attr.aria-labelledby]="p.opts.title ? 'cf-title' : null"
+    aria-describedby="cf-msg"
+  >
+    @if (p.opts.title) {
+      <h2 id="cf-title" class="cf-modal__title">{{ p.opts.title }}</h2>
+    }
+    <p id="cf-msg" class="cf-modal__msg">{{ p.opts.message }}</p>
+    <div class="cf-modal__actions">
+      <button
+        type="button"
+        class="cf-btn cf-btn--cancel"
+        (click)="confirmSvc.resolve(false)"
+      >{{ p.opts.cancelText }}</button>
+      <button
+        type="button"
+        class="cf-btn"
+        [class.cf-btn--danger]="p.opts.danger"
+        [class.cf-btn--confirm]="!p.opts.danger"
+        (click)="confirmSvc.resolve(true)"
+        autofocus
+      >{{ p.opts.confirmText }}</button>
+    </div>
+  </div>
+}

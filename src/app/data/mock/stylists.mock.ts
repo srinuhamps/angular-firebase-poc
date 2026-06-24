@@ -40,4 +40,28 @@ export const MOCK_STYLISTS: Stylist[] = [
     isAvailable: true,
     instagramUrl: '',
   },
+  {
+    id: 'sty-4',
+    name: 'Amara Okonkwo',
+    title: 'Color & Weave Specialist',
+    bio:
+      'Amara is a color virtuoso with 9 years behind the chair. Trained in Lagos and refined in Atlanta, she blends rich tones with seamless sew-ins and custom wig installations. Known for her balayage on textured hair and her flawless leave-outs.',
+    imageUrl: 'https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=600&q=80',
+    specialties: ['Balayage', 'Custom Wig Install', 'Sew-In Weaves', 'Color Correction'],
+    yearsExperience: 9,
+    isAvailable: true,
+    instagramUrl: 'https://instagram.com/amara.hair',
+  },
+  {
+    id: 'sty-5',
+    name: 'Simone Bellamy',
+    title: 'Natural Hair Stylist',
+    bio:
+      'Simone champions natural hair in all its forms. With 5 years of curated experience in silk presses, twist-outs, and big chops, she helps clients fall in love with their texture. Her gentle approach makes her a favorite for first-time naturals.',
+    imageUrl: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=600&q=80',
+    specialties: ['Silk Press', 'Twist-Outs', 'Big Chops', 'Natural Hair Coaching'],
+    yearsExperience: 5,
+    isAvailable: true,
+    instagramUrl: 'https://instagram.com/simonebellamy',
+  },
 ];

@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, inject, signal } from '@angular/core';
+import { Component, OnInit, AfterViewInit, inject, signal, computed } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { SalonDataService } from '../../core/services/salon-data.service';
 import { ScrollAnimationService } from '../../core/services/scroll-animation.service';
@@ -18,7 +18,7 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
   private dataService  = inject(SalonDataService);
   private scrollAnim   = inject(ScrollAnimationService);
 
-  allProducts: Product[] = [];
+  allProducts = signal<Product[]>([]);
   activeFilter = signal<FilterCat>('all');
 
   readonly filters: { label: string; value: FilterCat }[] = [
@@ -31,13 +31,21 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
     { label: 'Accessories',    value: 'accessories'   },
   ];
 
-  get filteredProducts(): Product[] {
+  filteredProducts = computed<Product[]>(() => {
     const f = this.activeFilter();
-    return f === 'all' ? this.allProducts : this.allProducts.filter(p => p.category === f);
-  }
+    const all = this.allProducts();
+    return f === 'all' ? all : all.filter(p => p.category === f);
+  });
 
   ngOnInit(): void {
-    this.dataService.getProducts().subscribe(p => (this.allProducts = p));
+    this.dataService.getProducts().subscribe({
+      next: (p) => {
+        this.allProducts.set(p);
+        // Data arrived after ngAfterViewInit ran — observe the freshly rendered cards.
+        setTimeout(() => this.scrollAnim.observeAll(), 0);
+      },
+      error: (err) => console.error('[ProductsPage] getProducts failed', err),
+    });
   }
 
   ngAfterViewInit(): void {

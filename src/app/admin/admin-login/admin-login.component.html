@@ -1,8 +1,8 @@
 <div class="login-page">
   <div class="login-card">
     <div class="login-card__brand">
-      <span class="login-card__script">Carolle</span>
-      <span class="login-card__label">Hair Studio · Admin</span>
+      <span class="login-card__script">{{ brand().script || 'Labelle' }}</span>
+      <span class="login-card__label">{{ subLabel() }}</span>
     </div>
 
     <form class="login-form" (ngSubmit)="onSubmit()" #loginForm="ngForm">
@@ -14,7 +14,7 @@
           type="email"
           name="email"
           [(ngModel)]="email"
-          placeholder="admin@carollehairstudio.com"
+          placeholder="admin@example.com"
           autocomplete="username"
           required
         />

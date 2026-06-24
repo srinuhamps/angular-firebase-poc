@@ -27,9 +27,9 @@
 <!-- Services Grid -->
 <section class="section svc-grid-section bg-dark">
   <div class="container">
-    @if (filteredServices.length > 0) {
+    @if (filteredServices().length > 0) {
       <div class="svc-grid">
-        @for (svc of filteredServices; track svc.id; let i = $index) {
+        @for (svc of filteredServices(); track svc.id; let i = $index) {
           <div class="reveal reveal-d{{ (i % 4) + 1 }}">
             <app-service-card [service]="svc" />
           </div>

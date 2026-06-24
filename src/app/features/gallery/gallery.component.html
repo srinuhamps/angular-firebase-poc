@@ -24,9 +24,9 @@
 <!-- Gallery Grid -->
 <section class="section gal-grid-section bg-dark">
   <div class="container">
-    @if (filteredImages.length > 0) {
+    @if (filteredImages().length > 0) {
       <div class="gal-grid">
-        @for (img of filteredImages; track img.id) {
+        @for (img of filteredImages(); track img.id) {
           <button class="gal-item reveal" (click)="openLightbox(img)">
             <img [src]="img.imageUrl" [alt]="img.title" loading="lazy">
             <div class="gal-item__overlay">

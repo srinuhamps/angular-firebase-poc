@@ -1,0 +1,9 @@
+# https://www.robotstxt.org/robotstxt.html
+# Allow all crawlers by default. Disallow the admin area.
+
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+
+Sitemap: https://carollehairstudio.com/sitemap.xml

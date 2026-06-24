@@ -1,11 +1,27 @@
 <div class="admin-page">
   <header class="admin-page__header">
     <h1 class="admin-page__title">Dashboard</h1>
-    <p class="admin-page__subtitle">Welcome back, Carolle.</p>
+    <p class="admin-page__subtitle">Welcome back to {{ businessName() }}.</p>
   </header>
 
   <!-- Stats cards -->
   <section class="dash-stats">
+    <div class="stat-card stat-card--feature">
+      <span class="stat-card__value">{{ upcomingCount() }}</span>
+      <span class="stat-card__label">Upcoming Appointments</span>
+      @if (pendingCount() > 0) {
+        <span class="stat-card__sub">{{ pendingCount() }} pending confirmation</span>
+      }
+      <a class="stat-card__link" [routerLink]="'/admin/appointments'">Manage →</a>
+    </div>
+    <div class="stat-card">
+      <span class="stat-card__value">{{ openMessageCount() }}</span>
+      <span class="stat-card__label">Open Messages</span>
+      @if (newMessageCount() > 0) {
+        <span class="stat-card__sub">{{ newMessageCount() }} new</span>
+      }
+      <a class="stat-card__link" [routerLink]="'/admin/messages'">Manage →</a>
+    </div>
     <div class="stat-card">
       <span class="stat-card__value">{{ serviceCount() }}</span>
       <span class="stat-card__label">Services</span>
@@ -16,6 +32,11 @@
       <span class="stat-card__label">Products</span>
       <a class="stat-card__link" [routerLink]="'/admin/products'">Manage →</a>
     </div>
+    <div class="stat-card">
+      <span class="stat-card__value">{{ stylistCount() }}</span>
+      <span class="stat-card__label">Stylists</span>
+      <a class="stat-card__link" [routerLink]="'/admin/stylists'">Manage →</a>
+    </div>
   </section>
 
   <!-- Quick actions -->
@@ -23,6 +44,7 @@
     <h2 class="dash-actions__heading">Quick Actions</h2>
     <div class="dash-actions__grid">
       <a class="action-btn" [routerLink]="'/admin/services/new'">+ Add Service</a>
+      <a class="action-btn" [routerLink]="'/admin/stylists/new'">+ Add Stylist</a>
       <a class="action-btn" [routerLink]="'/admin/products/new'">+ Add Product</a>
     </div>
   </section>

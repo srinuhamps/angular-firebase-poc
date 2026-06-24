@@ -1,14 +1,31 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
 
+// SEO descriptions use the `{name}` token — SeoService substitutes the live
+// business name from BusinessInfoService at render time so admin renames
+// flow through to <title> and <meta> tags without a redeploy.
 export const routes: Routes = [
   {
     path: '',
+    title: 'Luxury Hair Services & Beauty Supply',
+    data: {
+      seo: {
+        description:
+          '{name} — premium braiding, locs, weaving, and beauty supply. Book your appointment with luxury hair experts today.',
+      },
+    },
     loadComponent: () =>
       import('./features/home/home.component').then((m) => m.HomeComponent),
   },
   {
     path: 'services',
+    title: 'Services',
+    data: {
+      seo: {
+        description:
+          'Explore {name}’s full service menu — braids, locs, weaves, styling, and treatments by our top stylists.',
+      },
+    },
     loadComponent: () =>
       import('./features/services/services-page.component').then(
         (m) => m.ServicesPageComponent
@@ -16,6 +33,13 @@ export const routes: Routes = [
   },
   {
     path: 'products',
+    title: 'Beauty Supply',
+    data: {
+      seo: {
+        description:
+          'Shop curated beauty products and salon-grade hair care, hand-picked by {name}.',
+      },
+    },
     loadComponent: () =>
       import('./features/products/products-page.component').then(
         (m) => m.ProductsPageComponent
@@ -23,11 +47,25 @@ export const routes: Routes = [
   },
   {
     path: 'about',
+    title: 'About',
+    data: {
+      seo: {
+        description:
+          'Meet the stylists behind {name} and the story behind our hair sanctuary.',
+      },
+    },
     loadComponent: () =>
       import('./features/about/about.component').then((m) => m.AboutComponent),
   },
   {
     path: 'gallery',
+    title: 'Gallery',
+    data: {
+      seo: {
+        description:
+          'A visual look at the work coming out of {name} — braids, locs, weaves, color, and styling.',
+      },
+    },
     loadComponent: () =>
       import('./features/gallery/gallery.component').then(
         (m) => m.GalleryComponent
@@ -35,6 +73,13 @@ export const routes: Routes = [
   },
   {
     path: 'contact',
+    title: 'Contact',
+    data: {
+      seo: {
+        description:
+          'Get in touch with {name}. Find our studio, hours, phone, and email — or send a message directly.',
+      },
+    },
     loadComponent: () =>
       import('./features/contact/contact.component').then(
         (m) => m.ContactComponent
@@ -42,7 +87,13 @@ export const routes: Routes = [
   },
   {
     path: 'booking',
-    // Phase 2: Full booking flow — see BookingComponent for placeholder details
+    title: 'Book an Appointment',
+    data: {
+      seo: {
+        description:
+          'Book your appointment at {name} online in minutes — pick a service, stylist, date, and time.',
+      },
+    },
     loadComponent: () =>
       import('./features/booking/booking.component').then(
         (m) => m.BookingComponent
@@ -50,6 +101,8 @@ export const routes: Routes = [
   },
   {
     path: 'admin/login',
+    title: 'Admin Login',
+    data: { seo: { noIndex: true } },
     loadComponent: () =>
       import('./admin/admin-login/admin-login.component').then(
         (m) => m.AdminLoginComponent
@@ -57,6 +110,8 @@ export const routes: Routes = [
   },
   {
     path: 'admin',
+    title: 'Admin',
+    data: { seo: { noIndex: true } },
     canActivate: [authGuard],
     loadComponent: () =>
       import('./admin/admin-layout/admin-layout.component').then(
@@ -104,6 +159,13 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./admin/admin-gallery/admin-gallery.component').then(
             (m) => m.AdminGalleryComponent
+          ),
+      },
+      {
+        path: 'settings',
+        loadComponent: () =>
+          import('./admin/admin-settings/admin-settings.component').then(
+            (m) => m.AdminSettingsComponent
           ),
       },
       {

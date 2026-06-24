@@ -1,5 +1,6 @@
 import { Component, AfterViewInit, inject } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { SalonDataService } from '../../core/services/salon-data.service';
 import { ScrollAnimationService } from '../../core/services/scroll-animation.service';
 import { BusinessInfo } from '../../core/models/business-info.model';
@@ -16,8 +17,10 @@ export class ContactComponent implements AfterViewInit {
   private fb          = inject(FormBuilder);
   private dataService = inject(SalonDataService);
   private scrollAnim  = inject(ScrollAnimationService);
+  private sanitizer   = inject(DomSanitizer);
 
   businessInfo: BusinessInfo | null = null;
+  mapEmbedSafe: SafeResourceUrl | null = null;
   submitted = false;
 
   form: FormGroup = this.fb.group({
@@ -29,7 +32,12 @@ export class ContactComponent implements AfterViewInit {
   });
 
   constructor() {
-    this.dataService.getBusinessInfo().subscribe(b => (this.businessInfo = b));
+    this.dataService.getBusinessInfo().subscribe((b) => {
+      this.businessInfo = b;
+      this.mapEmbedSafe = b.mapEmbedUrl
+        ? this.sanitizer.bypassSecurityTrustResourceUrl(b.mapEmbedUrl)
+        : null;
+    });
   }
 
   ngAfterViewInit(): void {

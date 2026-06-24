@@ -1,5 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { SalonDataService } from '../../../core/services/salon-data.service';
+import {
+  BusinessInfo,
+  BusinessHours,
+  splitBrandName,
+} from '../../../core/models/business-info.model';
 
 @Component({
   selector: 'app-footer',
@@ -9,7 +15,11 @@ import { RouterLink } from '@angular/router';
   styleUrl: './footer.component.scss',
 })
 export class FooterComponent {
+  private readonly dataService = inject(SalonDataService);
+
   readonly currentYear = new Date().getFullYear();
+  readonly info = signal<BusinessInfo | null>(null);
+  readonly brand = computed(() => splitBrandName(this.info()?.name));
 
   readonly services = [
     { label: 'Knotless Box Braids', path: '/services' },
@@ -29,4 +39,12 @@ export class FooterComponent {
     { label: 'Contact',     path: '/contact'  },
     { label: 'Book Now',    path: '/booking'  },
   ];
+
+  constructor() {
+    this.dataService.getBusinessInfo().subscribe((b) => this.info.set(b));
+  }
+
+  hoursLabel(h: BusinessHours): string {
+    return h.isClosed ? 'Closed' : `${h.open} – ${h.close}`;
+  }
 }

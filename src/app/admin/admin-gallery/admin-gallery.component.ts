@@ -1,5 +1,7 @@
 import { Component, signal, inject } from '@angular/core';
 import { MediaService } from '../../core/services/media.service';
+import { ConfirmService } from '../../core/services/confirm.service';
+import { ToastService } from '../../core/services/toast.service';
 import { MediaItem } from '../../core/models/media-item.model';
 
 @Component({
@@ -10,7 +12,9 @@ import { MediaItem } from '../../core/models/media-item.model';
   styleUrl: './admin-gallery.component.scss',
 })
 export class AdminGalleryComponent {
-  private readonly mediaSvc = inject(MediaService);
+  private readonly mediaSvc   = inject(MediaService);
+  private readonly confirmSvc = inject(ConfirmService);
+  private readonly toast      = inject(ToastService);
 
   items     = signal<MediaItem[]>([]);
   loading   = signal(true);
@@ -85,8 +89,20 @@ export class AdminGalleryComponent {
   }
 
   async deleteItem(item: MediaItem): Promise<void> {
-    if (!confirm(`Delete "${item.title}"? This cannot be undone.`)) return;
-    await this.mediaSvc.delete(item);
-    this.items.update((list) => list.filter((i) => i.id !== item.id));
+    const ok = await this.confirmSvc.ask({
+      title:       'Delete media?',
+      message:     `“${item.title}” will be permanently removed from the gallery and Storage. This cannot be undone.`,
+      confirmText: 'Delete',
+      danger:      true,
+    });
+    if (!ok) return;
+    try {
+      await this.mediaSvc.delete(item);
+      this.items.update((list) => list.filter((i) => i.id !== item.id));
+      this.toast.success(`Deleted “${item.title}”.`);
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err);
+      this.toast.error('Could not delete media: ' + msg);
+    }
   }
 }

@@ -4,12 +4,14 @@ import { filter, map, startWith } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { NavbarComponent } from './shared/components/navbar/navbar.component';
 import { FooterComponent } from './shared/components/footer/footer.component';
+import { ToastHostComponent } from './shared/components/toast-host/toast-host.component';
+import { ConfirmHostComponent } from './shared/components/confirm-host/confirm-host.component';
 import { ScrollAnimationService } from './core/services/scroll-animation.service';
 import { ThemeService } from './core/services/theme.service';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, NavbarComponent, FooterComponent],
+  imports: [RouterOutlet, NavbarComponent, FooterComponent, ToastHostComponent, ConfirmHostComponent],
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })

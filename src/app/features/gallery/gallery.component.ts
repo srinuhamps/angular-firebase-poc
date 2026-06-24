@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, inject, signal } from '@angular/core';
+import { Component, AfterViewInit, computed, inject, signal } from '@angular/core';
 import { SalonDataService } from '../../core/services/salon-data.service';
 import { ScrollAnimationService } from '../../core/services/scroll-animation.service';
 import { GalleryImage, GalleryCategory } from '../../core/models/gallery-image.model';
@@ -16,9 +16,10 @@ export class GalleryComponent implements AfterViewInit {
   private dataService = inject(SalonDataService);
   private scrollAnim  = inject(ScrollAnimationService);
 
-  allImages: GalleryImage[] = [];
-  lightboxImage = signal<GalleryImage | null>(null);
-  activeFilter = signal<FilterCat>('all');
+  // Signal-backed so zoneless change detection picks up the async Firestore result.
+  readonly allImages     = signal<GalleryImage[]>([]);
+  readonly lightboxImage = signal<GalleryImage | null>(null);
+  readonly activeFilter  = signal<FilterCat>('all');
 
   readonly filters: { label: string; value: FilterCat }[] = [
     { label: 'All',           value: 'all'          },
@@ -30,13 +31,17 @@ export class GalleryComponent implements AfterViewInit {
     { label: 'Before & After',value: 'before-after' },
   ];
 
-  get filteredImages(): GalleryImage[] {
+  readonly filteredImages = computed<GalleryImage[]>(() => {
     const f = this.activeFilter();
-    return f === 'all' ? this.allImages : this.allImages.filter(i => i.category === f);
-  }
+    const all = this.allImages();
+    return f === 'all' ? all : all.filter((i) => i.category === f);
+  });
 
   constructor() {
-    this.dataService.getGalleryImages().subscribe(imgs => (this.allImages = imgs));
+    this.dataService.getGalleryImages().subscribe((imgs) => {
+      this.allImages.set(imgs);
+      setTimeout(() => this.scrollAnim.observeAll(), 0);
+    });
   }
 
   ngAfterViewInit(): void {

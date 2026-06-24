@@ -1,6 +1,8 @@
 import { Component, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ProductsService } from '../../core/services/products.service';
+import { ConfirmService } from '../../core/services/confirm.service';
+import { ToastService } from '../../core/services/toast.service';
 import { Product } from '../../core/models/product.model';
 
 @Component({
@@ -12,6 +14,8 @@ import { Product } from '../../core/models/product.model';
 })
 export class AdminProductsComponent {
   private readonly prdService = inject(ProductsService);
+  private readonly confirmSvc = inject(ConfirmService);
+  private readonly toast      = inject(ToastService);
 
   products = signal<Product[]>([]);
   loading  = signal<boolean>(true);
@@ -35,11 +39,22 @@ export class AdminProductsComponent {
   }
 
   async delete(id: string): Promise<void> {
-    if (!confirm('Delete this product? This cannot be undone.')) return;
+    const prd = this.products().find((p) => p.id === id);
+    const ok = await this.confirmSvc.ask({
+      title:       'Delete product?',
+      message:     `“${prd?.name ?? 'This product'}” will be permanently removed. This cannot be undone.`,
+      confirmText: 'Delete',
+      danger:      true,
+    });
+    if (!ok) return;
     this.deleting.set(id);
     try {
       await this.prdService.delete(id);
+      this.toast.success(`Deleted “${prd?.name ?? 'product'}”.`);
       this.load();
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err);
+      this.toast.error('Could not delete product: ' + msg);
     } finally {
       this.deleting.set(null);
     }

@@ -12,6 +12,11 @@ import { isPlatformBrowser } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { ThemeToggleComponent } from '../theme-toggle/theme-toggle.component';
 import { AuthService } from '../../../core/services/auth.service';
+import { BusinessInfoService } from '../../../core/services/business-info.service';
+import {
+  BusinessInfo,
+  splitBrandName,
+} from '../../../core/models/business-info.model';
 
 interface NavLink {
   label: string;
@@ -28,8 +33,14 @@ interface NavLink {
 export class NavbarComponent implements OnInit, OnDestroy {
   private platformId  = inject(PLATFORM_ID);
   private authService = inject(AuthService);
+  private bizService  = inject(BusinessInfoService);
 
   readonly isAdmin = computed(() => this.authService.user() !== null);
+
+  /** Live business info; drives the brand logo in the navbar. */
+  readonly info = signal<BusinessInfo | null>(null);
+  readonly brand = computed(() => splitBrandName(this.info()?.name));
+  readonly fullName = computed(() => this.info()?.name ?? 'Labelle Braids BB');
 
   readonly navLinks: NavLink[] = [
     { label: 'Home',     path: '/'        },
@@ -47,6 +58,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
     if (isPlatformBrowser(this.platformId)) {
       this.checkScroll();
     }
+    this.bizService.info$.subscribe((b) => this.info.set(b));
   }
 
   ngOnDestroy(): void {

@@ -27,9 +27,9 @@
 <!-- Products Grid -->
 <section class="section bg-dark">
   <div class="container">
-    @if (filteredProducts.length > 0) {
+    @if (filteredProducts().length > 0) {
       <div class="prd-grid">
-        @for (product of filteredProducts; track product.id; let i = $index) {
+        @for (product of filteredProducts(); track product.id; let i = $index) {
           <div class="reveal reveal-d{{ (i % 4) + 1 }}">
             <app-product-card [product]="product" />
           </div>

@@ -1,0 +1,84 @@
+<div class="admin-page">
+  <header class="admin-page__header">
+    <div>
+      <h1 class="admin-page__title">Appointments</h1>
+      <p class="admin-page__subtitle">{{ filtered().length }} of {{ appointments().length }} shown</p>
+    </div>
+  </header>
+
+  <!-- Filter tabs -->
+  <div class="appt-filters">
+    @for (f of filters; track f.value) {
+      <button
+        class="appt-filters__btn"
+        [class.active]="statusFilter() === f.value"
+        (click)="statusFilter.set(f.value)"
+      >{{ f.label }}</button>
+    }
+  </div>
+
+  @if (loading()) {
+    <p class="admin-loading">Loading appointments…</p>
+  } @else if (filtered().length === 0) {
+    <p class="admin-empty">No appointments match this filter.</p>
+  } @else {
+    <div class="admin-table-wrap">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>When</th>
+            <th>Customer</th>
+            <th>Service</th>
+            <th>Stylist</th>
+            <th>Total</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (a of filtered(); track a.id) {
+            <tr [class.row--cancelled]="a.status === 'cancelled'">
+              <td>
+                <div class="cell--date">{{ formatDate(a.date) }}</div>
+                <div class="cell--time">{{ a.startTime }} – {{ a.endTime }}</div>
+              </td>
+              <td>
+                <div class="cell--name">{{ a.customerName }}</div>
+                <a class="cell--link" [href]="'mailto:' + a.customerEmail">{{ a.customerEmail }}</a>
+                <div class="cell--sub">{{ a.customerPhone }}</div>
+              </td>
+              <td>
+                <div>{{ a.serviceName }}</div>
+                <div class="cell--sub">{{ a.duration }} min</div>
+              </td>
+              <td>{{ a.stylistName }}</td>
+              <td>${{ a.totalAmount }}</td>
+              <td>
+                <span class="status-badge status-badge--{{ a.status }}">{{ a.status }}</span>
+              </td>
+              <td class="cell--actions">
+                @if (a.status === 'pending') {
+                  <button class="tbl-btn tbl-btn--confirm" (click)="setStatus(a, 'confirmed')" [disabled]="updatingId() === a.id">Confirm</button>
+                }
+                @if (a.status === 'confirmed') {
+                  <button class="tbl-btn tbl-btn--confirm" (click)="setStatus(a, 'completed')" [disabled]="updatingId() === a.id">Complete</button>
+                }
+                @if (a.status !== 'cancelled' && a.status !== 'completed') {
+                  <button class="tbl-btn tbl-btn--edit" (click)="setStatus(a, 'no-show')" [disabled]="updatingId() === a.id">No-show</button>
+                  <button class="tbl-btn tbl-btn--del" (click)="setStatus(a, 'cancelled')" [disabled]="updatingId() === a.id">Cancel</button>
+                }
+                <button class="tbl-btn tbl-btn--del" (click)="delete(a)" [disabled]="updatingId() === a.id" title="Delete permanently">×</button>
+              </td>
+            </tr>
+            @if (a.notes) {
+              <tr class="notes-row">
+                <td></td>
+                <td colspan="6"><span class="notes-row__label">Notes:</span> {{ a.notes }}</td>
+              </tr>
+            }
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

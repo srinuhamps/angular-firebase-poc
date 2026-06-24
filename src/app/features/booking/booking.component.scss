@@ -116,3 +116,43 @@
   .booking-steps__divider { display: none; }
   .booking-placeholder__btns { flex-direction: column; }
 }
+
+// Live Hours & Holidays
+.booking-hours {
+  max-width: 460px;
+  width: 100%;
+  margin: 1rem auto 0;
+  padding: 1.5rem 1.75rem;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(201, 169, 110, 0.2);
+  border-radius: 12px;
+  text-align: left;
+
+  &__title {
+    font-family: var(--font-heading);
+    font-size: 0.95rem;
+    color: var(--color-gold);
+    margin: 0.75rem 0 0.5rem;
+
+    &:first-child { margin-top: 0; }
+  }
+
+  &__list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 0.25rem;
+
+    li {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.3rem 0;
+      font-size: 0.85rem;
+      color: var(--color-cream, #f4ead5);
+      border-bottom: 1px dashed rgba(255, 255, 255, 0.07);
+
+      &:last-child { border-bottom: 0; }
+
+      &.closed { color: var(--color-text-muted); }
+    }
+  }
+}

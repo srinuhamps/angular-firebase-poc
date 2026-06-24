@@ -1,0 +1,42 @@
+[debug] [2026-06-22T02:33:49.831Z] ----------------------------------------------------------------------
+[debug] [2026-06-22T02:33:49.833Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\srinu\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js login
+[debug] [2026-06-22T02:33:49.834Z] CLI Version:   15.18.0
+[debug] [2026-06-22T02:33:49.834Z] Platform:      win32
+[debug] [2026-06-22T02:33:49.834Z] Node Version:  v22.22.0
+[debug] [2026-06-22T02:33:49.834Z] Time:          Sun Jun 21 2026 21:33:49 GMT-0500 (Central Daylight Time)
+[debug] [2026-06-22T02:33:49.834Z] ----------------------------------------------------------------------
+[debug] 
+[info] i  The Firebase CLI’s MCP server feature can optionally make use of Gemini in Firebase. Learn more about Gemini in Firebase and how it uses your data: https://firebase.google.com/docs/gemini-in-firebase#how-gemini-in-firebase-uses-your-data 
+[info] 
+[info] i  Firebase optionally collects CLI and Emulator Suite usage and error reporting information to help improve our products. Data is collected in accordance with Google's privacy policy (https://policies.google.com/privacy) and is not used to identify you. 
+[debug] [2026-06-22T02:34:00.485Z] ExitPromptError: User force closed the prompt with SIGINT
+    at Interface.sigint (C:\Users\srinu\AppData\Roaming\npm\node_modules\firebase-tools\node_modules\@inquirer\core\dist\commonjs\lib\create-prompt.js:101:37)
+    at Interface.emit (node:events:519:28)
+    at [_ttyWrite] [as _ttyWrite] (node:internal/readline/interface:1134:18)
+    at ReadStream.onkeypress (node:internal/readline/interface:271:20)
+    at ReadStream.emit (node:events:531:35)
+    at emitKeys (node:internal/readline/utils:370:14)
+    at emitKeys.next (<anonymous>)
+    at ReadStream.onData (node:internal/readline/emitKeypressEvents:64:36)
+    at ReadStream.emit (node:events:519:28)
+    at addChunk (node:internal/streams/readable:561:12)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2026-06-22T02:34:02.718Z] ----------------------------------------------------------------------
+[debug] [2026-06-22T02:34:02.721Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\srinu\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js login
+[debug] [2026-06-22T02:34:02.721Z] CLI Version:   15.18.0
+[debug] [2026-06-22T02:34:02.721Z] Platform:      win32
+[debug] [2026-06-22T02:34:02.721Z] Node Version:  v22.22.0
+[debug] [2026-06-22T02:34:02.722Z] Time:          Sun Jun 21 2026 21:34:02 GMT-0500 (Central Daylight Time)
+[debug] [2026-06-22T02:34:02.722Z] ----------------------------------------------------------------------
+[debug] 
+[info] i  The Firebase CLI’s MCP server feature can optionally make use of Gemini in Firebase. Learn more about Gemini in Firebase and how it uses your data: https://firebase.google.com/docs/gemini-in-firebase#how-gemini-in-firebase-uses-your-data 
+[info] 
+[info] i  Firebase optionally collects CLI and Emulator Suite usage and error reporting information to help improve our products. Data is collected in accordance with Google's privacy policy (https://policies.google.com/privacy) and is not used to identify you. 
+[info] 
+[info] i  To change your preferences at any time, run `firebase logout` and `firebase login` again. 
+[info] 
+[info] Visit this URL on this device to log in:
+[info] https://accounts.google.com/o/oauth2/auth?client_id=563584335869-fgrhgmd47bqnekij5i8b5pr03ho849e6.apps.googleusercontent.com&scope=email%20openid%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcloudplatformprojects.readonly%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Ffirebase%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcloud-platform&response_type=code&state=942813478&redirect_uri=http%3A%2F%2Flocalhost%3A9005
+[info] 
+[info] Waiting for authentication...

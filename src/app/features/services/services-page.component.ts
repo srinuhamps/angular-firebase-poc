@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, inject, signal } from '@angular/core';
+import { Component, OnInit, AfterViewInit, inject, signal, computed } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { SalonDataService } from '../../core/services/salon-data.service';
 import { ScrollAnimationService } from '../../core/services/scroll-animation.service';
@@ -18,7 +18,7 @@ export class ServicesPageComponent implements OnInit, AfterViewInit {
   private dataService  = inject(SalonDataService);
   private scrollAnim   = inject(ScrollAnimationService);
 
-  allServices: HairService[] = [];
+  allServices = signal<HairService[]>([]);
   activeFilter = signal<FilterCategory>('all');
 
   readonly filters: { label: string; value: FilterCategory }[] = [
@@ -31,13 +31,20 @@ export class ServicesPageComponent implements OnInit, AfterViewInit {
     { label: 'Consultation',   value: 'consultation' },
   ];
 
-  get filteredServices(): HairService[] {
+  filteredServices = computed<HairService[]>(() => {
     const f = this.activeFilter();
-    return f === 'all' ? this.allServices : this.allServices.filter(s => s.category === f);
-  }
+    const all = this.allServices();
+    return f === 'all' ? all : all.filter(s => s.category === f);
+  });
 
   ngOnInit(): void {
-    this.dataService.getServices().subscribe(s => (this.allServices = s));
+    this.dataService.getServices().subscribe({
+      next: (s) => {
+        this.allServices.set(s);
+        setTimeout(() => this.scrollAnim.observeAll(), 0);
+      },
+      error: (err) => console.error('[ServicesPage] getServices failed', err),
+    });
   }
 
   ngAfterViewInit(): void {

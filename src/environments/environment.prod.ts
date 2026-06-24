@@ -1,5 +1,8 @@
 export const environment = {
   production: true,
+  // Public URL of the deployed site — used for canonical / OG / sitemap links.
+  siteUrl: 'https://carollehairstudio.com',
+  defaultOgImage: '/og-cover.jpg',
   firebase: {
     apiKey: 'AIzaSyDqNxqJ0LFKGBvoHzza3kdCzygz0tqxzjc',
     authDomain: 'carolle-hair-studio.firebaseapp.com',

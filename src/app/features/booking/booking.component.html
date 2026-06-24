@@ -21,13 +21,40 @@
       }
     </div>
 
+    <!-- Live Hours & Holidays -->
+    @if (info(); as biz) {
+      <div class="booking-hours">
+        <h3 class="booking-hours__title">Studio Hours</h3>
+        <ul class="booking-hours__list">
+          @for (h of biz.businessHours; track h.day) {
+            <li [class.closed]="h.isClosed">
+              <span>{{ h.day }}</span>
+              <span>{{ h.isClosed ? 'Closed' : h.open + ' – ' + h.close }}</span>
+            </li>
+          }
+        </ul>
+
+        @if (biz.holidays.length > 0) {
+          <h3 class="booking-hours__title">Upcoming Closures</h3>
+          <ul class="booking-hours__list">
+            @for (hol of biz.holidays; track hol.date) {
+              <li class="closed">
+                <span>{{ hol.date }}</span>
+                <span>{{ hol.label }}</span>
+              </li>
+            }
+          </ul>
+        }
+      </div>
+    }
+
     <!-- Interim CTA -->
     <div class="booking-placeholder__cta">
       <p class="booking-placeholder__cta-text">In the meantime, book by phone or email:</p>
       <div class="booking-placeholder__btns">
-        <a class="btn btn-primary btn-lg" href="tel:+14045550192">
+        <a class="btn btn-primary btn-lg" [href]="telHref(info()?.phone)">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.21h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.82a16 16 0 0 0 6.08 6.08l1.68-1.34a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-          Call Us
+          {{ info()?.phone ? 'Call ' + info()!.phone : 'Call Us' }}
         </a>
         <a class="btn btn-outline btn-lg" [routerLink]="'/contact'">Send a Message</a>
       </div>

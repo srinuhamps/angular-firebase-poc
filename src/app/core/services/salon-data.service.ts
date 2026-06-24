@@ -11,6 +11,7 @@ import { BusinessInfo } from '../models/business-info.model';
 
 import { ServicesService } from './services.service';
 import { ProductsService } from './products.service';
+import { BusinessInfoService } from './business-info.service';
 import { MOCK_STYLISTS } from '../../data/mock/stylists.mock';
 import { MOCK_TESTIMONIALS } from '../../data/mock/testimonials.mock';
 import { MOCK_GALLERY } from '../../data/mock/gallery.mock';
@@ -28,6 +29,7 @@ import { MOCK_BUSINESS_INFO } from '../../data/mock/business-info.mock';
 export class SalonDataService {
   private readonly svcService = inject(ServicesService);
   private readonly prdService = inject(ProductsService);
+  private readonly bizService = inject(BusinessInfoService);
 
   // ─── Services (live Firestore) ─────────────────────────────────────────────
 
@@ -97,10 +99,10 @@ export class SalonDataService {
     return of(MOCK_GALLERY.filter(g => g.category === category));
   }
 
-  // ─── Business Info ─────────────────────────────────────────────────────────
+  // ─── Business Info (live Firestore) ────────────────────────────────────────
 
-  /** Phase 3: doc('config/business') */
+  /** Live business profile — managed via Admin → Business Settings. */
   getBusinessInfo(): Observable<BusinessInfo> {
-    return of(MOCK_BUSINESS_INFO);
+    return this.bizService.get();
   }
 }

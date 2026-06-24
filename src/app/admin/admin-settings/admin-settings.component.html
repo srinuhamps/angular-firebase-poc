@@ -1,0 +1,258 @@
+<div class="admin-page">
+  <header class="admin-page__header">
+    <div>
+      <h1 class="admin-page__title">Business Settings</h1>
+      <p class="admin-page__subtitle">
+        These details are shown across the public site and used for appointment scheduling.
+      </p>
+    </div>
+  </header>
+
+  @if (loading()) {
+    <p class="muted">Loading…</p>
+  } @else {
+    <form class="settings-form" (ngSubmit)="save()">
+
+      <!-- ── Identity ─────────────────────────────────────────────────────── -->
+      <section class="settings-section">
+        <h2 class="settings-section__heading">Identity</h2>
+        <div class="form-grid">
+          <div class="form-group form-group--full">
+            <label class="form-label" for="name">Business Name *</label>
+            <input
+              id="name" class="form-input" type="text"
+              [ngModel]="form().name" name="name"
+              (ngModelChange)="setField('name', $event)"
+            />
+          </div>
+          <div class="form-group form-group--full">
+            <label class="form-label" for="tagline">Tagline</label>
+            <input
+              id="tagline" class="form-input" type="text"
+              [ngModel]="form().tagline" name="tagline"
+              (ngModelChange)="setField('tagline', $event)"
+            />
+          </div>
+          <div class="form-group form-group--full">
+            <label class="form-label" for="description">Description</label>
+            <textarea
+              id="description" class="form-input form-input--textarea" rows="3"
+              [ngModel]="form().description" name="description"
+              (ngModelChange)="setField('description', $event)"
+            ></textarea>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── Contact ───────────────────────────────────────────────────────── -->
+      <section class="settings-section">
+        <h2 class="settings-section__heading">Contact</h2>
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label" for="phone">Phone *</label>
+            <input
+              id="phone" class="form-input" type="tel"
+              [ngModel]="form().phone" name="phone"
+              (ngModelChange)="setField('phone', $event)"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="email">Email *</label>
+            <input
+              id="email" class="form-input" type="email"
+              [ngModel]="form().email" name="email"
+              (ngModelChange)="setField('email', $event)"
+            />
+          </div>
+          <div class="form-group form-group--full">
+            <label class="form-label" for="website">Website</label>
+            <input
+              id="website" class="form-input" type="url"
+              [ngModel]="form().website" name="website"
+              (ngModelChange)="setField('website', $event)"
+            />
+          </div>
+        </div>
+      </section>
+
+      <!-- ── Address ──────────────────────────────────────────────────────── -->
+      <section class="settings-section">
+        <h2 class="settings-section__heading">Address</h2>
+        <div class="form-grid">
+          <div class="form-group form-group--full">
+            <label class="form-label" for="address">Street Address</label>
+            <input
+              id="address" class="form-input" type="text"
+              [ngModel]="form().address" name="address"
+              (ngModelChange)="setField('address', $event)"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="city">City</label>
+            <input
+              id="city" class="form-input" type="text"
+              [ngModel]="form().city" name="city"
+              (ngModelChange)="setField('city', $event)"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="state">State</label>
+            <input
+              id="state" class="form-input" type="text"
+              [ngModel]="form().state" name="state"
+              (ngModelChange)="setField('state', $event)"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="zip">Zip</label>
+            <input
+              id="zip" class="form-input" type="text"
+              [ngModel]="form().zip" name="zip"
+              (ngModelChange)="setField('zip', $event)"
+            />
+          </div>
+          <div class="form-group form-group--full">
+            <label class="form-label" for="mapEmbedUrl">Google Maps Embed URL</label>
+            <input
+              id="mapEmbedUrl" class="form-input" type="url"
+              [ngModel]="form().mapEmbedUrl" name="mapEmbedUrl"
+              (ngModelChange)="setField('mapEmbedUrl', $event)"
+              placeholder="https://www.google.com/maps/embed?..."
+            />
+          </div>
+        </div>
+      </section>
+
+      <!-- ── Social ───────────────────────────────────────────────────────── -->
+      <section class="settings-section">
+        <h2 class="settings-section__heading">Social Links</h2>
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label" for="instagram">Instagram URL</label>
+            <input
+              id="instagram" class="form-input" type="url"
+              [ngModel]="form().instagramUrl" name="instagramUrl"
+              (ngModelChange)="setField('instagramUrl', $event)"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="facebook">Facebook URL</label>
+            <input
+              id="facebook" class="form-input" type="url"
+              [ngModel]="form().facebookUrl" name="facebookUrl"
+              (ngModelChange)="setField('facebookUrl', $event)"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="twitter">Twitter / X URL</label>
+            <input
+              id="twitter" class="form-input" type="url"
+              [ngModel]="form().twitterUrl ?? ''" name="twitterUrl"
+              (ngModelChange)="setField('twitterUrl', $event)"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="tiktok">TikTok URL</label>
+            <input
+              id="tiktok" class="form-input" type="url"
+              [ngModel]="form().tiktokUrl ?? ''" name="tiktokUrl"
+              (ngModelChange)="setField('tiktokUrl', $event)"
+            />
+          </div>
+        </div>
+      </section>
+
+      <!-- ── Weekly Hours ─────────────────────────────────────────────────── -->
+      <section class="settings-section">
+        <h2 class="settings-section__heading">Weekly Hours</h2>
+        <p class="settings-section__hint">
+          Toggle a day off to mark it closed. Times are free-text (e.g.
+          <code>9:00 AM</code>) and are displayed exactly as entered.
+        </p>
+        <div class="hours-table">
+          @for (h of form().businessHours; track h.day; let i = $index) {
+            <div class="hours-row" [class.closed]="h.isClosed">
+              <span class="hours-row__day">{{ h.day }}</span>
+              <label class="hours-row__toggle">
+                <input
+                  type="checkbox"
+                  [checked]="!h.isClosed"
+                  (change)="setHours(i, { isClosed: !$any($event.target).checked })"
+                />
+                <span>{{ h.isClosed ? 'Closed' : 'Open' }}</span>
+              </label>
+              <input
+                class="form-input hours-row__time"
+                type="text" placeholder="9:00 AM"
+                [ngModel]="h.open" [disabled]="h.isClosed"
+                [name]="'open-' + i"
+                (ngModelChange)="setHours(i, { open: $event })"
+              />
+              <span class="hours-row__sep">–</span>
+              <input
+                class="form-input hours-row__time"
+                type="text" placeholder="7:00 PM"
+                [ngModel]="h.close" [disabled]="h.isClosed"
+                [name]="'close-' + i"
+                (ngModelChange)="setHours(i, { close: $event })"
+              />
+            </div>
+          }
+        </div>
+      </section>
+
+      <!-- ── Holidays ─────────────────────────────────────────────────────── -->
+      <section class="settings-section">
+        <h2 class="settings-section__heading">Holidays & Closures</h2>
+        <p class="settings-section__hint">
+          Specific dates the studio is closed (or has special hours). These
+          override weekly hours and are excluded from appointment scheduling.
+        </p>
+
+        <div class="holiday-add">
+          <input
+            class="form-input" type="date"
+            [ngModel]="newHolidayDate()" name="newHolidayDate"
+            (ngModelChange)="newHolidayDate.set($event)"
+          />
+          <input
+            class="form-input" type="text" placeholder="Label (e.g. Christmas Day)"
+            [ngModel]="newHolidayLabel()" name="newHolidayLabel"
+            (ngModelChange)="newHolidayLabel.set($event)"
+          />
+          <button type="button" class="action-btn" (click)="addHoliday()">+ Add</button>
+        </div>
+
+        @if (hasHolidays()) {
+          <ul class="holiday-list">
+            @for (h of form().holidays; track h.date) {
+              <li class="holiday-list__item">
+                <span class="holiday-list__date">{{ h.date }}</span>
+                <span class="holiday-list__label">{{ h.label }}</span>
+                <button
+                  type="button" class="holiday-list__remove"
+                  (click)="removeHoliday(h.date)" aria-label="Remove holiday"
+                >×</button>
+              </li>
+            }
+          </ul>
+        } @else {
+          <p class="muted">No holidays configured.</p>
+        }
+      </section>
+
+      @if (error()) {
+        <p class="form-error" role="alert">{{ error() }}</p>
+      }
+      @if (saved()) {
+        <p class="form-success" role="status">✓ Settings saved. Changes are live across the site.</p>
+      }
+
+      <div class="form-actions">
+        <button class="action-btn" type="submit" [disabled]="saving()">
+          @if (saving()) { Saving… } @else { Save Changes }
+        </button>
+      </div>
+    </form>
+  }
+</div>

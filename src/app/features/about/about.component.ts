@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, inject } from '@angular/core';
+import { Component, AfterViewInit, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { SalonDataService } from '../../core/services/salon-data.service';
 import { ScrollAnimationService } from '../../core/services/scroll-animation.service';
@@ -16,7 +16,8 @@ export class AboutComponent implements AfterViewInit {
   private dataService = inject(SalonDataService);
   private scrollAnim  = inject(ScrollAnimationService);
 
-  stylists: Stylist[] = [];
+  // Signal-backed so zoneless change detection picks up the async Firestore result.
+  readonly stylists = signal<Stylist[]>([]);
 
   readonly values = [
     { title: 'Excellence',   desc: 'Every style is crafted with precision and artistry. We never compromise on quality.' },
@@ -26,7 +27,11 @@ export class AboutComponent implements AfterViewInit {
   ];
 
   constructor() {
-    this.dataService.getStylists().subscribe(s => (this.stylists = s));
+    this.dataService.getStylists().subscribe((s) => {
+      this.stylists.set(s);
+      // Cards just rendered — re-observe so reveal animations fire.
+      setTimeout(() => this.scrollAnim.observeAll(), 0);
+    });
   }
 
   ngAfterViewInit(): void {

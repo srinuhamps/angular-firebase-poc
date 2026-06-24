@@ -1,0 +1,121 @@
+rules_version = '2';
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Carolle Hair Studio — Firestore security rules
+//
+// Public site (unauthenticated) can READ catalog data and CREATE appointments.
+// Admin (signed-in via Firebase Auth) can do everything else.
+//
+// NOTE: For tighter security, deploy a custom claim like `admin: true` and
+//       gate writes on that instead of "any authenticated user". This baseline
+//       assumes admin accounts are created manually in the Firebase console.
+// ─────────────────────────────────────────────────────────────────────────────
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── Helpers ──────────────────────────────────────────────────────────────
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isString(field, maxLen) {
+      return field is string && field.size() > 0 && field.size() <= maxLen;
+    }
+
+    // ── Public catalog: anyone can read, only admin can write ────────────────
+    match /services/{id} {
+      allow read: if true;
+      allow write: if isSignedIn();
+    }
+
+    match /products/{id} {
+      allow read: if true;
+      allow write: if isSignedIn();
+    }
+
+    match /stylists/{id} {
+      allow read: if true;
+      allow write: if isSignedIn();
+    }
+
+    match /gallery/{id} {
+      allow read: if true;
+      allow write: if isSignedIn();
+    }
+
+    match /testimonials/{id} {
+      allow read: if true;
+      allow write: if isSignedIn();
+    }
+
+    // ── Business config (hours, address, etc.) ───────────────────────────────
+    match /config/{doc} {
+      allow read: if true;
+      allow write: if isSignedIn();
+    }
+
+    // ── Appointments: guests can CREATE, only admin can read/update/delete ──
+    //
+    // Guard against spam by requiring the canonical shape + sane string lengths.
+    // Cancelled/payment fields are normalized to safe defaults on create — the
+    // client is not trusted to set status='confirmed' or paymentStatus='paid'.
+    match /appointments/{id} {
+      allow read, update, delete: if isSignedIn();
+
+      allow create: if
+        // Required identity fields
+        isString(request.resource.data.customerName,  120) &&
+        isString(request.resource.data.customerEmail, 200) &&
+        isString(request.resource.data.customerPhone,  40) &&
+        // Service & stylist refs (id strings — model is denormalized so name/price are also stored)
+        isString(request.resource.data.serviceId,      80) &&
+        isString(request.resource.data.serviceName,   200) &&
+        isString(request.resource.data.stylistId,      80) &&
+        isString(request.resource.data.stylistName,   200) &&
+        isString(request.resource.data.startTime,      20) &&
+        isString(request.resource.data.endTime,        20) &&
+        request.resource.data.date is timestamp &&
+        request.resource.data.duration is number &&
+        request.resource.data.duration > 0 &&
+        request.resource.data.duration <= 720 && // <= 12 hours sanity cap
+        request.resource.data.totalAmount is number &&
+        request.resource.data.totalAmount >= 0 &&
+        // Status & payment must start in safe states
+        request.resource.data.status == 'pending' &&
+        request.resource.data.paymentStatus == 'unpaid' &&
+        request.resource.data.depositPaid == false &&
+        // Optional notes capped
+        (!('notes' in request.resource.data) || request.resource.data.notes == null ||
+         request.resource.data.notes is string && request.resource.data.notes.size() <= 2000);
+    }
+
+    // ── Contact messages: guests can CREATE, only admin can read/update/delete ─
+    //
+    // Anti-spam shape guard. Status / replies fields are server-defaults — the
+    // public form should never set them, and `replies` must always start empty.
+    match /contactMessages/{id} {
+      allow read, update, delete: if isSignedIn();
+
+      allow create: if
+        isString(request.resource.data.name,    120) &&
+        isString(request.resource.data.email,   200) &&
+        isString(request.resource.data.subject,  60) &&
+        isString(request.resource.data.message, 5000) &&
+        // Phone is optional but if present must be a short string.
+        (!('phone' in request.resource.data) ||
+          request.resource.data.phone is string &&
+          request.resource.data.phone.size() <= 40) &&
+        // Required server-default fields
+        request.resource.data.status == 'new' &&
+        request.resource.data.replies is list &&
+        request.resource.data.replies.size() == 0 &&
+        request.resource.data.createdAt is timestamp;
+    }
+
+    // ── Default deny ─────────────────────────────────────────────────────────
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

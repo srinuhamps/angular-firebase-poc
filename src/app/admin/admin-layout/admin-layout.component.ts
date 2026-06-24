@@ -18,6 +18,7 @@ export class AdminLayoutComponent {
     { label: 'Services',  icon: '✦', route: '/admin/services'  },
     { label: 'Products',  icon: '◈', route: '/admin/products'  },
     { label: 'Gallery',   icon: '🖼', route: '/admin/gallery'   },
+    { label: 'Settings',  icon: '⚙', route: '/admin/settings'  },
   ];
 
   async logout(): Promise<void> {

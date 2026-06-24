@@ -1,0 +1,21 @@
+<div class="toast-host" role="region" aria-label="Notifications" aria-live="polite">
+  @for (t of toast.toasts(); track t.id) {
+    <div class="toast toast--{{ t.kind }}" role="status">
+      <div class="toast__icon" aria-hidden="true">
+        @switch (t.kind) {
+          @case ('success') { ✓ }
+          @case ('error')   { ✕ }
+          @case ('warning') { ⚠ }
+          @default          { ℹ }
+        }
+      </div>
+      <div class="toast__body">
+        @if (t.title) {
+          <p class="toast__title">{{ t.title }}</p>
+        }
+        <p class="toast__msg">{{ t.message }}</p>
+      </div>
+      <button class="toast__close" type="button" (click)="toast.dismiss(t.id)" aria-label="Dismiss">×</button>
+    </div>
+  }
+</div>

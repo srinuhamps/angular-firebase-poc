@@ -1,0 +1,112 @@
+@use '../admin-shared' as adm;
+
+.admin-page          { @include adm.page-base;     }
+.admin-page__header  { @include adm.page-header;   }
+.admin-page__title   { @include adm.page-title;    }
+.admin-page__subtitle{ @include adm.page-subtitle; }
+.admin-loading,
+.admin-empty {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.9rem;
+}
+.admin-table-wrap { @include adm.table-wrap; }
+.admin-table      { @include adm.table-base; }
+
+// ─── Filter tabs ───────────────────────────────────────────────────────────────
+.appt-filters {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+
+  &__btn {
+    padding: 0.45rem 1rem;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(212, 175, 100, 0.2);
+    border-radius: var(--radius-full, 9999px);
+    color: rgba(255, 255, 255, 0.55);
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+
+    &:hover { color: #fff; }
+    &.active {
+      background: rgba(212, 175, 100, 0.15);
+      border-color: var(--color-gold, #d4af64);
+      color: var(--color-gold, #d4af64);
+    }
+  }
+}
+
+// ─── Table cells ───────────────────────────────────────────────────────────────
+.cell--date { color: #fff; font-weight: 500; }
+.cell--time { color: rgba(255, 255, 255, 0.55); font-size: 0.78rem; }
+.cell--name { color: #fff; font-weight: 500; }
+.cell--sub  { color: rgba(255, 255, 255, 0.45); font-size: 0.78rem; }
+.cell--link {
+  display: block;
+  color: var(--color-gold, #d4af64);
+  font-size: 0.82rem;
+  text-decoration: none;
+
+  &:hover { text-decoration: underline; }
+}
+
+.row--cancelled td { opacity: 0.45; }
+
+// ─── Status badges ─────────────────────────────────────────────────────────────
+.status-badge {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-full, 9999px);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: capitalize;
+  border: 1px solid transparent;
+
+  &--pending   { background: rgba(255, 193, 7, 0.12);   border-color: rgba(255, 193, 7, 0.4);   color: #ffcd38; }
+  &--confirmed { background: rgba(64, 196, 255, 0.12);  border-color: rgba(64, 196, 255, 0.4);  color: #40c4ff; }
+  &--completed { background: rgba(129, 199, 132, 0.12); border-color: rgba(129, 199, 132, 0.4); color: #81c784; }
+  &--cancelled { background: rgba(229, 115, 115, 0.12); border-color: rgba(229, 115, 115, 0.4); color: #e57373; }
+  &--no-show   { background: rgba(255, 255, 255, 0.06); border-color: rgba(255, 255, 255, 0.15); color: rgba(255, 255, 255, 0.55); }
+}
+
+// ─── Action buttons ────────────────────────────────────────────────────────────
+.cell--actions {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.tbl-btn {
+  @include adm.tbl-btn;
+
+  &--edit    { @include adm.tbl-btn-edit; }
+  &--del     { @include adm.tbl-btn-del;  }
+  &--confirm {
+    background: rgba(129, 199, 132, 0.12);
+    border-color: rgba(129, 199, 132, 0.4);
+    color: #81c784;
+    &:hover:not(:disabled) { background: rgba(129, 199, 132, 0.22); }
+  }
+}
+
+// ─── Inline notes row ──────────────────────────────────────────────────────────
+.notes-row td {
+  background: rgba(212, 175, 100, 0.04);
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.85rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.notes-row__label {
+  color: var(--color-gold, #d4af64);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-right: 0.5rem;
+}
