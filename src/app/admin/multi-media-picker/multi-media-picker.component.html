@@ -1,0 +1,124 @@
+<div class="mmp">
+
+  <!-- ─── Selected images list ──────────────────────────────────────────── -->
+  @if (value().length > 0) {
+    <ul class="mmp__list">
+      @for (url of value(); track url; let i = $index; let first = $first; let last = $last) {
+        <li class="mmp__item">
+          <img [src]="url" [alt]="'Media ' + (i + 1)" class="mmp__item-thumb" loading="lazy" />
+          <div class="mmp__item-info">
+            @if (first) {
+              <span class="mmp__cover-badge">Cover</span>
+            }
+            <span class="mmp__item-idx">Image {{ i + 1 }}</span>
+          </div>
+          <div class="mmp__item-actions">
+            <button type="button" class="mmp__icon-btn" [disabled]="first"
+              (click)="moveUp(i)" title="Move up" aria-label="Move up">↑</button>
+            <button type="button" class="mmp__icon-btn" [disabled]="last"
+              (click)="moveDown(i)" title="Move down" aria-label="Move down">↓</button>
+            <button type="button" class="mmp__icon-btn mmp__icon-btn--remove"
+              (click)="remove(url)" title="Remove" aria-label="Remove image">×</button>
+          </div>
+        </li>
+      }
+    </ul>
+  } @else {
+    <p class="mmp__empty">No images selected yet.</p>
+  }
+
+  <!-- ─── Action row ────────────────────────────────────────────────────── -->
+  <div class="mmp__actions">
+    <button type="button" class="mmp__btn mmp__btn--primary" (click)="openPicker()">
+      + Add from Library
+    </button>
+  </div>
+
+  <!-- ─── Manual URL entry ─────────────────────────────────────────────── -->
+  <details class="mmp__manual">
+    <summary>Or paste a URL manually</summary>
+    <div class="mmp__manual-row">
+      <input
+        #manualInput
+        type="url"
+        class="mmp__manual-input"
+        placeholder="https://…"
+      />
+      <button
+        type="button"
+        class="mmp__btn mmp__btn--ghost"
+        (click)="onManualUrlAdd(manualInput.value); manualInput.value = ''"
+      >Add</button>
+    </div>
+  </details>
+
+  <!-- ─── Library modal ────────────────────────────────────────────────── -->
+  @if (open()) {
+    <div class="mmp__overlay" (click)="closePicker()">
+      <div
+        class="mmp__modal"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Choose images"
+        (click)="$event.stopPropagation()"
+      >
+        <header class="mmp__modal-header">
+          <h2 class="mmp__modal-title">Choose {{ category() }} images</h2>
+          <button type="button" class="mmp__close" aria-label="Close" (click)="closePicker()">×</button>
+        </header>
+
+        <div class="mmp__toolbar">
+          <input
+            type="search"
+            class="mmp__search"
+            placeholder="Search by title…"
+            [value]="search()"
+            (input)="search.set($any($event.target).value)"
+          />
+          <span class="mmp__modal-hint">
+            {{ value().length }} selected — click thumbnails to add / remove
+          </span>
+        </div>
+
+        <div class="mmp__modal-body">
+          @if (loading()) {
+            <p class="mmp__msg">Loading…</p>
+          } @else if (errorMsg()) {
+            <p class="mmp__msg mmp__msg--error">{{ errorMsg() }}</p>
+          } @else if (items().length === 0) {
+            <p class="mmp__msg">
+              No {{ category() }} images uploaded yet. Go to
+              <strong>Admin › Gallery</strong> and upload some.
+            </p>
+          } @else if (filteredItems().length === 0) {
+            <p class="mmp__msg">No images match your search.</p>
+          } @else {
+            <div class="mmp__grid">
+              @for (item of filteredItems(); track item.id) {
+                <button
+                  type="button"
+                  class="mmp__thumb"
+                  [class.mmp__thumb--active]="isSelected(item.url)"
+                  (click)="toggle(item)"
+                  [attr.aria-label]="(isSelected(item.url) ? 'Remove ' : 'Add ') + item.title"
+                >
+                  <img [src]="item.url" [alt]="item.title" loading="lazy" />
+                  <span class="mmp__thumb-title">{{ item.title }}</span>
+                  @if (isSelected(item.url)) {
+                    <span class="mmp__thumb-check" aria-hidden="true">✓</span>
+                  }
+                </button>
+              }
+            </div>
+          }
+        </div>
+
+        <footer class="mmp__modal-footer">
+          <button type="button" class="mmp__btn mmp__btn--primary" (click)="closePicker()">
+            Done ({{ value().length }} selected)
+          </button>
+        </footer>
+      </div>
+    </div>
+  }
+</div>

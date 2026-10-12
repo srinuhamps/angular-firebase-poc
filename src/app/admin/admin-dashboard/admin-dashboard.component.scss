@@ -11,12 +11,12 @@
 .admin-page__title {
   font-family: var(--font-heading, 'Roboto Slab', serif);
   font-size: 1.8rem;
-  color: var(--color-gold, #d4af64);
+  color: var(--color-accent);
   margin: 0 0 0.25rem;
 }
 
 .admin-page__subtitle {
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--color-text-muted);
   font-size: 0.9rem;
   margin: 0;
 }
@@ -30,7 +30,7 @@
 }
 
 .stat-card {
-  background: #1a1512;
+  background: var(--surface-panel);
   border: 1px solid rgba(212, 175, 100, 0.18);
   border-radius: 10px;
   padding: 1.5rem;
@@ -47,7 +47,7 @@
 .stat-card__value {
   font-family: var(--font-heading, 'Roboto Slab', serif);
   font-size: 2.4rem;
-  color: var(--color-gold, #d4af64);
+  color: var(--color-accent);
   line-height: 1;
 }
 
@@ -55,19 +55,19 @@
   font-size: 0.78rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.45);
+  color: var(--color-text-muted);
 }
 
 .stat-card__sub {
   font-size: 0.78rem;
-  color: #ffcd38;
+  color: var(--color-warning);
   margin-top: 0.25rem;
 }
 
 .stat-card__link {
   margin-top: 0.75rem;
   font-size: 0.82rem;
-  color: var(--color-gold, #d4af64);
+  color: var(--color-accent);
   text-decoration: none;
 
   &:hover { text-decoration: underline; }
@@ -83,7 +83,7 @@
 .dash-seed__heading {
   font-family: var(--font-heading, 'Roboto Slab', serif);
   font-size: 1.1rem;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--color-cream);
   margin: 0 0 1rem;
 }
 
@@ -118,25 +118,25 @@
   &--outline {
     background: transparent;
     border-color: var(--color-gold, #d4af64);
-    color: var(--color-gold, #d4af64);
+    color: var(--color-accent);
   }
 }
 
 // ─── Seed ─────────────────────────────────────────────────────
 .dash-seed__desc {
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--color-text-muted);
   font-size: 0.88rem;
   margin: 0 0 1rem;
 }
 
 .dash-seed__success {
-  color: #81c784;
+  color: var(--color-success);
   font-size: 0.9rem;
   margin: 0;
 }
 
 .dash-seed__err {
-  color: #e57373;
+  color: var(--color-danger);
   font-size: 0.88rem;
   background: rgba(229, 115, 115, 0.1);
   border: 1px solid rgba(229, 115, 115, 0.3);

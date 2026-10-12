@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { AppointmentsService } from '../../core/services/appointments.service';
 import { ConfirmService } from '../../core/services/confirm.service';
 import { ToastService } from '../../core/services/toast.service';
+import { EmailService } from '../../core/services/email.service';
+import { SmsService } from '../../core/services/sms.service';
 import { Appointment, AppointmentStatus } from '../../core/models/appointment.model';
 
 type StatusFilter = AppointmentStatus | 'all' | 'upcoming';
@@ -15,9 +17,11 @@ type StatusFilter = AppointmentStatus | 'all' | 'upcoming';
   styleUrl: './admin-appointments.component.scss',
 })
 export class AdminAppointmentsComponent {
-  private readonly apptService = inject(AppointmentsService);
-  private readonly confirmSvc  = inject(ConfirmService);
-  private readonly toast       = inject(ToastService);
+  private readonly apptService  = inject(AppointmentsService);
+  private readonly confirmSvc   = inject(ConfirmService);
+  private readonly toast        = inject(ToastService);
+  private readonly emailService = inject(EmailService);
+  private readonly smsService   = inject(SmsService);
 
   readonly appointments = signal<Appointment[]>([]);
   readonly loading      = signal<boolean>(true);
@@ -83,6 +87,17 @@ export class AdminAppointmentsComponent {
   }
 
   async setStatus(appt: Appointment, status: AppointmentStatus): Promise<void> {
+    // Ask for confirmation before making a state change. Cancel is destructive
+    // (customer-visible + refund implications), so it gets the danger styling.
+    const prompt = this.confirmPromptFor(appt, status);
+    const ok = await this.confirmSvc.ask({
+      title:       prompt.title,
+      message:     prompt.message,
+      confirmText: prompt.confirmText,
+      danger:      prompt.danger,
+    });
+    if (!ok) return;
+
     this.updatingId.set(appt.id);
     try {
       await this.apptService.updateStatus(appt.id, status);
@@ -90,29 +105,89 @@ export class AdminAppointmentsComponent {
       this.appointments.update((list) =>
         list.map((a) => (a.id === appt.id ? { ...a, status, updatedAt: new Date() } : a))
       );
+
+      // Send status change notification email to customer (fire and forget)
+      this.emailService.sendStatusChangeNotification(appt, status).catch((err) => {
+        console.error('[AdminAppointments] status change email failed', err);
+      });
+
+      // Send matching SMS if the customer opted in at booking (TCPA).
+      if (appt.smsOptIn) {
+        this.smsService.sendStatusChangeNotification(appt, status).catch((err) => {
+          console.error('[AdminAppointments] status change SMS failed', err);
+        });
+      }
+
+      this.toast.success(prompt.successMessage, { title: prompt.successTitle });
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err);
+      this.toast.error('Could not update appointment: ' + msg);
     } finally {
       this.updatingId.set(null);
     }
   }
 
-  async delete(appt: Appointment): Promise<void> {
-    const ok = await this.confirmSvc.ask({
-      title:       'Delete appointment?',
-      message:     `The appointment for ${appt.customerName} on ${this.formatDate(appt.date)} will be permanently removed. This cannot be undone.`,
-      confirmText: 'Delete',
-      danger:      true,
-    });
-    if (!ok) return;
-    this.updatingId.set(appt.id);
-    try {
-      await this.apptService.delete(appt.id);
-      this.appointments.update((list) => list.filter((a) => a.id !== appt.id));
-      this.toast.success(`Deleted appointment for ${appt.customerName}.`);
-    } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : String(err);
-      this.toast.error('Could not delete appointment: ' + msg);
-    } finally {
-      this.updatingId.set(null);
+  /** Copy for the confirm + toast messages per status transition. */
+  private confirmPromptFor(
+    appt: Appointment,
+    status: AppointmentStatus,
+  ): {
+    title: string;
+    message: string;
+    confirmText: string;
+    danger: boolean;
+    successTitle: string;
+    successMessage: string;
+  } {
+    const who = appt.customerName;
+    const when = `${this.formatDate(appt.date)} at ${appt.startTime}`;
+    switch (status) {
+      case 'confirmed':
+        return {
+          title:          'Confirm appointment?',
+          message:        `Confirm the appointment for ${who} on ${when}? The customer will receive a confirmation email${appt.smsOptIn ? ' and SMS' : ''}.`,
+          confirmText:    'Confirm',
+          danger:         false,
+          successTitle:   'Appointment confirmed',
+          successMessage: `${who}'s appointment on ${when} is confirmed.`,
+        };
+      case 'completed':
+        return {
+          title:          'Mark as completed?',
+          message:        `Mark ${who}'s appointment on ${when} as completed? A thank-you email${appt.smsOptIn ? ' and SMS' : ''} will be sent.`,
+          confirmText:    'Mark completed',
+          danger:         false,
+          successTitle:   'Appointment completed',
+          successMessage: `${who}'s appointment has been marked completed.`,
+        };
+      case 'no-show':
+        return {
+          title:          'Mark as no-show?',
+          message:        `Mark ${who}'s appointment on ${when} as a no-show? The customer will be notified.`,
+          confirmText:    'Mark no-show',
+          danger:         true,
+          successTitle:   'Marked no-show',
+          successMessage: `${who}'s appointment has been marked as no-show.`,
+        };
+      case 'cancelled':
+        return {
+          title:          'Cancel appointment?',
+          message:        `Cancel ${who}'s appointment on ${when}? ${appt.depositPaid ? 'Note: the customer paid a deposit — refund manually in the Stripe dashboard if applicable. ' : ''}The customer will be notified.`,
+          confirmText:    'Cancel appointment',
+          danger:         true,
+          successTitle:   'Appointment cancelled',
+          successMessage: `${who}'s appointment has been cancelled.`,
+        };
+      case 'pending':
+      default:
+        return {
+          title:          'Update status?',
+          message:        `Change ${who}'s appointment to "${status}"?`,
+          confirmText:    'Update',
+          danger:         false,
+          successTitle:   'Status updated',
+          successMessage: `${who}'s appointment status is now ${status}.`,
+        };
     }
   }
 
@@ -123,5 +198,12 @@ export class AdminAppointmentsComponent {
       day:     'numeric',
       year:    'numeric',
     });
+  }
+
+  /** Build a link into the Stripe dashboard for a given PaymentIntent id.
+   *  Test vs live is inferred from the id prefix (Stripe test PIs are the
+   *  same shape as live but appear under /test/payments). */
+  stripePaymentUrl(paymentIntentId: string): string {
+    return `https://dashboard.stripe.com/payments/${paymentIntentId}`;
   }
 }

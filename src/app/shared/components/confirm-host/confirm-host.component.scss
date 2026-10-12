@@ -13,20 +13,20 @@
   left: 50%;
   transform: translate(-50%, -50%);
   width: min(440px, calc(100vw - 2rem));
-  background: #1a1512;
+  background: var(--surface-panel);
   border: 1px solid rgba(212, 175, 100, 0.3);
   border-radius: 10px;
   padding: 1.5rem;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
   z-index: 9200;
-  color: rgba(255, 255, 255, 0.85);
+  color: var(--color-cream);
   font-family: var(--font-body, 'Roboto', sans-serif);
   animation: cf-pop 0.18s ease-out;
 
   &__title {
     margin: 0 0 0.5rem;
     font-family: var(--font-heading, 'Roboto Slab', serif);
-    color: var(--color-gold, #d4af64);
+    color: var(--color-accent);
     font-size: 1.1rem;
   }
 
@@ -34,7 +34,7 @@
     margin: 0 0 1.25rem;
     font-size: 0.9rem;
     line-height: 1.5;
-    color: rgba(255, 255, 255, 0.78);
+    color: var(--color-text-dim);
   }
 
   &__actions {
@@ -57,9 +57,9 @@
 
   &--cancel {
     background: transparent;
-    border-color: rgba(255, 255, 255, 0.18);
-    color: rgba(255, 255, 255, 0.7);
-    &:hover { color: #fff; border-color: rgba(255, 255, 255, 0.4); }
+    border-color: rgba(var(--ui-rgb), 0.18);
+    color: var(--color-text-dim);
+    &:hover { color: var(--color-cream); border-color: rgba(var(--ui-rgb), 0.4); }
   }
 
   &--confirm {

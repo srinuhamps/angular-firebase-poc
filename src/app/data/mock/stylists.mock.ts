@@ -6,15 +6,15 @@ import { Stylist } from '../../core/models/stylist.model';
 export const MOCK_STYLISTS: Stylist[] = [
   {
     id: 'sty-1',
-    name: 'Carolle Mensah',
+    name: 'Carole Nkwamo',
     title: 'Master Stylist & Founder',
     bio:
-      'With over 12 years of experience in protective styling, Carolle founded her studio with a vision: to create a luxury hair care experience where every client feels seen, pampered, and transformed. Specializing in knotless braids, goddess locs, and hair health restoration.',
+      'With over 12 years of experience in protective styling, Carole founded her studio with a vision: to create a luxury hair care experience where every client feels seen, pampered, and transformed. Specializing in knotless braids, goddess locs, and hair health restoration.',
     imageUrl: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=600&q=80',
     specialties: ['Knotless Box Braids', 'Goddess Locs', 'Hair Restoration', 'Natural Hair'],
     yearsExperience: 12,
     isAvailable: true,
-    instagramUrl: 'https://instagram.com/carollehairstudio',
+    instagramUrl: 'https://instagram.com/labellebraidbb',
   },
   {
     id: 'sty-2',
@@ -45,7 +45,7 @@ export const MOCK_STYLISTS: Stylist[] = [
     name: 'Amara Okonkwo',
     title: 'Color & Weave Specialist',
     bio:
-      'Amara is a color virtuoso with 9 years behind the chair. Trained in Lagos and refined in Atlanta, she blends rich tones with seamless sew-ins and custom wig installations. Known for her balayage on textured hair and her flawless leave-outs.',
+      'Amara is a color virtuoso with 9 years behind the chair. Trained in Lagos and refined in Dallas, she blends rich tones with seamless sew-ins and custom wig installations. Known for her balayage on textured hair and her flawless leave-outs.',
     imageUrl: 'https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=600&q=80',
     specialties: ['Balayage', 'Custom Wig Install', 'Sew-In Weaves', 'Color Correction'],
     yearsExperience: 9,

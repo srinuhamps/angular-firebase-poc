@@ -18,14 +18,222 @@
 
 .action-btn {
   @include adm.action-btn;
+  &--outline { @include adm.action-btn-outline; }
+
+  &--danger-outline {
+    @include adm.action-btn-outline;
+    border-color: rgba(229, 115, 115, 0.4);
+    color: var(--color-danger);
+
+    &:hover:not(:disabled) {
+      background: rgba(229, 115, 115, 0.1);
+      border-color: rgba(229, 115, 115, 0.6);
+    }
+  }
+}
+
+.header-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+// ── Column filter row ───────────────────────────────────────────────────────
+.filter-row th {
+  background: var(--surface-base);
+  padding: 0.4rem 0.5rem;
+  border-bottom: 1px solid rgba(212, 175, 100, 0.18);
+  vertical-align: middle;
+}
+
+.filter-input {
+  width: 100%;
+  min-width: 0;
+  padding: 0.35rem 0.5rem;
+  font-size: 0.82rem;
+  background: rgba(var(--ui-rgb), 0.04);
+  border: 1px solid rgba(var(--ui-rgb), 0.12);
+  border-radius: 6px;
+  color: var(--color-cream);
+  box-sizing: border-box;
+
+  &::placeholder { color: var(--color-text-muted); }
+
+  &:focus {
+    outline: none;
+    border-color: rgba(212, 175, 100, 0.5);
+    background: rgba(var(--ui-rgb), 0.06);
+  }
+
+  &--select {
+    appearance: none;
+    padding-right: 1.6rem;
+    background-image: linear-gradient(45deg, transparent 50%, rgba(var(--ui-rgb), 0.55) 50%),
+                      linear-gradient(135deg, rgba(var(--ui-rgb), 0.55) 50%, transparent 50%);
+    background-position: calc(100% - 12px) 50%, calc(100% - 7px) 50%;
+    background-size: 5px 5px, 5px 5px;
+    background-repeat: no-repeat;
+    cursor: pointer;
+
+    // The dropdown popup itself is rendered by the OS, defaulting to a white
+    // background that the `color` above can't override on its own — only the
+    // *closed* <select> box is themeable that way. Browsers DO respect an
+    // explicit background set on <option>, though, so set one here (matching
+    // the pattern already used by the shared `form-input` mixin) instead of
+    // leaving unselected options as invisible white-on-white text.
+    option {
+      background: var(--surface-panel);
+      color: var(--color-cream);
+    }
+  }
+
+  &--num { max-width: 90px; }
+}
+
+.tbl-btn--reset {
+  background: transparent;
+  border: 1px solid rgba(212, 175, 100, 0.35);
+  color: var(--color-accent);
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  &:hover { background: rgba(212, 175, 100, 0.1); }
+}
+
+.cell--empty {
+  text-align: center;
+  padding: 1.5rem;
+  color: var(--color-text-muted);
+
+  .tbl-btn--reset { margin-left: 0.75rem; }
+}
+
+// ── Bulk-import panel ────────────────────────────────────────────────────────
+.import-panel {
+  border: 1px solid rgba(212, 175, 100, 0.2);
+  border-radius: 10px;
+  padding: 1.25rem 1.5rem 1.5rem;
+  margin: 0 0 2rem;
+  background: rgba(var(--ui-rgb), 0.02);
+}
+
+.import-panel__header {
+  margin-bottom: 1rem;
+}
+
+.import-panel__title {
+  font-size: 1.1rem;
+  color: var(--color-cream);
+  margin: 0 0 0.25rem;
+  font-weight: 500;
+}
+
+.import-panel__intro {
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  margin: 0;
+
+  code {
+    background: rgba(var(--ui-rgb), 0.08);
+    padding: 0.05rem 0.35rem;
+    border-radius: 3px;
+    font-family: 'Consolas', 'Menlo', monospace;
+    font-size: 0.8rem;
+    color: var(--color-cream);
+  }
+  strong { color: var(--color-cream); }
+}
+
+.import-panel__textarea {
+  width: 100%;
+  min-height: 240px;
+  padding: 0.85rem 1rem;
+  border: 1px solid rgba(var(--ui-rgb), 0.12);
+  border-radius: 6px;
+  background: var(--surface-base);
+  color: var(--color-cream);
+  font-family: 'Consolas', 'Menlo', monospace;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  resize: vertical;
+  outline: none;
+  transition: border-color 0.15s;
+  &:focus { border-color: var(--color-gold, #d4af64); }
+}
+
+.import-panel__actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: 0.75rem;
+
+  &--commit {
+    margin-top: 1.25rem;
+    align-items: center;
+  }
+}
+
+.import-preview {
+  margin-top: 1.5rem;
+  border-top: 1px solid rgba(var(--ui-rgb), 0.08);
+  padding-top: 1.25rem;
+}
+
+.import-preview__summary {
+  color: var(--color-text-dim);
+  font-size: 0.9rem;
+  margin: 0 0 1rem;
+
+  strong { color: var(--color-cream); }
+}
+
+.import-preview__errcount {
+  color: var(--color-danger) !important;
+}
+
+.import-preview__errors {
+  margin: 0 0 1rem;
+  padding-left: 1.25rem;
+  color: var(--color-danger);
+  font-size: 0.85rem;
+}
+
+.import-preview__section-title {
+  font-size: 0.9rem;
+  color: var(--color-text-dim);
+  margin: 1.5rem 0 0.5rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.import-preview__hint {
+  color: var(--color-danger);
+  font-size: 0.85rem;
+}
+
+.admin-table--compact {
+  font-size: 0.85rem;
+  th, td { padding: 0.5rem 0.75rem; }
+}
+
+.row--invalid td { background: rgba(242, 139, 130, 0.08); }
+
+.cell--issues {
+  color: var(--color-danger);
+  font-size: 0.8rem;
+
+  .ok { color: var(--color-success); }
+  ul { margin: 0; padding-left: 1rem; }
 }
 
 .admin-loading,
 .admin-empty {
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--color-text-muted);
   font-size: 0.9rem;
 
-  a { color: var(--color-gold, #d4af64); }
+  a { color: var(--color-accent); }
 }
 
 .admin-table-wrap {
@@ -40,9 +248,43 @@
   opacity: 0.5;
 }
 
+.row--selected td {
+  background: rgba(212, 175, 100, 0.08);
+}
+
+.cell--check {
+  width: 2.25rem;
+  text-align: center;
+
+  input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--color-gold, #d4af64);
+    cursor: pointer;
+  }
+}
+
+.selection-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+  padding: 0.5rem 0.85rem;
+  background: rgba(212, 175, 100, 0.08);
+  border: 1px solid rgba(212, 175, 100, 0.25);
+  border-radius: 8px;
+}
+
+.selection-bar__count {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--color-accent);
+  margin-right: auto;
+}
+
 .cell--name {
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--color-cream);
 }
 
 .badge {
@@ -56,10 +298,10 @@
 }
 
 .featured-dot {
-  color: rgba(255, 255, 255, 0.3);
+  color: var(--color-text-muted);
   font-size: 1.1rem;
 
-  &--on { color: var(--color-gold, #d4af64); }
+  &--on { color: var(--color-accent); }
 }
 
 .cell--actions {

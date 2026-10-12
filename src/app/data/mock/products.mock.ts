@@ -87,11 +87,11 @@ export const MOCK_PRODUCTS: Product[] = [
   {
     id: 'prd-6',
     name: 'Water Wave Hair Bundles',
-    brand: 'Carolle Premium',
+    brand: 'Labelle Premium',
     category: 'extensions',
     shortDescription: 'Premium 100% human hair water wave bundles.',
     description:
-      'Our exclusive Carolle Premium hair bundles. Soft, silky 100% human hair in the popular water wave texture. Available in 12"–30" lengths. Tangle-free, shedding-free, and highly versatile.',
+      'Our exclusive Labelle Premium hair bundles. Soft, silky 100% human hair in the popular water wave texture. Available in 12"–30" lengths. Tangle-free, shedding-free, and highly versatile.',
     price: 65.00,
     imageUrl: 'https://images.unsplash.com/photo-1513201099705-a9746e1e201f?w=600&q=80',
     inStock: true,
@@ -151,11 +151,11 @@ export const MOCK_PRODUCTS: Product[] = [
   {
     id: 'prd-10',
     name: 'Silk Bonnet – Gold Edition',
-    brand: 'Carolle Premium',
+    brand: 'Labelle Premium',
     category: 'accessories',
     shortDescription: 'Luxurious silk satin bonnet to protect hair overnight.',
     description:
-      'Our exclusive Carolle Premium Silk Bonnet protects your protective styles and natural hair overnight. Made with 100% mulberry silk lining to prevent breakage, retain moisture, and reduce frizz.',
+      'Our exclusive Labelle Premium Silk Bonnet protects your protective styles and natural hair overnight. Made with 100% mulberry silk lining to prevent breakage, retain moisture, and reduce frizz.',
     price: 24.99,
     imageUrl: 'https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=600&q=80',
     inStock: true,

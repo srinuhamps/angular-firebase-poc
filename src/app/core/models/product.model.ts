@@ -17,6 +17,10 @@ export interface Product {
   description: string;
   price: number;
   imageUrl: string;
+  /** Additional images shown in the product details gallery / carousel. */
+  mediaUrls?: string[];
+  /** Optional video URL (YouTube embed, Vimeo, or Firebase Storage .mp4). */
+  videoUrl?: string;
   inStock: boolean;
   stockQuantity: number;
   isFeatured: boolean;

@@ -2,20 +2,208 @@
   <header class="admin-page__header">
     <div>
       <h1 class="admin-page__title">Services</h1>
-      <p class="admin-page__subtitle">{{ services().length }} total</p>
+      <p class="admin-page__subtitle">
+        @if (hasActiveFilters()) {
+          Showing {{ filteredServices().length }} of {{ services().length }} service{{ services().length === 1 ? '' : 's' }}
+        } @else {
+          {{ services().length }} service{{ services().length === 1 ? '' : 's' }}
+        }
+      </p>
     </div>
-    <a class="action-btn" [routerLink]="'/admin/services/new'">+ Add Service</a>
+    <div class="header-actions">
+      <!-- <button
+        type="button"
+        class="action-btn action-btn--outline"
+        (click)="toggleImport()"
+      >
+        {{ showImport() ? '✕ Close Import' : '⇪ Bulk Import' }}
+      </button> -->
+      <!-- <button
+        type="button"
+        class="action-btn action-btn--danger-outline"
+        [disabled]="bulkUpdating() || services().length === 0"
+        (click)="disableAllServices()"
+      >
+        {{ bulkUpdating() ? 'Disabling…' : '⛔ Disable All' }}
+      </button> -->
+      <a class="action-btn" [routerLink]="'/admin/services/new'">+ Add Service</a>
+    </div>
   </header>
 
+  <!-- ── Bulk Import panel ────────────────────────────────────────────────── -->
+  @if (showImport()) {
+    <section class="import-panel">
+      <header class="import-panel__header">
+        <h2 class="import-panel__title">Bulk Import (JSON)</h2>
+        <p class="import-panel__intro">
+          Paste a JSON block with <code>services</code> and/or <code>addons</code> arrays.
+          Click <strong>Parse &amp; Preview</strong> to validate, then <strong>Import</strong> to write to Firestore.
+          Give a service an <code>addonNames</code> array (add-on names, not IDs) to link it to
+          add-ons already saved or included in the same paste — no need to know Firestore IDs.
+        </p>
+      </header>
+
+      <textarea
+        class="import-panel__textarea"
+        rows="12"
+        placeholder='{ "services": [...], "addons": [...] }'
+        [ngModel]="rawJson()"
+        (ngModelChange)="rawJson.set($event); parsed.set(null);"
+      ></textarea>
+
+      <div class="import-panel__actions">
+        <button type="button" class="action-btn" (click)="parseImport()">Parse &amp; Preview</button>
+        <button type="button" class="action-btn action-btn--outline" (click)="insertSampleJson()">Insert sample</button>
+        <button type="button" class="action-btn action-btn--outline" (click)="clearImport()">Clear</button>
+      </div>
+
+      @if (parsed(); as p) {
+        <div class="import-preview">
+          <p class="import-preview__summary">
+            <strong>{{ p.services.length }}</strong> service{{ p.services.length === 1 ? '' : 's' }} ·
+            <strong>{{ p.addons.length }}</strong> add-on{{ p.addons.length === 1 ? '' : 's' }} ·
+            <strong [class.import-preview__errcount]="totalImportErrors() > 0">
+              {{ totalImportErrors() }} error{{ totalImportErrors() === 1 ? '' : 's' }}
+            </strong>
+          </p>
+
+          @if (p.errors.length > 0) {
+            <ul class="import-preview__errors">
+              @for (e of p.errors; track e) {
+                <li>{{ e }}</li>
+              }
+            </ul>
+          }
+
+          @if (p.services.length > 0) {
+            <h3 class="import-preview__section-title">Services</h3>
+            <div class="admin-table-wrap">
+              <table class="admin-table admin-table--compact">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Duration</th>
+                    <th>Featured</th>
+                    <th>Issues</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (s of p.services; track $index) {
+                    <tr [class.row--invalid]="s._errors.length > 0">
+                      <td>{{ $index + 1 }}</td>
+                      <td class="cell--name">{{ s.name || '(missing)' }}</td>
+                      <td><span class="badge">{{ categoryLabel(s.category) }}</span></td>
+                      <td>${{ s.price }}</td>
+                      <td>{{ formatDuration(s.duration) }}</td>
+                      <td>{{ s.isFeatured ? '★' : '' }}</td>
+                      <td class="cell--issues">
+                        @if (s._errors.length === 0) { <span class="ok">OK</span> }
+                        @else {
+                          <ul>
+                            @for (e of s._errors; track e) { <li>{{ e }}</li> }
+                          </ul>
+                        }
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          }
+
+          @if (p.addons.length > 0) {
+            <h3 class="import-preview__section-title">Add-Ons</h3>
+            <div class="admin-table-wrap">
+              <table class="admin-table admin-table--compact">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Price Δ</th>
+                    <th>Time Δ</th>
+                    <th>Applies to</th>
+                    <th>Issues</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (a of p.addons; track $index) {
+                    <tr [class.row--invalid]="a._errors.length > 0">
+                      <td>{{ $index + 1 }}</td>
+                      <td class="cell--name">{{ a.name || '(missing)' }}</td>
+                      <td>{{ a.priceDelta >= 0 ? '+' : '' }}${{ a.priceDelta }}</td>
+                      <td>{{ a.durationDelta >= 0 ? '+' : '' }}{{ a.durationDelta }} min</td>
+                      <td>{{ a.appliesToAll ? 'All services' : 'Per-service (link from Services)' }}</td>
+                      <td class="cell--issues">
+                        @if (a._errors.length === 0) { <span class="ok">OK</span> }
+                        @else {
+                          <ul>
+                            @for (e of a._errors; track e) { <li>{{ e }}</li> }
+                          </ul>
+                        }
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          }
+
+          <div class="import-panel__actions import-panel__actions--commit">
+            <button
+              type="button"
+              class="action-btn"
+              [disabled]="!canImport()"
+              (click)="runImport()"
+            >
+              @if (importing()) { Importing… }
+              @else { Import {{ totalImportRows() }} row{{ totalImportRows() === 1 ? '' : 's' }} }
+            </button>
+            @if (totalImportErrors() > 0) {
+              <span class="import-preview__hint">Fix all errors before importing.</span>
+            }
+          </div>
+        </div>
+      }
+    </section>
+  }
+
+  <!-- ── Existing services list ───────────────────────────────────────────── -->
   @if (loading()) {
     <p class="admin-loading">Loading services…</p>
   } @else if (services().length === 0) {
-    <p class="admin-empty">No services yet. <a [routerLink]="'/admin/services/new'">Add one</a> or seed from the dashboard.</p>
+    <p class="admin-empty">
+      No services yet. <a [routerLink]="'/admin/services/new'">Add one</a>.
+    </p>
   } @else {
+    @if (selectedCount() > 0) {
+      <div class="selection-bar">
+        <span class="selection-bar__count">{{ selectedCount() }} selected</span>
+        <button type="button" class="tbl-btn tbl-btn--reset" (click)="clearSelection()">Clear</button>
+        <button
+          type="button"
+          class="action-btn action-btn--danger-outline"
+          [disabled]="bulkDeleting()"
+          (click)="deleteSelected()"
+        >
+          {{ bulkDeleting() ? 'Deleting…' : '🗑 Delete Selected' }}
+        </button>
+      </div>
+    }
     <div class="admin-table-wrap">
-      <table class="admin-table">
+      <table class="admin-table admin-table--filters">
         <thead>
           <tr>
+            <th class="cell--check">
+              <input
+                type="checkbox"
+                [checked]="allFilteredSelected()"
+                (change)="toggleSelectAllFiltered($any($event.target).checked)"
+                aria-label="Select all filtered services"
+              />
+            </th>
             <th>Name</th>
             <th>Category</th>
             <th>Price</th>
@@ -24,14 +212,94 @@
             <th>Featured</th>
             <th>Actions</th>
           </tr>
+          <tr class="filter-row">
+            <th></th>
+            <th>
+              <input
+                type="text" class="filter-input"
+                placeholder="Search name…"
+                [ngModel]="filterName()"
+                (ngModelChange)="filterName.set($event)"
+              />
+            </th>
+            <th>
+              <select
+                class="filter-input filter-input--select"
+                [ngModel]="filterCategory()"
+                (ngModelChange)="filterCategory.set($event)"
+              >
+                <option value="all">All</option>
+                @for (c of allCategories; track c.value) {
+                  <option [value]="c.value">{{ c.label }}</option>
+                }
+              </select>
+            </th>
+            <th>
+              <input
+                type="number" min="0" step="1"
+                class="filter-input filter-input--num"
+                placeholder="≥ $"
+                [ngModel]="filterMinPrice()"
+                (ngModelChange)="filterMinPrice.set($event)"
+              />
+            </th>
+            <th>
+              <input
+                type="number" min="0" step="15"
+                class="filter-input filter-input--num"
+                placeholder="≥ min"
+                [ngModel]="filterMinDuration()"
+                (ngModelChange)="filterMinDuration.set($event)"
+              />
+            </th>
+            <th>
+              <select
+                class="filter-input filter-input--select"
+                [ngModel]="filterAvailable()"
+                (ngModelChange)="filterAvailable.set($event)"
+              >
+                <option value="all">All</option>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+              </select>
+            </th>
+            <th>
+              <select
+                class="filter-input filter-input--select"
+                [ngModel]="filterFeatured()"
+                (ngModelChange)="filterFeatured.set($event)"
+              >
+                <option value="all">All</option>
+                <option value="yes">★ Yes</option>
+                <option value="no">No</option>
+              </select>
+            </th>
+            <th>
+              @if (hasActiveFilters()) {
+                <button
+                  type="button"
+                  class="tbl-btn tbl-btn--reset"
+                  (click)="resetFilters()"
+                >Reset</button>
+              }
+            </th>
+          </tr>
         </thead>
         <tbody>
-          @for (svc of services(); track svc.id) {
-            <tr [class.row--unavailable]="!svc.isAvailable">
+          @for (svc of filteredServices(); track svc.id) {
+            <tr [class.row--unavailable]="!svc.isAvailable" [class.row--selected]="isSelected(svc.id)">
+              <td class="cell--check">
+                <input
+                  type="checkbox"
+                  [checked]="isSelected(svc.id)"
+                  (change)="toggleSelect(svc.id, $any($event.target).checked)"
+                  [attr.aria-label]="'Select ' + svc.name"
+                />
+              </td>
               <td class="cell--name">{{ svc.name }}</td>
-              <td><span class="badge">{{ svc.category }}</span></td>
+              <td><span class="badge">{{ categoryLabel(svc.category) }}</span></td>
               <td>${{ svc.price }}</td>
-              <td>{{ svc.duration }} min</td>
+              <td>{{ formatDuration(svc.duration) }}</td>
               <td>
                 <button
                   class="toggle-btn"
@@ -52,6 +320,13 @@
                   (click)="delete(svc.id)"
                   [disabled]="deleting() === svc.id"
                 >{{ deleting() === svc.id ? '…' : 'Delete' }}</button>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="8" class="cell--empty">
+                No services match the current filters.
+                <button type="button" class="tbl-btn tbl-btn--reset" (click)="resetFilters()">Reset filters</button>
               </td>
             </tr>
           }

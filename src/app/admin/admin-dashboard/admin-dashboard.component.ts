@@ -25,7 +25,7 @@ export class AdminDashboardComponent {
 
   /** Live business info — drives the welcome line. */
   readonly info         = signal<BusinessInfo | null>(null);
-  readonly businessName = computed(() => this.info()?.name ?? 'Labelle Braids BB');
+  readonly businessName = computed(() => this.info()?.name ?? 'Labelle Braid BB');
 
   serviceCount     = signal<number>(0);
   productCount     = signal<number>(0);

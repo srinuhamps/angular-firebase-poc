@@ -31,7 +31,7 @@ export class AdminMessagesComponent {
   private readonly bizService      = inject(BusinessInfoService);
 
   /** Latest business name; appended to outgoing reply subjects. */
-  private readonly businessName    = signal<string>('Labelle Braids BB');
+  private readonly businessName    = signal<string>('Labelle Braid BB');
 
   readonly messages    = signal<ContactMessage[]>([]);
   readonly loading     = signal<boolean>(true);
@@ -186,7 +186,7 @@ export class AdminMessagesComponent {
     const sentBy = this.authService.user()?.email ?? undefined;
     const replySubject = `Re: ${this.subjectLabel(msg.subject)} — ${this.businessName()}`;
 
-    // Attempt to dispatch the email (stub until Brevo is wired).
+    // Dispatch the reply via Brevo (through the sendEmail Cloud Function).
     const emailResult = await this.emailService.send({
       to:       msg.email,
       toName:   msg.name,

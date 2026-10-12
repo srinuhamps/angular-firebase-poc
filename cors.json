@@ -2,8 +2,10 @@
   {
     "origin": [
       "http://localhost:4200",
-      "https://carolle-hair-studio.web.app",
-      "https://carolle-hair-studio.firebaseapp.com"
+      "https://labelle-braids-bb.web.app",
+      "https://labelle-braids-bb.firebaseapp.com",
+      "https://labellebraidbb.com",
+      "https://www.labellebraidbb.com"
     ],
     "method": ["GET", "POST", "PUT", "DELETE", "HEAD"],
     "responseHeader": [

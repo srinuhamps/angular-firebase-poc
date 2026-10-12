@@ -1,0 +1,60 @@
+@if (summary(); as s) {
+  @if (s.reviews.length > 0) {
+    <div class="reviews">
+      <div class="reviews__summary">
+        <span class="reviews__score">{{ s.rating | number: '1.1-1' }}</span>
+        <span class="reviews__stars" [attr.aria-label]="s.rating + ' out of 5 stars'">
+          @for (filled of stars(s.rating); track $index) {
+            <span class="reviews__star" [class.is-filled]="filled" aria-hidden="true">★</span>
+          }
+        </span>
+        <span class="reviews__count">Based on {{ s.totalReviews }} Google reviews</span>
+      </div>
+
+      <div class="reviews__viewport">
+        <div class="reviews__track" [style.transform]="trackOffset()">
+          @for (r of s.reviews; track r.author + r.date) {
+            <div class="reviews__slide" [style.flex-basis.%]="slideWidth()">
+              <article class="r-card">
+                <header class="r-card__head">
+                  <span class="r-card__avatar" aria-hidden="true">{{ initials(r.author) }}</span>
+                  <span class="r-card__who">
+                    <span class="r-card__name">{{ r.author }}</span>
+                    <span class="r-card__date">{{ r.relativeDate }}</span>
+                  </span>
+                </header>
+                <span class="r-card__stars" [attr.aria-label]="r.rating + ' out of 5 stars'">
+                  @for (filled of stars(r.rating); track $index) {
+                    <span class="r-card__star" [class.is-filled]="filled" aria-hidden="true">★</span>
+                  }
+                </span>
+                <blockquote class="r-card__text">{{ r.text }}</blockquote>
+              </article>
+            </div>
+          }
+        </div>
+      </div>
+
+      @if (maxIndex() > 0) {
+        <div class="reviews__controls">
+          <button
+            type="button"
+            class="reviews__arrow"
+            aria-label="Previous reviews"
+            [disabled]="!canPrev()"
+            (click)="prev()"
+          >‹</button>
+          <button
+            type="button"
+            class="reviews__arrow"
+            aria-label="Next reviews"
+            [disabled]="!canNext()"
+            (click)="next()"
+          >›</button>
+        </div>
+      }
+    </div>
+  }
+} @else if (loading()) {
+  <p class="reviews__loading">Loading reviews…</p>
+}

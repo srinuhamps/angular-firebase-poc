@@ -1,63 +1,494 @@
-<section class="booking-placeholder">
-  <div class="booking-placeholder__overlay"></div>
-  <div class="container booking-placeholder__content">
-    <div class="booking-placeholder__badge">Phase 2 — Coming Soon</div>
-    <h1 class="heading-1">Online Booking</h1>
-    <p class="subheading">
-      Our full online booking system is under development. Soon you'll be able to<br>
-      select your service, choose a stylist, and pick your perfect time — all in one place.
-    </p>
+<section class="booking">
+  <div class="booking__overlay"></div>
+  <div class="container booking__content">
 
-    <!-- Phase 2 Preview Steps -->
-    <div class="booking-steps">
-      @for (step of steps; track step.num) {
-        <div class="booking-steps__item">
-          <div class="booking-steps__num">{{ step.num }}</div>
-          <p class="booking-steps__label">{{ step.label }}</p>
-        </div>
+    <!-- Header -->
+    <header class="booking__head">
+      <span class="booking__badge">Book an Appointment</span>
+      <h1 class="heading-1">Reserve Your Chair</h1>
+      <p class="subheading">
+        Pick a service, select your time, and we'll confirm by phone or email.
+      </p>
+    </header>
+
+    <!-- Progress bar -->
+    <ol class="wizard-steps" role="list" aria-label="Booking steps">
+      @for (s of steps; track s.num; let i = $index) {
+        @let n = i + 1;
+        <li
+          class="wizard-steps__item"
+          [class.is-active]="currentStep() === n"
+          [class.is-done]="currentStep() > n"
+          [class.is-clickable]="currentStep() > n"
+          (click)="goToStep(n)"
+        >
+          <div class="wizard-steps__num">
+            @if (currentStep() > n) { ✓ } @else { {{ s.num }} }
+          </div>
+          <p class="wizard-steps__label">{{ s.label }}</p>
+        </li>
         @if (!$last) {
-          <div class="booking-steps__divider" aria-hidden="true">→</div>
+          <li class="wizard-steps__divider" aria-hidden="true">→</li>
         }
       }
-    </div>
+    </ol>
 
-    <!-- Live Hours & Holidays -->
-    @if (info(); as biz) {
-      <div class="booking-hours">
-        <h3 class="booking-hours__title">Studio Hours</h3>
-        <ul class="booking-hours__list">
-          @for (h of biz.businessHours; track h.day) {
-            <li [class.closed]="h.isClosed">
-              <span>{{ h.day }}</span>
-              <span>{{ h.isClosed ? 'Closed' : h.open + ' – ' + h.close }}</span>
-            </li>
-          }
-        </ul>
-
-        @if (biz.holidays.length > 0) {
-          <h3 class="booking-hours__title">Upcoming Closures</h3>
-          <ul class="booking-hours__list">
-            @for (hol of biz.holidays; track hol.date) {
-              <li class="closed">
-                <span>{{ hol.date }}</span>
-                <span>{{ hol.label }}</span>
-              </li>
-            }
-          </ul>
-        }
+    <!-- Loading / error states -->
+    @if (loadingData()) {
+      <div class="booking-panel booking-panel--center">
+        <p class="booking-panel__muted">Loading services…</p>
       </div>
+    } @else if (loadError()) {
+      <div class="booking-panel booking-panel--center">
+        <p class="booking-panel__err" role="alert">
+          ✕ Could not load booking data: {{ loadError() }}
+        </p>
+      </div>
+    } @else {
+
+      <!-- Step 1 — Service -->
+      @if (currentStep() === 1) {
+        <div class="booking-panel">
+
+          <!-- 1a: Category picker -->
+          @if (!selectedCategory()) {
+            <h2 class="booking-panel__title">What type of service are you looking for?</h2>
+            @if (availableCategories().length === 0) {
+              <p class="booking-panel__muted">
+                No bookable services available right now. Please check back soon or
+                <a [routerLink]="'/contact'">contact us</a>.
+              </p>
+            } @else {
+              <div class="cat-grid">
+                @for (cat of availableCategories(); track cat.value) {
+                  <button
+                    type="button"
+                    class="cat-card"
+                    (click)="selectCategory(cat.value)"
+                  >
+                    <span class="cat-card__label">{{ cat.label }}</span>
+                    <span class="cat-card__count">
+                      {{ countInCategory(cat.value) }} service{{ countInCategory(cat.value) === 1 ? '' : 's' }}
+                    </span>
+                  </button>
+                }
+              </div>
+            }
+
+          <!-- 1b: Service picker (category chosen) -->
+          } @else {
+            <div class="booking-panel__cat-header">
+              <button type="button" class="booking-panel__cat-back" (click)="selectCategory('')">
+                ← All categories
+              </button>
+              <h2 class="booking-panel__title">{{ labelForCategory(selectedCategory()) }}</h2>
+            </div>
+
+            <div class="card-grid">
+              @for (svc of filteredServices(); track svc.id) {
+                <button
+                  type="button"
+                  class="pick-card"
+                  [class.is-selected]="selectedService()?.id === svc.id"
+                  (click)="selectService(svc)"
+                >
+                  <div class="pick-card__media">
+                    @if ((svc.mediaUrls && svc.mediaUrls.length > 0) || svc.imageUrl) {
+                      <img [src]="svc.mediaUrls?.[0] || svc.imageUrl" [alt]="svc.name" loading="lazy" />
+                    } @else {
+                      <span class="pick-card__placeholder">✦</span>
+                    }
+                  </div>
+                  <div class="pick-card__body">
+                    <h3 class="pick-card__title">{{ svc.name }}</h3>
+                    <p class="pick-card__desc">{{ svc.shortDescription }}</p>
+                    <div class="pick-card__meta">
+                      <span>{{ formatPrice(svc.price) }}</span>
+                      <span>•</span>
+                      <span>{{ formatDuration(svc.duration) }}</span>
+                    </div>
+                  </div>
+                </button>
+              }
+            </div>
+
+            <!-- Add-ons — appear after a service is picked, when any apply -->
+            @if (selectedService() && availableAddons().length > 0) {
+              <div class="addons">
+                <h3 class="addons__title">Enhance your appointment</h3>
+                <p class="addons__hint">
+                  Optional extras that adjust your price and appointment length.
+                </p>
+                <ul class="addon-list" role="list">
+                  @for (a of availableAddons(); track a.id) {
+                    <li>
+                      <label
+                        class="addon-item"
+                        [class.is-selected]="isAddonSelected(a.id)"
+                      >
+                        <input
+                          type="checkbox"
+                          class="addon-item__check"
+                          [checked]="isAddonSelected(a.id)"
+                          (change)="toggleAddon(a.id)"
+                        />
+                        <span class="addon-item__body">
+                          <span class="addon-item__name">{{ a.name }}</span>
+                          <span class="addon-item__meta">
+                            <span class="addon-item__delta">{{ formatPriceDelta(a.priceDelta) }}</span>
+                            <span aria-hidden="true">•</span>
+                            <span class="addon-item__delta">{{ formatDurationDelta(a.durationDelta) }}</span>
+                          </span>
+                        </span>
+                      </label>
+                    </li>
+                  }
+                </ul>
+              </div>
+            }
+          }
+
+        </div>
+      }
+
+      <!-- Step 2 — Date & Time -->
+      @if (currentStep() === 2) {
+        <div class="booking-panel">
+          <h2 class="booking-panel__title">Pick a date & time</h2>
+
+          <!-- Inline month calendar -->
+          <div class="calendar" role="group" aria-label="Choose a date">
+            <div class="calendar__header">
+              <button
+                type="button"
+                class="calendar__nav"
+                aria-label="Previous month"
+                [disabled]="!canGoPrevMonth()"
+                (click)="prevMonth()"
+              >‹</button>
+              <span class="calendar__month">{{ calendarMonthLabel() }}</span>
+              <button
+                type="button"
+                class="calendar__nav"
+                aria-label="Next month"
+                [disabled]="!canGoNextMonth()"
+                (click)="nextMonth()"
+              >›</button>
+            </div>
+
+            <div class="calendar__weekdays" aria-hidden="true">
+              @for (w of weekdayLabels; track w) {
+                <span>{{ w }}</span>
+              }
+            </div>
+
+            <div class="calendar__grid">
+              @for (cell of calendarCells(); track cell.iso) {
+                <button
+                  type="button"
+                  class="calendar__day"
+                  [class.calendar__day--out]="!cell.inMonth"
+                  [class.calendar__day--today]="cell.isToday"
+                  [class.calendar__day--selected]="cell.isSelected"
+                  [class.calendar__day--closed]="cell.closed && cell.inMonth && !cell.outOfRange"
+                  [class.calendar__day--holiday]="cell.holiday && cell.inMonth && !cell.outOfRange"
+                  [disabled]="cell.disabled"
+                  [attr.aria-pressed]="cell.isSelected"
+                  [attr.aria-label]="cell.iso"
+                  [attr.title]="cell.holiday ? 'Holiday — closed' : (cell.closed ? 'Closed this day' : null)"
+                  (click)="selectDay(cell)"
+                >{{ cell.day }}</button>
+              }
+            </div>
+
+            @if (selectedDateIso()) {
+              <p class="calendar__selected">Selected: <strong>{{ formatDateLong(selectedDateIso()) }}</strong></p>
+            }
+          </div>
+
+          @if (selectedDateIso()) {
+            @if (isHoliday()) {
+              <p class="booking-panel__muted">
+                We're closed on this date (holiday). Please pick another day.
+              </p>
+            } @else if (selectedDayHours()?.isClosed) {
+              <p class="booking-panel__muted">
+                We're closed on {{ selectedDayName() }}s. Please pick another day.
+              </p>
+            } @else if (slotOptions().length === 0) {
+              <p class="booking-panel__muted">
+                No slots fit this service on the selected day.
+              </p>
+            } @else {
+              <div class="slot-grid" role="radiogroup" aria-label="Available times">
+                @for (slot of slotOptions(); track slot.time) {
+                  <button
+                    type="button"
+                    class="slot"
+                    role="radio"
+                    [attr.aria-checked]="selectedTime() === slot.time"
+                    [class.is-selected]="selectedTime() === slot.time"
+                    [disabled]="!slot.available"
+                    (click)="selectTime(slot.time)"
+                  >
+                    {{ slot.time }}
+                  </button>
+                }
+              </div>
+            }
+          } @else {
+            <p class="booking-panel__muted">Select a date to see available times.</p>
+          }
+        </div>
+      }
+
+      <!-- Step 3 — Your Details -->
+      @if (currentStep() === 3) {
+        <div class="booking-panel">
+          <h2 class="booking-panel__title">Your details</h2>
+          <form [formGroup]="detailsForm" class="details-form" (ngSubmit)="next()">
+            <div class="form-row">
+              <label for="bk-name">Full name *</label>
+              <input id="bk-name" type="text" formControlName="name" autocomplete="name" />
+              @if (detailsForm.get('name')?.touched && detailsForm.get('name')?.invalid) {
+                <small class="form-err">Please enter your name.</small>
+              }
+            </div>
+            <div class="form-row">
+              <label for="bk-email">Email *</label>
+              <input id="bk-email" type="email" formControlName="email" autocomplete="email" />
+              @if (detailsForm.get('email')?.touched && detailsForm.get('email')?.invalid) {
+                <small class="form-err">Please enter a valid email.</small>
+              }
+            </div>
+            <div class="form-row">
+              <label for="bk-phone">Phone *</label>
+              <input id="bk-phone" type="tel" formControlName="phone" autocomplete="tel" />
+              @if (detailsForm.get('phone')?.touched && detailsForm.get('phone')?.invalid) {
+                <small class="form-err">Please enter a valid phone number.</small>
+              }
+            </div>
+            <div class="form-row">
+              <label for="bk-notes">Additional notes (optional)</label>
+              <textarea id="bk-notes" formControlName="notes" rows="3"></textarea>
+            </div>
+            <div class="form-row form-row--checkbox">
+              <label class="sms-optin">
+                <input
+                  id="bk-sms-optin"
+                  type="checkbox"
+                  formControlName="smsOptIn"
+                />
+                <span class="sms-optin__text">
+                  <strong>Text me appointment confirmations and reminders.</strong>
+                  <small>
+                    By checking this box, I agree to receive automated
+                    appointment confirmation, 24-hour reminder, and status
+                    update text messages from Labelle Braid BB at the mobile
+                    number provided. Message frequency: up to 3 messages per
+                    appointment. Msg &amp; data rates may apply. Reply
+                    <strong>HELP</strong> for help,
+                    <strong>STOP</strong> to cancel at any time. Consent is
+                    not a condition of booking. See our
+                    <a routerLink="/privacy-policy" target="_blank" rel="noopener">Privacy&nbsp;Policy</a>
+                    and
+                    <a routerLink="/terms-of-service" target="_blank" rel="noopener">Terms&nbsp;of&nbsp;Service</a>.
+                  </small>
+                </span>
+              </label>
+            </div>
+          </form>
+        </div>
+      }
+
+      <!-- Step 4 — Confirm & Pay -->
+      @if (currentStep() === 4) {
+        <div class="booking-panel">
+          <h2 class="booking-panel__title">Confirm & pay</h2>
+
+          <div class="summary">
+            <div class="summary__row">
+              <span class="summary__k">Service</span>
+              <span class="summary__v">{{ selectedService()?.name }}</span>
+            </div>
+            @if (selectedAddons().length > 0) {
+              <div class="summary__row summary__row--stack">
+                <span class="summary__k">Add-ons</span>
+                <span class="summary__v">
+                  <ul class="summary__addons" role="list">
+                    @for (a of selectedAddons(); track a.id) {
+                      <li>
+                        {{ a.name }}
+                        <span class="summary__addon-delta">
+                          ({{ formatPriceDelta(a.priceDelta) }}, {{ formatDurationDelta(a.durationDelta) }})
+                        </span>
+                      </li>
+                    }
+                  </ul>
+                </span>
+              </div>
+            }
+            <div class="summary__row">
+              <span class="summary__k">When</span>
+              <span class="summary__v">
+                {{ formatDateLong(selectedDateIso()) }} · {{ selectedTime() }}
+              </span>
+            </div>
+            <div class="summary__row">
+              <span class="summary__k">Duration</span>
+              <span class="summary__v">
+                {{ formatDuration(effectiveDuration()) }}
+              </span>
+            </div>
+            <div class="summary__row">
+              <span class="summary__k">Name</span>
+              <span class="summary__v">{{ detailsForm.value.name }}</span>
+            </div>
+            <div class="summary__row">
+              <span class="summary__k">Contact</span>
+              <span class="summary__v">
+                {{ detailsForm.value.email }} · {{ detailsForm.value.phone }}
+              </span>
+            </div>
+          </div>
+
+          <h3 class="booking-panel__subtitle">Payment</h3>
+          <div class="pay-options">
+            <label class="pay-option" [class.is-selected]="paymentMethod() === 'pay-in-store'">
+              <input
+                type="radio"
+                name="payment"
+                value="pay-in-store"
+                [checked]="paymentMethod() === 'pay-in-store'"
+                (change)="setPayment('pay-in-store')"
+              />
+              <div class="pay-option__body">
+                <strong>Pay at the salon</strong>
+                <span>Reserve now, settle the full amount in person.</span>
+              </div>
+            </label>
+            <label class="pay-option" [class.is-selected]="paymentMethod() === 'card-deposit'">
+              <input
+                type="radio"
+                name="payment"
+                value="card-deposit"
+                [checked]="paymentMethod() === 'card-deposit'"
+                (change)="setPayment('card-deposit')"
+              />
+              <div class="pay-option__body">
+                <strong>Card deposit (20%)</strong>
+                <span>Secure your slot by charging a 20% deposit now. The remaining balance is paid at the salon.</span>
+              </div>
+            </label>
+          </div>
+
+          @if (paymentMethod() === 'card-deposit') {
+            <app-stripe-payment></app-stripe-payment>
+          }
+
+          <div class="totals">
+            <div class="totals__row">
+              <span>Service</span>
+              <span>{{ formatPrice(selectedService()?.price ?? 0) }}</span>
+            </div>
+            @for (a of selectedAddons(); track a.id) {
+              <div class="totals__row totals__row--sub">
+                <span>{{ a.name }}</span>
+                <span>{{ formatPriceDelta(a.priceDelta) }}</span>
+              </div>
+            }
+            <div class="totals__row totals__row--grand">
+              <span>Total</span>
+              <span>{{ formatPrice(totals().total) }}</span>
+            </div>
+            @if (totals().deposit > 0) {
+              <div class="totals__row">
+                <span>Deposit due now</span>
+                <span>{{ formatPrice(totals().deposit) }}</span>
+              </div>
+              <div class="totals__row">
+                <span>Due at salon</span>
+                <span>{{ formatPrice(totals().dueAtSalon) }}</span>
+              </div>
+            }
+          </div>
+
+          @if (submitError()) {
+            <p class="booking-panel__err" role="alert">✕ {{ submitError() }}</p>
+          }
+        </div>
+      }
+
+      <!-- Success view -->
+      @if (currentStep() === steps.length + 1) {
+        <div class="booking-panel booking-panel--center">
+          <div class="success-icon">✓</div>
+          <h2 class="booking-panel__title">You're booked!</h2>
+          <p class="booking-panel__muted">
+            Your appointment request was submitted. We'll send a confirmation to
+            <strong>{{ detailsForm.value.email }}</strong> shortly.
+          </p>
+          <div class="success-actions">
+            <button class="btn btn-primary" type="button" (click)="resetWizard()">
+              Book another appointment
+            </button>
+            <a class="btn btn-outline" [routerLink]="'/'">Back to home</a>
+          </div>
+        </div>
+      }
+
+      <!-- Step navigation -->
+      @if (currentStep() <= steps.length) {
+        <div class="wizard-nav">
+          @if (currentStep() === 1) {
+            <a
+              class="btn btn-outline"
+              [routerLink]="'/'"
+              [attr.aria-disabled]="submitting() ? true : null"
+            >
+              Cancel
+            </a>
+          } @else {
+            <button
+              type="button"
+              class="btn btn-outline"
+              [disabled]="submitting()"
+              (click)="back()"
+            >
+              ← Back
+            </button>
+          }
+
+          @if (currentStep() < steps.length) {
+            <button
+              type="button"
+              class="btn btn-primary"
+              [disabled]="!canAdvance()"
+              (click)="next()"
+            >
+              Next →
+            </button>
+          } @else {
+            <button
+              type="button"
+              class="btn btn-primary"
+              [disabled]="!canConfirm()"
+              (click)="submit()"
+            >
+              @if (submitting()) { Submitting… } @else { Confirm booking }
+            </button>
+          }
+        </div>
+      }
     }
 
-    <!-- Interim CTA -->
-    <div class="booking-placeholder__cta">
-      <p class="booking-placeholder__cta-text">In the meantime, book by phone or email:</p>
-      <div class="booking-placeholder__btns">
-        <a class="btn btn-primary btn-lg" [href]="telHref(info()?.phone)">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.21h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.82a16 16 0 0 0 6.08 6.08l1.68-1.34a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-          {{ info()?.phone ? 'Call ' + info()!.phone : 'Call Us' }}
-        </a>
-        <a class="btn btn-outline btn-lg" [routerLink]="'/contact'">Send a Message</a>
-      </div>
-    </div>
+    <!-- Footer help -->
+    @if (businessInfo(); as biz) {
+      <p class="booking__help">
+        Need a hand? Call
+        <a [href]="telHref(biz.phone)">{{ biz.phone }}</a>
+        or <a [routerLink]="'/contact'">send a message</a>.
+      </p>
+    }
   </div>
 </section>

@@ -1,0 +1,169 @@
+<!-- Hero -->
+<section class="page-hero legal-hero">
+  <div class="page-hero__overlay"></div>
+  <div class="container page-hero__content">
+    <p class="eyebrow">Legal</p>
+    <h1 class="heading-1">Privacy Policy</h1>
+    <p class="subheading">Effective {{ effectiveDate }}</p>
+  </div>
+</section>
+
+<!-- Content -->
+<section class="section legal-page bg-dark">
+  <div class="container legal-page__inner">
+
+    <p class="legal-page__lead">
+      {{ businessName() }} ("we", "us", or "our") respects your privacy. This
+      Privacy Policy explains what information we collect, how we use it, and
+      the choices you have regarding your information when you visit our
+      website or use our appointment booking and text message services.
+    </p>
+
+    <!-- 1. Information We Collect -->
+    <h2 class="legal-page__h2">1. Information We Collect</h2>
+    <p>We collect the following categories of information:</p>
+    <ul>
+      <li>
+        <strong>Contact details</strong> you provide when you book an
+        appointment or send us a message — including your full name, email
+        address, and mobile phone number.
+      </li>
+      <li>
+        <strong>Appointment details</strong> such as the service you selected,
+        preferred date and time, and any notes you include with your request.
+      </li>
+      <li>
+        <strong>Communication preferences</strong> — for example, whether you
+        have opted in to receive SMS text messages from us.
+      </li>
+      <li>
+        <strong>Technical data</strong> automatically collected when you visit
+        the site (browser type, device information, and pages visited) for
+        security and analytics.
+      </li>
+    </ul>
+
+    <!-- 2. How We Use Your Information -->
+    <h2 class="legal-page__h2">2. How We Use Your Information</h2>
+    <p>We use the information we collect to:</p>
+    <ul>
+      <li>Schedule, confirm, remind, and manage your appointments;</li>
+      <li>Send email and (if you have opted in) SMS text messages relating to your appointments;</li>
+      <li>Respond to inquiries submitted through our contact form;</li>
+      <li>Improve the operation and security of our website;</li>
+      <li>Comply with applicable laws and regulations.</li>
+    </ul>
+
+    <!-- 3. SMS / Text Messages -->
+    <h2 class="legal-page__h2">3. SMS &amp; Text Messages</h2>
+    <p>
+      <strong>
+        No mobile information will be shared with third parties or affiliates
+        for marketing or promotional purposes.
+      </strong>
+      Information sharing to sub-contractors in support services, such as
+      customer service, is permitted. All other categories exclude text
+      messaging originator opt-in data and consent; this information will not
+      be shared with any third parties.
+    </p>
+    <p>
+      If you opt in during booking by checking the SMS consent checkbox, we
+      will send transactional messages including:
+    </p>
+    <ul>
+      <li>An appointment confirmation immediately after you book;</li>
+      <li>A reminder approximately 24 hours before your appointment;</li>
+      <li>Notifications when your appointment status changes (confirmed, cancelled, or completed).</li>
+    </ul>
+    <p>
+      <strong>Message frequency:</strong> up to 3 messages per appointment.
+      <strong>Message and data rates may apply.</strong>
+      Reply <strong>STOP</strong> to any message to opt out at any time. Reply
+      <strong>HELP</strong> for help. Opting out is free and takes effect
+      immediately. Consent to receive SMS is <em>not</em> a condition of
+      booking an appointment.
+    </p>
+
+    <!-- 4. How We Share Information -->
+    <h2 class="legal-page__h2">4. How We Share Your Information</h2>
+    <p>
+      We do not sell, rent, or trade your personal information. We share
+      information only with service providers who help us operate the site and
+      deliver messages on our behalf:
+    </p>
+    <ul>
+      <li><strong>Google Firebase</strong> — hosting, database, and authentication;</li>
+      <li><strong>Brevo (Sendinblue)</strong> — transactional email delivery;</li>
+      <li><strong>Twilio</strong> — SMS delivery.</li>
+    </ul>
+    <p>
+      These providers are contractually bound to use the information only to
+      perform services for us and to keep it confidential. We may also
+      disclose information when required by law or to protect our legal
+      rights.
+    </p>
+
+    <!-- 5. Data Retention -->
+    <h2 class="legal-page__h2">5. Data Retention</h2>
+    <p>
+      We retain appointment records and contact information for as long as
+      necessary to provide our services and comply with legal obligations.
+      You can request deletion of your data by contacting us at
+      <a class="legal-page__link" [href]="'mailto:' + businessEmail()">{{ businessEmail() }}</a>.
+    </p>
+
+    <!-- 6. Security -->
+    <h2 class="legal-page__h2">6. Security</h2>
+    <p>
+      We use industry-standard safeguards, including encryption in transit
+      (HTTPS/TLS) and access controls on our databases. No online service is
+      100% secure, but we work to protect your information from unauthorized
+      access or disclosure.
+    </p>
+
+    <!-- 7. Your Choices -->
+    <h2 class="legal-page__h2">7. Your Choices</h2>
+    <ul>
+      <li><strong>SMS opt-out:</strong> Reply STOP to any text message.</li>
+      <li><strong>Email opt-out:</strong> Contact us to unsubscribe from non-essential email.</li>
+      <li><strong>Access &amp; deletion:</strong> Email us to request a copy of your data or its deletion.</li>
+    </ul>
+
+    <!-- 8. Children -->
+    <h2 class="legal-page__h2">8. Children's Privacy</h2>
+    <p>
+      Our services are not directed to children under 13, and we do not
+      knowingly collect information from them. If we learn we have collected
+      information from a child under 13, we will delete it.
+    </p>
+
+    <!-- 9. Changes -->
+    <h2 class="legal-page__h2">9. Changes to This Policy</h2>
+    <p>
+      We may update this Privacy Policy from time to time. Changes take
+      effect when posted on this page with an updated "Effective" date.
+    </p>
+
+    <!-- 10. Contact -->
+    <h2 class="legal-page__h2">10. Contact Us</h2>
+    <p>
+      Questions about this Privacy Policy? Contact us:
+    </p>
+    <ul class="legal-page__contact">
+      <li>
+        <strong>{{ businessName() }}</strong>
+      </li>
+      <li>
+        Email:
+        <a class="legal-page__link" [href]="'mailto:' + businessEmail()">{{ businessEmail() }}</a>
+      </li>
+      @if (businessPhone()) {
+        <li>
+          Phone:
+          <a class="legal-page__link" [href]="'tel:' + businessPhone()">{{ businessPhone() }}</a>
+        </li>
+      }
+    </ul>
+
+  </div>
+</section>

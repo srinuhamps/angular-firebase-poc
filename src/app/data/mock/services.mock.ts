@@ -7,7 +7,7 @@ export const MOCK_SERVICES: HairService[] = [
   {
     id: 'svc-1',
     name: 'Knotless Box Braids',
-    category: 'braiding',
+    category: 'knotless-braids',
     shortDescription: 'Tension-free, feed-in box braids that protect your natural hair.',
     description:
       'Our signature knotless box braids begin with your natural hair and gradually add extensions, eliminating the knot at the root for a seamless, tension-free style. Available in small, medium, and large sizes with any length.',
@@ -23,7 +23,7 @@ export const MOCK_SERVICES: HairService[] = [
   {
     id: 'svc-2',
     name: 'Goddess Locs',
-    category: 'locs',
+    category: 'starter-locs',
     shortDescription: 'Bohemian goddess locs with wavy ends for a free-spirited look.',
     description:
       'Stunning goddess locs created with premium Marley and wavy hair for those flowing, boho ends. A gorgeous protective style that blends seamlessly with your natural texture. Long-lasting and versatile.',
@@ -39,7 +39,7 @@ export const MOCK_SERVICES: HairService[] = [
   {
     id: 'svc-3',
     name: 'Bohemian Twists',
-    category: 'braiding',
+    category: 'twist',
     shortDescription: 'Soft, romantic passion twists with a lightweight, natural finish.',
     description:
       'Passion twists and spring twists installed with the highest-quality pre-looped hair for a soft, lightweight style. Perfect for everyday elegance with minimal daily styling needed.',
@@ -55,7 +55,7 @@ export const MOCK_SERVICES: HairService[] = [
   {
     id: 'svc-4',
     name: 'Sew-In Weave',
-    category: 'weaving',
+    category: 'sew-in',
     shortDescription: 'Full sew-in weave installation with natural-looking results.',
     description:
       'Complete sew-in weave service including braid-down, net, and premium hair installation. We create a natural-looking scalp and seamless blending. Closure and frontal installs available.',
@@ -71,7 +71,7 @@ export const MOCK_SERVICES: HairService[] = [
   {
     id: 'svc-5',
     name: 'Kids Box Braids',
-    category: 'kids',
+    category: 'kids-braids',
     shortDescription: 'Gentle, beautiful braids designed specifically for children.',
     description:
       "Our gentle touch and patience make every child's experience enjoyable. We specialize in age-appropriate protective styles that keep kids looking adorable while protecting their growing hair.",
@@ -87,7 +87,7 @@ export const MOCK_SERVICES: HairService[] = [
   {
     id: 'svc-6',
     name: 'Natural Hair Styling',
-    category: 'styling',
+    category: 'shampoo',
     shortDescription: 'Wash, blowout, silk press, and natural style finishing.',
     description:
       "From a relaxing wash and deep condition to a flawless silk press or defined wash-and-go, our natural hair styling services are customized for your hair's unique needs.",
@@ -103,7 +103,7 @@ export const MOCK_SERVICES: HairService[] = [
   {
     id: 'svc-7',
     name: 'Loc Maintenance & Retwist',
-    category: 'locs',
+    category: 'microlocs-retie-maintenance',
     shortDescription: 'Professional loc retwisting, palm-rolling, and loc care.',
     description:
       "Keep your locs fresh and clean with our professional retwist and maintenance services. We use premium loc gel and techniques tailored for your specific loc journey — starter, teen, or mature locs.",

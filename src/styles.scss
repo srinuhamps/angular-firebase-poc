@@ -1,5 +1,5 @@
 /* ============================================================
-   CAROLLE HAIR STUDIO — Global Styles
+   LABELLE BRAID BB — Global Styles
    Luxury Hair Services & Beauty Supply
    ============================================================ */
 
@@ -26,13 +26,23 @@
   --color-ivory:        #faf8f4;
   --color-white:        #ffffff;
 
-  --color-text-muted:   #7a7a7a;
+  --color-text-muted:   #b0b0b0;
   --color-text-dim:     #aaaaaa;
   --color-text-light:   #d0c8bb;
 
   --color-border:       rgba(201, 169, 110, 0.18);
   --color-border-light: rgba(255, 255, 255, 0.07);
   --color-border-mid:   rgba(255, 255, 255, 0.12);
+  --color-accent:       #dfc18a;
+  --color-success:      #9bdda0;
+  --color-danger:       #ffaaaa;
+  --color-warning:      #ffda85;
+  --color-info:         #a4d6ff;
+  --ui-rgb:            255, 255, 255;
+  --surface-base:      #0f0c0a;
+  --surface-panel:     #1a1512;
+  --surface-raised:    #241e19;
+  color-scheme: dark;
 
   /* --- Typography --- */
   --font-heading:    'Roboto Slab', Georgia, 'Times New Roman', serif;
@@ -98,7 +108,7 @@
    Applied via [data-theme="light"] on <html>
    Gold accents are identical in both themes — only surfaces & text flip.
    ============================================================ */
-[data-theme="light"] {
+:root[data-theme="light"] {
   /* ── Surfaces (warm ivory / cream scale) ── */
   --color-black:        #faf8f4;
   --color-charcoal:     #f0ebe1;
@@ -110,7 +120,7 @@
   --color-cream:        #1a110a;
   --color-ivory:        #0f0904;
   --color-white:        #000000;
-  --color-text-muted:   #907860;
+  --color-text-muted:   #534b40;
   --color-text-dim:     #5a3e28;
   --color-text-light:   #2e1c0c;
 
@@ -118,6 +128,16 @@
   --color-border:       rgba(140, 100, 50, 0.22);
   --color-border-light: rgba(0, 0, 0, 0.08);
   --color-border-mid:   rgba(0, 0, 0, 0.14);
+  --color-accent:       #634818;
+  --color-success:      #21632e;
+  --color-danger:       #a32121;
+  --color-warning:      #775000;
+  --color-info:         #175685;
+  --ui-rgb:            26, 26, 26;
+  --surface-base:      #faf8f4;
+  --surface-panel:     #ffffff;
+  --surface-raised:    #f0ebe1;
+  color-scheme: light;
 
   /* ── Shadows (much softer on light backgrounds) ── */
   --shadow-sm:      0 2px 8px  rgba(0, 0, 0, 0.07);
@@ -189,6 +209,14 @@ a { text-decoration: none; color: inherit; }
 button { cursor: pointer; border: none; background: none; font-family: inherit; }
 ul, ol { list-style: none; }
 input, textarea, select { font-family: inherit; }
+input, select, textarea { accent-color: var(--color-accent); }
+select option { background: var(--surface-panel); color: var(--color-cream); }
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 3px solid var(--color-accent) !important;
+  outline-offset: 3px !important;
+}
+:where(button, input, select, textarea):disabled { cursor: not-allowed; }
+:where(p, h1, h2, h3, h4, label, td, a) { overflow-wrap: anywhere; }
 
 /* ============================================================
    Custom Scrollbar
@@ -247,13 +275,13 @@ input, textarea, select { font-family: inherit; }
   font-weight: 600;
   letter-spacing: 0.25em;
   text-transform: uppercase;
-  color: var(--color-gold);
+  color: var(--color-accent);
 }
 
 .script-accent {
   font-family: var(--font-script);
   font-size: 1.4em;
-  color: var(--color-gold);
+  color: var(--color-accent);
 }
 
 /* ============================================================
@@ -293,7 +321,9 @@ input, textarea, select { font-family: inherit; }
   text-transform: uppercase;
   transition: transform var(--t-base), box-shadow var(--t-base), background var(--t-base);
   cursor: pointer;
-  white-space: nowrap;
+  white-space: normal;
+  text-align: center;
+  max-width: 100%;
   position: relative;
   overflow: hidden;
 
@@ -301,14 +331,14 @@ input, textarea, select { font-family: inherit; }
 
   &-primary {
     background: linear-gradient(135deg, var(--color-gold-light) 0%, var(--color-gold) 50%, var(--color-gold-dark) 100%);
-    color: var(--color-black);
+    color: #161616;
     box-shadow: var(--shadow-gold);
     &:hover { transform: translateY(-2px); box-shadow: var(--shadow-gold-lg); }
   }
 
   &-outline {
     background: transparent;
-    color: var(--color-gold);
+    color: var(--color-accent);
     border: 1.5px solid var(--color-gold);
     &:hover { background: rgba(201, 169, 110, 0.08); transform: translateY(-2px); box-shadow: var(--shadow-gold); }
   }
@@ -441,13 +471,43 @@ input, textarea, select { font-family: inherit; }
   -webkit-text-fill-color: transparent;
 }
 
+:root[data-theme="light"] .text-gradient-gold {
+  background: none;
+  color: var(--color-accent);
+  -webkit-text-fill-color: currentColor;
+}
+
+:is(.hero, .page-hero:not(.legal-hero), .about-hero, .products-hero, .gallery-hero, .contact-hero,
+    .cta-banner, .lightbox, .gal-item__overlay, .gallery-preview__item-overlay,
+    .service-card__unavailable, .product-card__oos, .product-card__overlay, .media-viewer) {
+  --color-cream: #f5f0e8;
+  --color-text-dim: #e0ddd7;
+  --color-text-muted: #d0ccc5;
+  --color-accent: #dfc18a;
+  --color-border-light: rgba(255, 255, 255, 0.4);
+  --btn-ghost-bg: rgba(0, 0, 0, 0.65);
+  --btn-ghost-hover-bg: rgba(0, 0, 0, 0.85);
+  --btn-ghost-border: rgba(255, 255, 255, 0.65);
+}
+
+/* Headings have no color of their own — keep them light over hero imagery. */
+:is(.page-hero:not(.legal-hero), .about-hero, .products-hero, .gallery-hero, .contact-hero, .cta-banner)
+:is(h1, h2, h3, .heading-1, .heading-2, .heading-hero) {
+  color: var(--color-cream);
+}
+
+:is(.service-card__badge, .service-details__badge, .product-card__badge) {
+  background: #1c1c1c;
+  color: #dfc18a;
+}
+
 /* ============================================================
    Stars Rating
    ============================================================ */
 .stars {
   display: inline-flex;
   gap: 2px;
-  color: var(--color-gold);
+  color: var(--color-accent);
   font-size: 0.9rem;
 }
 
@@ -457,17 +517,17 @@ input, textarea, select { font-family: inherit; }
 .badge {
   display: inline-flex;
   align-items: center;
-  padding: 0.3rem 0.85rem;
+  padding: 0rem 0.5rem;
   border-radius: var(--radius-full);
   font-size: 0.7rem;
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 
-  &-gold  { background: rgba(201, 169, 110, 0.12); color: var(--color-gold);  border: 1px solid rgba(201, 169, 110, 0.25); }
+  &-gold  { background: rgba(201, 169, 110, 0.904); color: var(--color-accent);  border: 1px solid rgba(201, 169, 110, 0.25); }
   &-dark  { background: rgba(255,255,255, 0.06);   color: var(--color-text-dim); border: 1px solid var(--color-border-light); }
-  &-green { background: rgba(74,222,128, 0.1);  color: #4ade80; border: 1px solid rgba(74,222,128,0.2);  }
-  &-red   { background: rgba(248,113,113, 0.1); color: #f87171; border: 1px solid rgba(248,113,113,0.2); }
+  &-green { background: rgba(74,222,128, 0.1);  color: var(--color-success); border: 1px solid rgba(74,222,128,0.2);  }
+  &-red   { background: rgba(248,113,113, 0.1); color: var(--color-danger); border: 1px solid rgba(248,113,113,0.2); }
 }
 
 /* ============================================================
@@ -487,7 +547,7 @@ input, textarea, select { font-family: inherit; }
   width: 100%;
   padding: 0.875rem 1.25rem;
   background: var(--form-ctrl-bg);
-  border: 1px solid var(--color-border-light);
+  border: 1px solid var(--color-text-muted);
   border-radius: var(--radius-md);
   color: var(--color-cream);
   font-size: 0.925rem;
@@ -506,7 +566,7 @@ textarea.form-control { resize: vertical; min-height: 130px; }
 .bg-black    { background-color: var(--color-black);    }
 .bg-dark     { background-color: var(--color-dark);     }
 .bg-charcoal { background-color: var(--color-charcoal); }
-.text-gold   { color: var(--color-gold);       }
+.text-gold   { color: var(--color-accent);       }
 .text-cream  { color: var(--color-cream);      }
 .text-muted  { color: var(--color-text-muted); }
 .text-dim    { color: var(--color-text-dim);   }
@@ -517,6 +577,16 @@ textarea.form-control { resize: vertical; min-height: 130px; }
 .sr-only {
   position: absolute; width: 1px; height: 1px; padding: 0;
   margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .reveal { opacity: 1; transform: none; }
 }
 
 /* ============================================================

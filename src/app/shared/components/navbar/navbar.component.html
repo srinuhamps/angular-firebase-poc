@@ -1,10 +1,10 @@
-<nav class="navbar" [class.scrolled]="isScrolled()" role="navigation" aria-label="Main navigation">
+<nav class="navbar" [class.scrolled]="isScrolled()" [class.over-hero]="overHero()" role="navigation" aria-label="Main navigation">
   <div class="navbar__inner container">
 
     <!-- Logo -->
     <a class="navbar__logo" routerLink="/" (click)="closeMenu()" [attr.aria-label]="fullName() + ' — Home'">
       <span class="navbar__logo-script">{{ brand().script || 'Labelle' }}</span>
-      <span class="navbar__logo-sub">{{ brand().sub || 'Braids BB' }}</span>
+      <span class="navbar__logo-sub">{{ brand().sub || 'Braid BB' }}</span>
     </a>
 
     <!-- Desktop links -->
@@ -58,11 +58,12 @@
   role="dialog"
   aria-label="Mobile navigation"
   [attr.aria-hidden]="!menuOpen()"
+  [attr.inert]="menuOpen() ? null : ''"
 >
   <div class="mobile-menu__backdrop" (click)="closeMenu()"></div>
   <nav class="mobile-menu__panel">
     <div class="mobile-menu__header">
-      <span class="navbar__logo-script">Carolle</span>
+      <span class="navbar__logo-script">Labelle</span>
       <app-theme-toggle />
     </div>
     <ul class="mobile-menu__links" role="list">
@@ -89,8 +90,8 @@
       Book an Appointment
     </a>
     <div class="mobile-menu__footer">
-      <a href="https://instagram.com/carollehairstudio" target="_blank" rel="noopener" aria-label="Instagram">IG</a>
-      <a href="https://facebook.com/carollehairstudio"  target="_blank" rel="noopener" aria-label="Facebook">FB</a>
+      <a href="https://instagram.com/labellebraidbb" target="_blank" rel="noopener" aria-label="Instagram">IG</a>
+      <a href="https://facebook.com/labellebraidbb"  target="_blank" rel="noopener" aria-label="Facebook">FB</a>
     </div>
   </nav>
 </div>

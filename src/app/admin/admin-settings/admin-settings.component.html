@@ -8,6 +8,21 @@
     </div>
   </header>
 
+  <!-- ── Data-source banner ─────────────────────────────────────────────────
+       Tells the admin whether the form is showing saved values from Firestore
+       or an empty form because no business profile has been saved yet. -->
+  @if (source() === 'firestore') {
+    <p class="settings-banner settings-banner--ok">
+      ✓ Loaded from Firestore (config/business). Edits will overwrite the saved values on Save.
+    </p>
+  } @else if (source() === 'missing') {
+    <p class="settings-banner settings-banner--warn">
+      ⚠ No business profile saved yet. The Firestore document
+      <code>config/business</code> will be created the first time you click <strong>Save Changes</strong>.
+      All public pages will remain blank in the meantime.
+    </p>
+  }
+
   @if (loading()) {
     <p class="muted">Loading…</p>
   } @else {
@@ -159,6 +174,22 @@
               (ngModelChange)="setField('tiktokUrl', $event)"
             />
           </div>
+          <div class="form-group">
+            <label class="form-label" for="snapchat">Snapchat URL</label>
+            <input
+              id="snapchat" class="form-input" type="url"
+              [ngModel]="form().snapchatUrl ?? ''" name="snapchatUrl"
+              (ngModelChange)="setField('snapchatUrl', $event)"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="youtube">YouTube URL</label>
+            <input
+              id="youtube" class="form-input" type="url"
+              [ngModel]="form().youtubeUrl ?? ''" name="youtubeUrl"
+              (ngModelChange)="setField('youtubeUrl', $event)"
+            />
+          </div>
         </div>
       </section>
 
@@ -166,8 +197,7 @@
       <section class="settings-section">
         <h2 class="settings-section__heading">Weekly Hours</h2>
         <p class="settings-section__hint">
-          Toggle a day off to mark it closed. Times are free-text (e.g.
-          <code>9:00 AM</code>) and are displayed exactly as entered.
+          Toggle a day off to mark it closed. Use the time picker to set open and close times.
         </p>
         <div class="hours-table">
           @for (h of form().businessHours; track h.day; let i = $index) {
@@ -183,19 +213,25 @@
               </label>
               <input
                 class="form-input hours-row__time"
-                type="text" placeholder="9:00 AM"
+                type="time"
                 [ngModel]="h.open" [disabled]="h.isClosed"
                 [name]="'open-' + i"
                 (ngModelChange)="setHours(i, { open: $event })"
               />
+              @if (h.open && !h.isClosed) {
+                <span class="hours-row__hint">{{ fmt24(h.open) }}</span>
+              }
               <span class="hours-row__sep">–</span>
               <input
                 class="form-input hours-row__time"
-                type="text" placeholder="7:00 PM"
+                type="time"
                 [ngModel]="h.close" [disabled]="h.isClosed"
                 [name]="'close-' + i"
                 (ngModelChange)="setHours(i, { close: $event })"
               />
+              @if (h.close && !h.isClosed) {
+                <span class="hours-row__hint">{{ fmt24(h.close) }}</span>
+              }
             </div>
           }
         </div>
@@ -247,6 +283,32 @@
       @if (saved()) {
         <p class="form-success" role="status">✓ Settings saved. Changes are live across the site.</p>
       }
+
+      <!-- ── Diagnostic: verify what's actually in Firestore ─────────────── -->
+      <!-- <section class="settings-section settings-section--diag">
+        <h2 class="settings-section__heading">Diagnostics</h2>
+        <p class="settings-section__hint">
+          Fetch the raw <code>config/business</code> document directly from Firestore
+          (bypasses any cached data) and display it below. Use this to confirm your
+          most recent save actually persisted.
+        </p>
+        <button type="button" class="action-btn action-btn--ghost" (click)="peekFirestore()">
+          Verify saved data
+        </button>
+
+        @if (rawFirestoreError()) {
+          <p class="form-error" role="alert">Peek failed: {{ rawFirestoreError() }}</p>
+        }
+        @if (rawFirestoreData() === null) {
+          <p class="settings-banner settings-banner--warn">
+            ⚠ Firestore document <code>config/business</code> does not exist.
+            No settings have been persisted yet.
+          </p>
+        }
+        @if (rawFirestoreData()) {
+          <pre class="settings-diag__json">{{ rawFirestoreData() | json }}</pre>
+        }
+      </section> -->
 
       <div class="form-actions">
         <button class="action-btn" type="submit" [disabled]="saving()">

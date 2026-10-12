@@ -1,0 +1,61 @@
+rules_version = '2';
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Labelle Braid BB — Firebase Storage security rules
+//
+// Model:
+//   • Public site (unauthenticated) can READ media/gallery images so the
+//     public gallery, product cards, and stylist headshots render for visitors.
+//   • Only signed-in admin can upload / overwrite / delete.
+//   • Uploads are capped at 10 MB and must be image/* to prevent abuse.
+//
+// NOTE: For tighter security once real customer accounts exist, gate writes
+//       on a custom claim (e.g. request.auth.token.admin == true) instead
+//       of "any signed-in user".
+// ─────────────────────────────────────────────────────────────────────────────
+
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    // ── Helpers ──────────────────────────────────────────────────────────────
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isImageUpload() {
+      return request.resource != null
+          && request.resource.size < 10 * 1024 * 1024
+          && request.resource.contentType.matches('image/.*');
+    }
+
+    // ── Public media — gallery photos, product images, stylist headshots ────
+    match /media/{allPaths=**} {
+      allow read:  if true;
+      allow write: if isSignedIn() && isImageUpload();
+      allow delete: if isSignedIn();
+    }
+
+    match /gallery/{allPaths=**} {
+      allow read:  if true;
+      allow write: if isSignedIn() && isImageUpload();
+      allow delete: if isSignedIn();
+    }
+
+    match /products/{allPaths=**} {
+      allow read:  if true;
+      allow write: if isSignedIn() && isImageUpload();
+      allow delete: if isSignedIn();
+    }
+
+    match /stylists/{allPaths=**} {
+      allow read:  if true;
+      allow write: if isSignedIn() && isImageUpload();
+      allow delete: if isSignedIn();
+    }
+
+    // ── Deny everything else by default ──────────────────────────────────────
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

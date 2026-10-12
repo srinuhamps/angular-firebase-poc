@@ -24,18 +24,23 @@ export class ThemeService {
 
   private getInitialTheme(): Theme {
     if (isPlatformBrowser(this.platformId)) {
-      const stored = localStorage.getItem(STORAGE_KEY) as Theme | null;
-      if (stored === 'dark' || stored === 'light') return stored;
-      // Respect OS preference on first visit
-      return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+      try {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (stored === 'dark' || stored === 'light') return stored;
+      } catch {}
     }
-    return 'dark';
+    return 'light';
   }
 
   private applyTheme(theme: Theme): void {
     if (isPlatformBrowser(this.platformId)) {
       document.documentElement.setAttribute('data-theme', theme);
-      localStorage.setItem(STORAGE_KEY, theme);
+      document.querySelector('meta[name="theme-color"]')?.setAttribute(
+        'content', theme === 'light' ? '#faf8f4' : '#0a0a0a'
+      );
+      try {
+        localStorage.setItem(STORAGE_KEY, theme);
+      } catch {}
     }
   }
 }

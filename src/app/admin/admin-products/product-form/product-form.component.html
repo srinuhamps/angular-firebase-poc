@@ -88,13 +88,14 @@
         ></textarea>
       </div>
 
-      <!-- Image URL -->
+      <!-- Image (picker + optional manual URL) -->
       <div class="form-group form-group--full">
-        <label class="form-label" for="imageUrl">Image URL</label>
-        <input
-          id="imageUrl" class="form-input" type="url" name="imageUrl"
-          [ngModel]="form().imageUrl" (ngModelChange)="setField('imageUrl', $event)"
-          placeholder="https://…"
+        <label class="form-label">Product Image</label>
+        <app-media-picker
+          category="product"
+          label="Product Image"
+          [value]="form().imageUrl"
+          (valueChange)="setField('imageUrl', $event)"
         />
       </div>
 

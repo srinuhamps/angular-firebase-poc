@@ -9,17 +9,17 @@
 
 .admin-loading,
 .admin-empty {
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--color-text-muted);
   font-size: 0.9rem;
 
-  a { color: var(--color-gold, #d4af64); }
+  a { color: var(--color-accent); }
 }
 
 .admin-table-wrap { @include adm.table-wrap; }
 .admin-table      { @include adm.table-base; }
 
-.row--unavailable td { opacity: 0.5; }
-.cell--name { font-weight: 500; color: rgba(255, 255, 255, 0.9); }
+.row--unavailable td { background: rgba(var(--ui-rgb), 0.03); }
+.cell--name { font-weight: 500; color: var(--color-cream); }
 
 .avatar {
   width: 42px;
@@ -30,7 +30,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: var(--color-gold, #d4af64);
+  color: var(--color-accent);
   font-family: var(--font-heading, 'Roboto Slab', serif);
   font-weight: 600;
   font-size: 1rem;
@@ -47,7 +47,7 @@
 
   &__more {
     font-size: 0.72rem;
-    color: rgba(255, 255, 255, 0.45);
+    color: var(--color-text-muted);
     align-self: center;
   }
 }

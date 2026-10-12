@@ -1,0 +1,169 @@
+<!-- Hero -->
+<section class="page-hero legal-hero">
+  <div class="page-hero__overlay"></div>
+  <div class="container page-hero__content">
+    <p class="eyebrow">Legal</p>
+    <h1 class="heading-1">Terms of Service</h1>
+    <p class="subheading">Effective {{ effectiveDate }}</p>
+  </div>
+</section>
+
+<!-- Content -->
+<section class="section legal-page bg-dark">
+  <div class="container legal-page__inner">
+
+    <p class="legal-page__lead">
+      These Terms of Service ("Terms") govern your use of the {{ businessName() }}
+      website, online booking system, and SMS notification program. By using
+      the site, booking an appointment, or opting in to receive text messages,
+      you agree to these Terms.
+    </p>
+
+    <!-- 1. Booking Appointments -->
+    <h2 class="legal-page__h2">1. Booking Appointments</h2>
+    <ul>
+      <li>All bookings are subject to availability and staff confirmation.</li>
+      <li>Prices displayed on the site are estimates; final pricing may vary based on service specifics discussed at the salon.</li>
+      <li>You must be at least 18 years old to book an appointment on your own behalf, or have a parent/guardian book on your behalf if under 18.</li>
+      <li>You are responsible for providing accurate contact information so we can reach you.</li>
+    </ul>
+
+    <!-- 2. Cancellation & No-Show -->
+    <h2 class="legal-page__h2">2. Cancellations, Rescheduling &amp; No-Shows</h2>
+    <ul>
+      <li>Please give at least <strong>24 hours' notice</strong> to cancel or reschedule an appointment.</li>
+      <li>Late cancellations and no-shows may result in a fee or requirement to prepay for future bookings.</li>
+      <li>To cancel, reply to your confirmation email or call the salon directly.</li>
+    </ul>
+
+    <!-- 3. SMS Program Terms -->
+    <h2 class="legal-page__h2">3. SMS Text Message Program Terms</h2>
+    <p>
+      By checking the SMS opt-in box during booking, you consent to receive
+      recurring automated text messages from {{ businessName() }} at the mobile
+      number you provided.
+    </p>
+    <ul>
+      <li>
+        <strong>Program name:</strong> {{ businessName() }} Appointment Notifications
+      </li>
+      <li>
+        <strong>Message types:</strong> booking confirmations, 24-hour
+        reminders, and status change notifications (confirmed, cancelled,
+        completed).
+      </li>
+      <li>
+        <strong>Message frequency:</strong> up to 3 messages per appointment.
+      </li>
+      <li>
+        <strong>Cost:</strong> messages are free from us, but
+        <strong>message and data rates may apply</strong> depending on your
+        wireless carrier plan.
+      </li>
+      <li>
+        <strong>Opt out:</strong> reply <strong>STOP</strong> to any message
+        at any time to end the program. You will receive one final message
+        confirming your opt-out.
+      </li>
+      <li>
+        <strong>Help:</strong> reply <strong>HELP</strong> to any message, or
+        contact us at
+        <a class="legal-page__link" [href]="'mailto:' + businessEmail()">{{ businessEmail() }}</a>@if (businessPhone()) {
+          or
+          <a class="legal-page__link" [href]="'tel:' + businessPhone()">{{ businessPhone() }}</a>
+        }.
+      </li>
+      <li>
+        <strong>Supported carriers:</strong> Verizon, AT&amp;T, T-Mobile, and
+        most other US carriers. Carriers are not liable for delayed or
+        undelivered messages.
+      </li>
+      <li>
+        <strong>Consent is not required</strong> as a condition of purchase or
+        booking. Standard email confirmations are always sent regardless of
+        SMS opt-in status.
+      </li>
+    </ul>
+    <p>
+      Your use of this SMS program is governed by our
+      <a class="legal-page__link" [routerLink]="'/privacy-policy'">Privacy Policy</a>.
+    </p>
+
+    <!-- 4. Payment -->
+    <h2 class="legal-page__h2">4. Payment</h2>
+    <p>
+      Payment is due at the time of service unless a deposit was collected at
+      booking. Deposits are non-refundable except in the case of cancellation
+      by the salon. We accept cash and major credit/debit cards.
+    </p>
+
+    <!-- 5. Website Use -->
+    <h2 class="legal-page__h2">5. Acceptable Use</h2>
+    <p>You agree not to:</p>
+    <ul>
+      <li>Submit false, misleading, or fraudulent booking information;</li>
+      <li>Use the site to send spam or unsolicited communications;</li>
+      <li>Attempt to interfere with the operation of the site or its security;</li>
+      <li>Copy or redistribute site content without written permission.</li>
+    </ul>
+
+    <!-- 6. Intellectual Property -->
+    <h2 class="legal-page__h2">6. Intellectual Property</h2>
+    <p>
+      All content on this site — text, graphics, logos, photographs, and
+      software — is the property of {{ businessName() }} or its licensors and
+      is protected by copyright and trademark laws.
+    </p>
+
+    <!-- 7. Disclaimer -->
+    <h2 class="legal-page__h2">7. Disclaimers</h2>
+    <p>
+      Services are provided "as is." We make no warranties, express or
+      implied, regarding the results of any hair service. Individual results
+      may vary based on hair type, condition, and follow-up care.
+    </p>
+
+    <!-- 8. Limitation of Liability -->
+    <h2 class="legal-page__h2">8. Limitation of Liability</h2>
+    <p>
+      To the fullest extent permitted by law, {{ businessName() }} shall not be
+      liable for indirect, incidental, special, or consequential damages
+      arising from your use of the site or our services. Our total liability
+      for any claim shall not exceed the amount you paid for the specific
+      service giving rise to the claim.
+    </p>
+
+    <!-- 9. Governing Law -->
+    <h2 class="legal-page__h2">9. Governing Law</h2>
+    <p>
+      These Terms are governed by the laws of the State of Texas, without
+      regard to its conflict-of-law provisions. Any disputes shall be resolved
+      in the state or federal courts located in Texas.
+    </p>
+
+    <!-- 10. Changes -->
+    <h2 class="legal-page__h2">10. Changes to These Terms</h2>
+    <p>
+      We may update these Terms from time to time. Changes take effect when
+      posted on this page with an updated "Effective" date. Continued use of
+      the site or SMS program after changes constitutes acceptance.
+    </p>
+
+    <!-- 11. Contact -->
+    <h2 class="legal-page__h2">11. Contact Us</h2>
+    <ul class="legal-page__contact">
+      <li><strong>{{ businessName() }}</strong></li>
+      <li>
+        Email:
+        <a class="legal-page__link" [href]="'mailto:' + businessEmail()">{{ businessEmail() }}</a>
+      </li>
+      @if (businessPhone()) {
+        <li>
+          Phone:
+          <a class="legal-page__link" [href]="'tel:' + businessPhone()">{{ businessPhone() }}</a>
+        </li>
+      }
+    </ul>
+
+  </div>
+</section>

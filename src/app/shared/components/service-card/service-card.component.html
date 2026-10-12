@@ -1,24 +1,55 @@
 <article class="service-card" [class.featured]="service.isFeatured">
   <!-- Image -->
-  <div class="service-card__img-wrap">
-    <img
-      [src]="service.imageUrl"
-      [alt]="service.name"
-      class="service-card__img"
-      loading="lazy"
-    >
+  <div
+    class="service-card__img-wrap"
+    [class.is-clickable]="imageUrls.length > 0"
+    (click)="openDetails()"
+    (keydown.enter)="openDetails()"
+    (keydown.space)="$event.preventDefault(); openDetails()"
+    [attr.role]="imageUrls.length === 1 ? 'button' : null"
+    [attr.tabindex]="imageUrls.length === 1 ? 0 : null"
+    [attr.aria-label]="imageUrls.length === 1 ? 'View service image' : null"
+  >
+    @if (imageUrls.length > 1) {
+      <div class="service-card__image-stack">
+        @for (image of imageUrls; track image; let i = $index) {
+          <button
+            type="button"
+            class="service-card__stack-image"
+            [class.is-active]="selectedImageIndex() === i"
+            [style.--stack-index]="i"
+            [style.--stack-total]="imageUrls.length"
+            [attr.aria-label]="'Bring image ' + (i + 1) + ' of ' + imageUrls.length + ' forward'"
+            (click)="$event.stopPropagation(); handleStackImageClick(i)"
+          >
+            <img [src]="image" [alt]="service.name + ' image ' + (i + 1)" loading="lazy">
+          </button>
+        }
+      </div>
+    } @else if (primaryImage) {
+      <img
+        [src]="primaryImage"
+        [alt]="service.name"
+        class="service-card__img"
+        loading="lazy"
+      >
+    } @else {
+      <div class="service-card__placeholder" aria-hidden="true">✦</div>
+    }
+    @if (imageUrls.length > 1) {
+      <span class="service-card__image-hint" aria-hidden="true">Click to change image</span>
+    }
     @if (service.isFeatured) {
       <span class="service-card__badge badge badge-gold">Featured</span>
     }
     @if (!service.isAvailable) {
       <div class="service-card__unavailable">Currently Unavailable</div>
     }
-    <!-- Category tag -->
-    <span class="service-card__category">{{ service.category | titlecase }}</span>
   </div>
 
   <!-- Content -->
   <div class="service-card__body">
+    <span class="service-card__category">{{ service.category | titlecase }}</span>
     <h3 class="service-card__name">{{ service.name }}</h3>
     <p class="service-card__desc">{{ service.shortDescription }}</p>
 
@@ -44,7 +75,82 @@
       >
         Book Now
       </a>
-      <a class="btn btn-ghost btn-sm" routerLink="/services">Details</a>
+      <button type="button" class="btn btn-ghost btn-sm" (click)="openDetails()">
+        Details
+      </button>
     </div>
   </div>
 </article>
+
+<dialog
+  #detailsDialog
+  class="service-details"
+  (click)="onDialogClick($event)"
+  (close)="onDialogClose()"
+>
+  <div class="service-details__panel">
+    <button
+      type="button"
+      class="service-details__close"
+      aria-label="Close details"
+      (click)="closeDetails()"
+    >×</button>
+
+    <div class="service-details__img-wrap">
+      @if (primaryImage) {
+        <img [src]="primaryImage" [alt]="service.name" class="service-details__img" />
+      } @else {
+        <div class="service-details__placeholder" aria-hidden="true">✦</div>
+      }
+      @if (service.isFeatured) {
+        <span class="badge badge-gold service-details__badge">Featured</span>
+      }
+      @if (imageUrls.length > 1) {
+        <button type="button" class="service-details__prev" aria-label="Previous image" (click)="previousImage()">‹</button>
+        <button type="button" class="service-details__next" aria-label="Next image" (click)="nextImage()">›</button>
+        <span class="service-details__count">{{ selectedImageIndex() + 1 }} / {{ imageUrls.length }}</span>
+      }
+    </div>
+
+    <div class="service-details__body">
+      <p class="eyebrow">{{ service.category | titlecase }}</p>
+      <h2 class="service-details__name">{{ service.name }}</h2>
+
+      <div class="service-details__meta">
+        <div class="service-details__meta-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span>{{ formatDuration(service.duration) }}</span>
+        </div>
+        <div class="service-details__meta-item service-details__price">
+          <span>Starting at</span>
+          <strong>${{ service.price }}</strong>
+        </div>
+      </div>
+
+      <p class="service-details__desc">{{ service.description || service.shortDescription }}</p>
+
+      @if (service.tags.length) {
+        <ul class="service-details__tags">
+          @for (t of service.tags; track t) {
+            <li class="service-details__tag">{{ t }}</li>
+          }
+        </ul>
+      }
+
+      @if (!service.isAvailable) {
+        <p class="service-details__unavailable">Currently unavailable.</p>
+      }
+
+      <div class="service-details__actions">
+        <a
+          class="btn btn-primary"
+          routerLink="/booking"
+          [queryParams]="{ service: service.id }"
+          [class.disabled]="!service.isAvailable || !service.bookingEnabled"
+          (click)="closeDetails()"
+        >Book Now</a>
+        <button type="button" class="btn btn-ghost" (click)="closeDetails()">Close</button>
+      </div>
+    </div>
+  </div>
+</dialog>

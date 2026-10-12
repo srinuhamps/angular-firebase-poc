@@ -27,6 +27,30 @@
 
       <!-- Fields -->
       <div class="upload-card__fields">
+        <label class="field-label">Categories <span class="field-label__hint">(pick one or more)</span></label>
+        <div class="category-radios" role="group" aria-label="Media categories">
+          @for (opt of [
+            { value: 'gallery',  label: 'Gallery',  hint: 'Shown on public Gallery + Home' },
+            { value: 'product',  label: 'Products', hint: 'Available in product image picker' },
+            { value: 'service',  label: 'Services', hint: 'Available in service image picker' },
+            { value: 'internal', label: 'Internal', hint: 'Site backgrounds, banners & UI placeholders (not public)' }
+          ]; track opt.value) {
+            <label
+              class="category-radios__item"
+              [class.category-radios__item--active]="isUploadCategoryChecked($any(opt.value))"
+            >
+              <input
+                type="checkbox"
+                [checked]="isUploadCategoryChecked($any(opt.value))"
+                [disabled]="uploading()"
+                (change)="toggleUploadCategory($any(opt.value), $any($event.target).checked)"
+              />
+              <span class="category-radios__label">{{ opt.label }}</span>
+              <span class="category-radios__hint">{{ opt.hint }}</span>
+            </label>
+          }
+        </div>
+
         <label class="field-label" for="gallery-file-input">Image File</label>
         <input
           id="gallery-file-input"
@@ -76,27 +100,182 @@
   } @else if (items().length === 0) {
     <p class="gallery-page__msg">No images uploaded yet. Use the form above to add your first image.</p>
   } @else {
-    <div class="media-grid">
-      @for (item of items(); track item.id) {
-        <div class="media-card">
-          <div class="media-card__img-wrap">
-            <img [src]="item.url" [alt]="item.title" class="media-card__img" loading="lazy" />
-          </div>
-          <div class="media-card__body">
-            <p class="media-card__title">{{ item.title }}</p>
-            <div class="media-card__actions">
-              <button
-                class="btn-copy"
-                [class.btn-copy--done]="copied() === item.id"
-                (click)="copyLink(item)"
-              >
-                {{ copied() === item.id ? '✓ Copied!' : 'Copy Link' }}
-              </button>
-              <button class="btn-delete" (click)="deleteItem(item)">Delete</button>
+    <!-- Category tabs -->
+    <div class="category-tabs" role="tablist" aria-label="Filter media by category">
+      @for (tab of [
+        { value: 'all',      label: 'All'      },
+        { value: 'gallery',  label: 'Gallery'  },
+        { value: 'product',  label: 'Products' },
+        { value: 'service',  label: 'Services' },
+        { value: 'internal', label: 'Internal' }
+      ]; track tab.value) {
+        <button
+          type="button"
+          role="tab"
+          class="category-tabs__btn"
+          [class.category-tabs__btn--active]="filter() === tab.value"
+          [attr.aria-selected]="filter() === tab.value"
+          (click)="filter.set($any(tab.value))"
+        >
+          {{ tab.label }}
+          <span class="category-tabs__count">{{ countFor(tab.value) }}</span>
+        </button>
+      }
+    </div>
+
+    @if (filteredItems().length === 0) {
+      <p class="gallery-page__msg">No images in this category yet.</p>
+    } @else {
+      <div class="media-grid">
+        @for (item of filteredItems(); track item.id) {
+          <div class="media-card">
+            <div class="media-card__img-wrap">
+              <img [src]="item.url" [alt]="item.title" class="media-card__img" loading="lazy" />
+              <div class="media-card__badges">
+                @for (cat of item.categories; track cat) {
+                  <span class="media-card__badge media-card__badge--{{ cat }}">{{ cat }}</span>
+                }
+              </div>
+            </div>
+            <div class="media-card__body">
+              <p class="media-card__title">{{ item.title }}</p>
+              <div class="media-card__actions">
+                <button
+                  class="btn-view"
+                  type="button"
+                  title="View full size"
+                  aria-label="View full size"
+                  (click)="openViewer(item)"
+                >🔍 View</button>
+                <button
+                  class="btn-copy"
+                  [class.btn-copy--done]="copied() === item.id"
+                  (click)="copyLink(item)"
+                >
+                  {{ copied() === item.id ? '✓ Copied!' : 'Copy Link' }}
+                </button>
+                <button
+                  class="btn-edit-cats"
+                  type="button"
+                  title="Edit name & categories"
+                  aria-label="Edit name and categories"
+                  (click)="openEditDialog(item)"
+                >✏ Edit</button>
+                <button class="btn-delete" (click)="deleteItem(item)">Delete</button>
+              </div>
             </div>
           </div>
+        }
+      </div>
+    }
+  }
+  <!-- ─── Full-size viewer (lightbox) ─────────────────────── -->
+  @if (viewingItem(); as v) {
+    <div class="media-viewer" (click)="closeViewer()">
+      <button
+        type="button"
+        class="media-viewer__close"
+        aria-label="Close viewer"
+        (click)="closeViewer()"
+      >×</button>
+      <div class="media-viewer__inner" (click)="$event.stopPropagation()">
+        <img class="media-viewer__img" [src]="v.url" [alt]="v.title" />
+        <p class="media-viewer__caption">{{ v.title }}</p>
+      </div>
+    </div>
+  }
+  <!-- ─── Edit-categories dialog ────────────────────────────────── -->
+  @if (editingItem(); as it) {
+    <div class="edit-cats-overlay" (click)="closeEditDialog()">
+      <div
+        class="edit-cats-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="edit-cats-title"
+        (click)="$event.stopPropagation()"
+      >
+        <header class="edit-cats-dialog__header">
+          <h2 id="edit-cats-title" class="edit-cats-dialog__title">Edit image</h2>
+          <button
+            type="button"
+            class="edit-cats-dialog__close"
+            aria-label="Close"
+            (click)="closeEditDialog()"
+          >×</button>
+        </header>
+
+        <div class="edit-cats-dialog__body">
+          <div class="edit-cats-dialog__preview">
+            <img [src]="it.url" [alt]="it.title" />
+          </div>
+          <input
+            type="file"
+            accept="image/*"
+            hidden
+            id="replace-input"
+            (change)="onReplaceFile(it, $event)"
+          />
+          <button
+            type="button"
+            class="btn-replace"
+            title="Swap the image file — URL stays the same"
+            [disabled]="savingEdit() || replacingId() === it.id"
+            (click)="startReplace()"
+          >{{ replacingId() === it.id ? 'Replacing…' : '⇄ Replace image (keeps the same link)' }}</button>
+          <div class="edit-cats-dialog__field">
+            <label class="field-label" for="edit-media-title">Image name</label>
+            <input
+              id="edit-media-title"
+              type="text"
+              class="field-input"
+              placeholder="e.g. Cornrows no extension"
+              [value]="editingTitle()"
+              [disabled]="savingEdit()"
+              (input)="editingTitle.set($any($event.target).value)"
+            />
+          </div>
+
+          <div class="category-radios" role="group" aria-label="Edit categories">
+            @for (opt of [
+              { value: 'gallery',  label: 'Gallery',  hint: 'Shown on public Gallery + Home' },
+              { value: 'product',  label: 'Products', hint: 'Available in product image picker' },
+              { value: 'service',  label: 'Services', hint: 'Available in service image picker' },
+              { value: 'internal', label: 'Internal', hint: 'Site backgrounds, banners & UI placeholders (not public)' }
+            ]; track opt.value) {
+              <label
+                class="category-radios__item"
+                [class.category-radios__item--active]="isEditCategoryChecked($any(opt.value))"
+              >
+                <input
+                  type="checkbox"
+                  [checked]="isEditCategoryChecked($any(opt.value))"
+                  [disabled]="savingEdit()"
+                  (change)="toggleEditCategory($any(opt.value), $any($event.target).checked)"
+                />
+                <span class="category-radios__label">{{ opt.label }}</span>
+                <span class="category-radios__hint">{{ opt.hint }}</span>
+              </label>
+            }
+          </div>
         </div>
-      }
+
+        <footer class="edit-cats-dialog__actions">
+          <button
+            type="button"
+            class="btn-upload"
+            [disabled]="savingEdit() || editingCategories().length === 0 || !editingTitle().trim()"
+            (click)="saveEdits()"
+          >
+            @if (savingEdit()) { Saving… } @else { Save }
+          </button>
+          <button
+            type="button"
+            class="btn-edit-cats"
+            [disabled]="savingEdit()"
+            (click)="closeEditDialog()"
+          >Cancel</button>
+        </footer>
+      </div>
     </div>
   }
 

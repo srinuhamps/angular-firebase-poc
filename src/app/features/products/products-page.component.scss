@@ -59,8 +59,8 @@
     white-space: nowrap;
     transition: all var(--t-base);
 
-    &:hover { color: var(--color-gold); border-color: var(--color-border); }
-    &.active { color: var(--color-black); background: var(--color-gold); border-color: var(--color-gold); }
+    &:hover { color: var(--color-accent); border-color: var(--color-border); }
+    &.active { color: #161616; background: var(--color-gold); border-color: var(--color-gold); }
   }
 }
 
@@ -94,7 +94,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--color-gold);
+    color: var(--color-accent);
     flex-shrink: 0;
   }
 

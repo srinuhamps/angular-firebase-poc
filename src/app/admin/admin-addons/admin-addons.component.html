@@ -1,0 +1,59 @@
+<div class="admin-page">
+  <header class="admin-page__header">
+    <div>
+      <h1 class="admin-page__title">Add-Ons</h1>
+      <p class="admin-page__subtitle">{{ addons().length }} total · shown at booking after a service is chosen</p>
+    </div>
+    <a class="action-btn" [routerLink]="'/admin/addons/new'">+ Add Add-On</a>
+  </header>
+
+  @if (loading()) {
+    <p class="admin-loading">Loading add-ons…</p>
+  } @else if (addons().length === 0) {
+    <p class="admin-empty">
+      No add-ons yet. <a [routerLink]="'/admin/addons/new'">Add your first one</a>
+      (e.g. Blow Dry, Deep Treatment, Detangle).
+    </p>
+  } @else {
+    <div class="admin-table-wrap">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Duration</th>
+            <th>Applies to</th>
+            <th>Active</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (a of addons(); track a.id) {
+            <tr [class.row--unavailable]="!a.isActive">
+              <td class="cell--name">{{ a.name }}</td>
+              <td>{{ formatPriceDelta(a.priceDelta) }}</td>
+              <td>{{ formatDurationDelta(a.durationDelta) }}</td>
+              <td class="cell--applies">{{ appliesToLabel(a) }}</td>
+              <td>
+                <button
+                  class="toggle-btn"
+                  [class.toggle-btn--on]="a.isActive"
+                  (click)="toggleActive(a)"
+                  [attr.aria-label]="a.isActive ? 'Disable' : 'Enable'"
+                >{{ a.isActive ? 'Yes' : 'No' }}</button>
+              </td>
+              <td class="cell--actions">
+                <a class="tbl-btn tbl-btn--edit" [routerLink]="['/admin/addons/edit', a.id]">Edit</a>
+                <button
+                  class="tbl-btn tbl-btn--del"
+                  (click)="delete(a.id)"
+                  [disabled]="deleting() === a.id"
+                >{{ deleting() === a.id ? '…' : 'Delete' }}</button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

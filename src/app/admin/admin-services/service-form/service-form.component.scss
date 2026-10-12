@@ -46,7 +46,7 @@
 }
 
 .confirm-dialog {
-  background: #1e1812;
+  background: var(--surface-panel);
   border: 1px solid rgba(212, 175, 100, 0.25);
   border-radius: 12px;
   padding: 2rem 2.25rem;
@@ -57,13 +57,13 @@
   &__title {
     font-family: var(--font-heading, 'Roboto Slab', serif);
     font-size: 1.2rem;
-    color: var(--color-gold, #d4af64);
+    color: var(--color-accent);
     margin: 0 0 0.75rem;
   }
 
   &__body {
     font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.65);
+    color: var(--color-text-dim);
     margin: 0 0 1.5rem;
     line-height: 1.55;
   }
@@ -113,11 +113,172 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--color-text-dim);
   font-size: 0.88rem;
   cursor: pointer;
 
   input[type="checkbox"] { accent-color: var(--color-gold, #d4af64); }
+
+  &--compact {
+    padding: 0.2rem 0;
+    font-size: 0.85rem;
+  }
+}
+
+.form-hint {
+  margin: 0.35rem 0 0;
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+
+  a {
+    color: var(--color-accent);
+    text-decoration: underline;
+  }
+
+  &--muted { color: var(--color-text-muted); }
+}
+
+// ─── Add-Ons picker ─────────────────────────────────────────────────────────
+
+.addon-picker__globals {
+  margin: 0.5rem 0 0.75rem;
+  padding: 0.6rem 0.85rem;
+  background: rgba(212, 175, 100, 0.06);
+  border: 1px solid rgba(212, 175, 100, 0.18);
+  border-radius: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 0.5rem;
+  font-size: 0.82rem;
+  color: var(--color-text-dim);
+}
+
+.addon-picker__globals-label {
+  color: var(--color-accent);
+  font-weight: 500;
+  margin-right: 0.25rem;
+}
+
+.addon-chip {
+  display: inline-block;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  background: rgba(212, 175, 100, 0.14);
+  color: var(--color-cream);
+  font-size: 0.78rem;
+  line-height: 1.6;
+}
+
+.addon-chip__delta {
+  color: var(--color-text-muted);
+  font-style: normal;
+  font-size: 0.8em;
+  margin-left: 0.25rem;
+}
+
+.addon-picker__toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 0.6rem;
+  padding: 0.4rem 0.85rem;
+  background: rgba(var(--ui-rgb), 0.04);
+  border: 1px solid rgba(var(--ui-rgb), 0.08);
+  border-radius: 8px 8px 0 0;
+  border-bottom: none;
+}
+
+.check-label--select-all {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--color-accent);
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+
+  input[type="checkbox"] { accent-color: var(--color-gold, #d4af64); }
+}
+
+.addon-picker__count {
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+.service-picker {
+  margin-top: 0;
+  padding: 0.6rem;
+  background: var(--surface-base);
+  border: 1px solid rgba(var(--ui-rgb), 0.1);
+  border-radius: 0 0 8px 8px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+  max-height: 520px;
+  overflow-y: auto;
+}
+
+.addon-option {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.5rem 0.65rem;
+  border-radius: 7px;
+  border: 1px solid rgba(var(--ui-rgb), 0.09);
+  background: rgba(var(--ui-rgb), 0.02);
+  color: var(--color-text-dim);
+  font-size: 0.85rem;
+  line-height: 1.35;
+  cursor: pointer;
+  transition: background 0.12s ease, border-color 0.12s ease;
+
+  input[type="checkbox"] {
+    accent-color: var(--color-gold, #d4af64);
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+  }
+
+  &:hover {
+    background: rgba(var(--ui-rgb), 0.06);
+    border-color: rgba(var(--ui-rgb), 0.18);
+  }
+
+  &--checked {
+    background: rgba(212, 175, 100, 0.12);
+    border-color: rgba(212, 175, 100, 0.4);
+    color: var(--color-cream);
+
+    &:hover {
+      background: rgba(212, 175, 100, 0.18);
+    }
+  }
+}
+
+.addon-option__name {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.addon-option__label {
+  color: inherit;
+}
+
+.addon-option__delta {
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+}
+
+.addon-option--checked .addon-option__delta {
+  color: rgba(212, 175, 100, 0.85);
 }
 
 .form-error {

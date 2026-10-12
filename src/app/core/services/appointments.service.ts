@@ -109,28 +109,46 @@ export class AppointmentsService {
   }
 
   private toDoc(appt: Omit<Appointment, 'id'>): Record<string, unknown> {
-    return {
+    const doc: Record<string, unknown> = {
       ...appt,
       date: Timestamp.fromDate(appt.date),
       createdAt: Timestamp.fromDate(appt.createdAt),
       updatedAt: appt.updatedAt ? Timestamp.fromDate(appt.updatedAt) : null,
     };
+    // Firestore rejects undefined values - strip them out
+    for (const key of Object.keys(doc)) {
+      if (doc[key] === undefined) {
+        delete doc[key];
+      }
+    }
+    return doc;
   }
 }
 
 // ── Time helpers (exported for component reuse) ──────────────────────────────
 
-/** '9:00 AM' / '10:30 PM' → minutes since midnight. Returns -1 if invalid. */
+/** '9:00 AM' / '10:30 PM' / '09:00' (24-h HH:MM from <input type="time">) → minutes since midnight. Returns -1 if invalid. */
 export function parseDisplayTime(t: string | undefined | null): number {
   if (!t) return -1;
-  const m = t.trim().match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
-  if (!m) return -1;
-  let h = Number(m[1]);
-  const mins = Number(m[2]);
-  const mer = m[3].toUpperCase();
-  if (h === 12) h = 0;
-  if (mer === 'PM') h += 12;
-  return h * 60 + mins;
+  // Format 1: "9:00 AM" / "10:30 PM" (12-hour with AM/PM)
+  const m12 = t.trim().match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
+  if (m12) {
+    let h = Number(m12[1]);
+    const mins = Number(m12[2]);
+    const mer = m12[3].toUpperCase();
+    if (h === 12) h = 0;
+    if (mer === 'PM') h += 12;
+    return h * 60 + mins;
+  }
+  // Format 2: "HH:MM" — exactly two-digit hour (24-hour from <input type="time">)
+  const m24 = t.trim().match(/^(\d{2}):(\d{2})$/);
+  if (m24) {
+    const h = Number(m24[1]);
+    const mins = Number(m24[2]);
+    if (h > 23 || mins > 59) return -1;
+    return h * 60 + mins;
+  }
+  return -1;
 }
 
 /** minutes since midnight → '10:30 AM'. */

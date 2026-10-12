@@ -5,10 +5,6 @@
   <div class="hero__bg"></div>
   <div class="hero__overlay"></div>
 
-  <!-- Floating decorative orb -->
-  <div class="hero__orb hero__orb--1" aria-hidden="true"></div>
-  <div class="hero__orb hero__orb--2" aria-hidden="true"></div>
-
   <div class="container hero__content">
     <div class="hero__text">
       <p class="hero__eyebrow">{{ info()?.tagline || 'Where Beauty Meets Artistry' }}</p>
@@ -97,8 +93,8 @@
     <div class="about-preview__image-wrap reveal reveal-left">
       <div class="about-preview__img-frame">
         <img
-          src="https://images.unsplash.com/photo-1560066984-138dadb4c035?w=800&q=80"
-          alt="Carolle Hair Studio interior — luxury salon"
+          src="/assets/home_3.jpeg"
+          alt="Detailed side view of a braided hairstyle"
           class="about-preview__img"
           loading="lazy"
         >
@@ -112,8 +108,8 @@
         heading="Luxury Hair Care, Redefined"
       />
       <p class="about-preview__body subheading">
-        Carolle Hair Studio was born from a passion for transforming hair and elevating confidence.
-        Founded in the heart of Atlanta, we've grown into a full-service luxury hair studio and
+        Labelle Braid BB was born from a passion for transforming hair and elevating confidence.
+        Founded in the heart of Fort Worth, we've grown into a full-service luxury hair studio and
         beauty supply destination.
       </p>
       <p class="about-preview__body subheading">
@@ -174,76 +170,47 @@
       />
     </div>
 
-    @if (featuredTestimonials().length > 0) {
-      <div class="testimonials__carousel">
-        <div class="testimonials__track" [style.transform]="'translateX(-' + (activeTestimonial() * 100) + '%)'">
-          @for (t of featuredTestimonials(); track t.id) {
-            <div class="testimonials__slide">
-              <app-testimonial-card [testimonial]="t" />
-            </div>
-          }
-        </div>
-      </div>
-
-      <!-- Controls -->
-      <div class="testimonials__controls">
-        <button class="testimonials__arrow" (click)="prevTestimonial()" aria-label="Previous testimonial">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-        </button>
-        <div class="testimonials__dots">
-          @for (t of featuredTestimonials(); track t.id; let i = $index) {
-            <button
-              class="testimonials__dot"
-              [class.active]="i === activeTestimonial()"
-              (click)="setTestimonial(i)"
-              [attr.aria-label]="'Testimonial ' + (i + 1)"
-            ></button>
-          }
-        </div>
-        <button class="testimonials__arrow" (click)="nextTestimonial()" aria-label="Next testimonial">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-        </button>
-      </div>
-    }
+    <app-digifeel-reviews />
   </div>
 </section>
 
 <!-- ══════════════════════════════════════════════════════════
-     GALLERY PREVIEW
+     GALLERY PREVIEW (only shown when admin has uploaded images)
      ══════════════════════════════════════════════════════════ -->
-<section class="section gallery-preview" aria-labelledby="gallery-heading">
-  <div class="container">
-    <div class="gallery-preview__header reveal">
-      <app-section-title
-        eyebrow="Our Work"
-        heading="Style Gallery"
-        subheading="A glimpse into the artistry we create every day. Braids, locs, weaves, and so much more."
-      />
-      <a class="btn btn-outline" routerLink="/gallery">View Full Gallery</a>
-    </div>
+@if (featuredGallery().length > 0) {
+  <section class="section gallery-preview" aria-labelledby="gallery-heading">
+    <div class="container">
+      <div class="gallery-preview__header reveal">
+        <app-section-title
+          eyebrow="Our Work"
+          heading="Style Gallery"
+          subheading="A glimpse into the artistry we create every day. Braids, locs, weaves, and so much more."
+        />
+        <a class="btn btn-outline" routerLink="/gallery">View Full Gallery</a>
+      </div>
 
-    <div class="gallery-preview__grid">
-      @for (image of featuredGallery(); track image.id; let i = $index) {
-        <a
-          class="gallery-preview__item reveal reveal-d{{ (i % 3) + 1 }}"
-          routerLink="/gallery"
-          [attr.aria-label]="image.title"
-        >
-          <img
-            [src]="image.thumbnailUrl"
-            [alt]="image.title"
-            loading="lazy"
-            class="gallery-preview__img"
+      <div class="gallery-preview__grid">
+        @for (image of featuredGallery(); track image.id; let i = $index) {
+          <a
+            class="gallery-preview__item reveal reveal-d{{ (i % 3) + 1 }}"
+            routerLink="/gallery"
+            [attr.aria-label]="image.title"
           >
-          <div class="gallery-preview__item-overlay">
-            <span class="gallery-preview__item-title">{{ image.title }}</span>
-            <span class="gallery-preview__item-cat badge badge-gold">{{ image.category }}</span>
-          </div>
-        </a>
-      }
+            <img
+              [src]="image.thumbnailUrl"
+              [alt]="image.title"
+              loading="lazy"
+              class="gallery-preview__img"
+            >
+            <div class="gallery-preview__item-overlay">
+              <span class="gallery-preview__item-title">{{ image.title }}</span>
+            </div>
+          </a>
+        }
+      </div>
     </div>
-  </div>
-</section>
+  </section>
+}
 
 <!-- ══════════════════════════════════════════════════════════
      CTA BANNER
@@ -267,6 +234,8 @@
 
 <!-- ══════════════════════════════════════════════════════════
      QUICK CONTACT INFO
+     Bound to BusinessInfoService (config/business). Edit via
+     Admin → Business Settings; changes appear here live.
      ══════════════════════════════════════════════════════════ -->
 <section class="quick-info bg-charcoal">
   <div class="container quick-info__inner">
@@ -276,8 +245,19 @@
       </div>
       <div>
         <p class="quick-info__label">Visit Us</p>
-        <p class="quick-info__value">1247 Peachtree St NE, Suite 201</p>
-        <p class="quick-info__value">Atlanta, GA 30309</p>
+        <a
+          [href]="mapsUrl()"
+          target="_blank"
+          rel="noopener"
+          class="quick-info__value quick-info__link"
+        >
+          @if (info()?.address) {
+            {{ info()!.address }}<br>
+          }
+          {{ info()?.city || 'Fort Worth' }},
+          {{ info()?.state || 'TX' }}
+          {{ info()?.zip || '' }}
+        </a>
       </div>
     </div>
 
@@ -289,8 +269,12 @@
       </div>
       <div>
         <p class="quick-info__label">Call Us</p>
-        <a href="tel:+14045550192" class="quick-info__value quick-info__link">(404) 555-0192</a>
-        <a href="mailto:hello@carollehairstudio.com" class="quick-info__value quick-info__link">hello&#64;carollehairstudio.com</a>
+        @if (info()?.phone) {
+          <a [href]="'tel:' + info()!.phone" class="quick-info__value quick-info__link">{{ info()!.phone }}</a>
+        }
+        @if (info()?.email) {
+          <a [href]="'mailto:' + info()!.email" class="quick-info__value quick-info__link">{{ info()!.email }}</a>
+        }
       </div>
     </div>
 
@@ -302,8 +286,9 @@
       </div>
       <div>
         <p class="quick-info__label">Studio Hours</p>
-        <p class="quick-info__value">Mon – Fri: 9:00 AM – 7:00 PM</p>
-        <p class="quick-info__value">Saturday: 8:00 AM – 6:00 PM</p>
+        @for (h of quickHours(); track h.label) {
+          <p class="quick-info__value">{{ h.label }}</p>
+        }
       </div>
     </div>
   </div>

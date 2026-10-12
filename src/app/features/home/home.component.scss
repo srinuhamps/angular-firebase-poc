@@ -12,8 +12,8 @@
     position: absolute;
     inset: 0;
     background:
-      url('https://images.unsplash.com/photo-1522337660859-02fbefca4702?w=1920&q=80')
-      center/cover no-repeat;
+      url('/assets/home_2.jpeg')
+      center 34%/cover no-repeat;
     transform: scale(1.05);
     animation: heroZoom 16s ease-in-out infinite alternate;
   }
@@ -30,28 +30,6 @@
       );
   }
 
-  // Decorative orbs
-  &__orb {
-    position: absolute;
-    border-radius: 50%;
-    pointer-events: none;
-    filter: blur(80px);
-    animation: float 8s ease-in-out infinite;
-
-    &--1 {
-      width: 500px; height: 500px;
-      background: radial-gradient(circle, rgba(201,169,110,0.08) 0%, transparent 70%);
-      top: -150px; right: -150px;
-      animation-delay: 0s;
-    }
-    &--2 {
-      width: 350px; height: 350px;
-      background: radial-gradient(circle, rgba(212,165,165,0.06) 0%, transparent 70%);
-      bottom: -100px; left: -100px;
-      animation-delay: -4s;
-    }
-  }
-
   &__content {
     position: relative;
     z-index: var(--z-base);
@@ -65,6 +43,7 @@
 
   &__text {
     max-width: 620px;
+    min-width: 0;
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
@@ -76,7 +55,7 @@
     font-weight: 600;
     letter-spacing: 0.3em;
     text-transform: uppercase;
-    color: var(--color-gold);
+    color: var(--color-accent);
     animation: fadeInUp 0.8s var(--ease-smooth) 0.2s both;
   }
 
@@ -89,25 +68,25 @@
 
   &__title-script {
     font-family: var(--font-script);
-    font-size: clamp(3rem, 7vw, 5.5rem);
-    color: var(--color-gold);
+    font-size: 5.5rem;
+    color: var(--color-accent);
     line-height: 1;
     display: block;
   }
 
   &__title-main {
     font-family: var(--font-heading);
-    font-size: clamp(3.5rem, 9vw, 7.5rem);
+    font-size: 7.5rem;
     font-weight: 600;
     line-height: 0.92;
-    letter-spacing: -0.02em;
+    letter-spacing: 0;
     color: var(--color-cream);
     display: block;
   }
 
   &__subtitle {
     font-family: var(--font-subheading);
-    font-size: clamp(1rem, 1.8vw, 1.2rem);
+    font-size: 1.2rem;
     font-weight: 300;
     line-height: 1.7;
     color: var(--color-text-dim);
@@ -226,7 +205,7 @@
   }
 
   &__icon {
-    color: var(--color-gold);
+    color: var(--color-accent);
     font-size: 0.6rem;
   }
 
@@ -361,68 +340,7 @@
 
 // ── Testimonials ──────────────────────────────────────────────────────────────
 .testimonials {
-  &__carousel {
-    position: relative;
-    overflow: hidden;
-    margin: 3rem auto 0;
-    max-width: 720px;
-  }
-
-  &__track {
-    display: flex;
-    transition: transform 0.6s var(--ease-smooth);
-    will-change: transform;
-  }
-
-  &__slide {
-    flex: 0 0 100%;
-    padding: 0 0.5rem;
-  }
-
-  &__controls {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1.5rem;
-    margin-top: 2rem;
-  }
-
-  &__arrow {
-    width: 44px; height: 44px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.06);
-    border: 1px solid var(--color-border-light);
-    color: var(--color-text-dim);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: background var(--t-base), color var(--t-base), border-color var(--t-base);
-
-    &:hover {
-      background: rgba(201, 169, 110, 0.12);
-      color: var(--color-gold);
-      border-color: var(--color-gold);
-    }
-  }
-
-  &__dots { display: flex; gap: 0.5rem; }
-
-  &__dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    background: var(--color-dark-3);
-    border: 1px solid var(--color-border-light);
-    cursor: pointer;
-    transition: background var(--t-base), transform var(--t-base), width var(--t-base);
-
-    &.active {
-      background: var(--color-gold);
-      width: 24px;
-      border-radius: var(--radius-full);
-      border-color: var(--color-gold);
-    }
-  }
+  app-digifeel-reviews { display: block; }
 }
 
 // ── Gallery Preview ───────────────────────────────────────────────────────────
@@ -440,20 +358,17 @@
 
   &__grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(2, 260px);
-    gap: 1rem;
+    grid-template-columns: repeat(6, 1fr);
+    grid-auto-rows: 160px;
+    gap: 0.75rem;
   }
 
   &__item {
     display: block;
     position: relative;
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-md);
     overflow: hidden;
     cursor: pointer;
-
-    // Make first item span 2 rows
-    &:first-child { grid-row: span 2; }
 
     &:hover .gallery-preview__item-overlay { opacity: 1; }
     &:hover .gallery-preview__img { transform: scale(1.08); }
@@ -499,8 +414,8 @@
     position: absolute;
     inset: 0;
     background:
-      url('https://images.unsplash.com/photo-1489424731084-a5d8b219a5bb?w=1920&q=80')
-      center/cover no-repeat;
+      url('/assets/home_1.jpeg')
+      center 45%/cover no-repeat;
   }
 
   &__overlay {
@@ -559,7 +474,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--color-gold);
+    color: var(--color-accent);
     flex-shrink: 0;
   }
 
@@ -568,7 +483,7 @@
     font-weight: 700;
     letter-spacing: 0.15em;
     text-transform: uppercase;
-    color: var(--color-gold);
+    color: var(--color-accent);
     margin-bottom: 0.35rem;
   }
 
@@ -580,8 +495,14 @@
   }
 
   &__link {
-    transition: color var(--t-base);
-    &:hover { color: var(--color-gold); }
+    text-decoration: underline;
+    text-decoration-color: var(--color-border-light);
+    text-underline-offset: 3px;
+    transition: color var(--t-base), text-decoration-color var(--t-base);
+    &:hover {
+      color: var(--color-accent);
+      text-decoration-color: var(--color-accent);
+    }
   }
 
   &__divider {
@@ -592,25 +513,32 @@
 }
 
 // ── Light Theme Overrides ────────────────────────────────────────────────────
-// ── Light mode: replace the dark photo overlay with a warm champagne tint ──
-// This makes the hero VISUALLY different between themes. The stats card stays
-// intentionally dark so its gold/white text keeps full contrast.
 :host-context([data-theme="light"]) {
-  // Swap the dark overlay for a warm ivory-champagne wash — photo shows through
   .hero__overlay {
     background: linear-gradient(
-      135deg,
-      rgba(245, 235, 215, 0.84) 0%,
-      rgba(225, 205, 170, 0.70) 50%,
-      rgba(245, 235, 215, 0.82) 100%
+      90deg,
+      rgba(16, 11, 7, 0.82) 0%,
+      rgba(16, 11, 7, 0.60) 43%,
+      rgba(16, 11, 7, 0.24) 100%
     );
   }
 
-  // With a light overlay, hero text flips to dark espresso
-  .hero__title-main { color: #1a110a; }
-  .hero__subtitle   { color: rgba(26, 17, 10, 0.85); }
-  .hero__eyebrow    { color: var(--color-gold); }
-  .hero__scroll span { color: rgba(26, 17, 10, 0.60); }
+  .hero__title-main { color: #f5f0e8; }
+  .hero__subtitle   { color: rgba(245, 240, 232, 0.88); }
+  .hero__eyebrow    { color: var(--color-accent); }
+  .hero__scroll span { color: rgba(245, 240, 232, 0.68); }
+
+  .hero .btn-outline {
+    background: rgba(12, 8, 5, 0.28);
+    border-color: rgba(245, 240, 232, 0.82);
+    color: #f5f0e8;
+  }
+
+  .hero .btn-ghost {
+    background: rgba(12, 8, 5, 0.40);
+    border-color: rgba(245, 240, 232, 0.40);
+    color: #f5f0e8;
+  }
 
   // Stats card keeps a dark glass background so numbers stay legible
   .hero__stats-card {
@@ -633,7 +561,7 @@
 
     &:hover {
       background: rgba(201, 169, 110, 0.14);
-      color: var(--color-gold);
+      color: var(--color-accent);
       border-color: var(--color-gold);
     }
   }
@@ -657,25 +585,35 @@
   .hero__stats-card { display: none; }
 }
 
+@media (max-width: 1200px) {
+  .gallery-preview__grid {
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: 150px;
+  }
+}
+
 @media (max-width: 900px) {
   .about-preview__inner {
     grid-template-columns: 1fr;
     gap: 3rem;
   }
   .gallery-preview__grid {
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: unset;
-    & > :first-child { grid-row: span 1; }
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: 140px;
   }
   .quick-info__divider { display: none; }
 }
 
 @media (max-width: 640px) {
+  .hero__title-script { font-size: 3.5rem; }
+  .hero__title-main { font-size: 4rem; }
+  .hero__subtitle { font-size: 1rem; }
+  .hero__content { padding-top: 7rem; padding-bottom: 6rem; }
   .hero__actions { flex-direction: column; .btn { width: 100%; } }
   .services-preview__header,
   .products-preview__header,
   .gallery-preview__header { flex-direction: column; align-items: flex-start; }
-  .gallery-preview__grid { grid-template-columns: 1fr; }
+  .gallery-preview__grid { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 130px; }
   .features-bar__inner { justify-content: center; }
   .br-desktop { display: none; }
   .cta-banner__actions { flex-direction: column; align-items: center; }

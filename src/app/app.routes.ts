@@ -100,6 +100,34 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'privacy-policy',
+    title: 'Privacy Policy',
+    data: {
+      seo: {
+        description:
+          '{name} Privacy Policy — how we collect, use, and protect your personal information, including our SMS text message program.',
+      },
+    },
+    loadComponent: () =>
+      import('./features/legal/privacy-policy/privacy-policy.component').then(
+        (m) => m.PrivacyPolicyComponent
+      ),
+  },
+  {
+    path: 'terms-of-service',
+    title: 'Terms of Service',
+    data: {
+      seo: {
+        description:
+          '{name} Terms of Service — booking policies, SMS program terms, cancellation policy, and legal terms.',
+      },
+    },
+    loadComponent: () =>
+      import('./features/legal/terms-of-service/terms-of-service.component').then(
+        (m) => m.TermsOfServiceComponent
+      ),
+  },
+  {
     path: 'admin/login',
     title: 'Admin Login',
     data: { seo: { noIndex: true } },
@@ -148,6 +176,27 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'addons',
+        loadComponent: () =>
+          import('./admin/admin-addons/admin-addons.component').then(
+            (m) => m.AdminAddonsComponent
+          ),
+      },
+      {
+        path: 'addons/new',
+        loadComponent: () =>
+          import('./admin/admin-addons/addon-form/addon-form.component').then(
+            (m) => m.AddonFormComponent
+          ),
+      },
+      {
+        path: 'addons/edit/:id',
+        loadComponent: () =>
+          import('./admin/admin-addons/addon-form/addon-form.component').then(
+            (m) => m.AddonFormComponent
+          ),
+      },
+      {
         path: 'products',
         loadComponent: () =>
           import('./admin/admin-products/admin-products.component').then(
@@ -180,6 +229,41 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./admin/admin-products/product-form/product-form.component').then(
             (m) => m.ProductFormComponent
+          ),
+      },
+      {
+        path: 'stylists',
+        loadComponent: () =>
+          import('./admin/admin-stylists/admin-stylists.component').then(
+            (m) => m.AdminStylistsComponent
+          ),
+      },
+      {
+        path: 'stylists/new',
+        loadComponent: () =>
+          import('./admin/admin-stylists/stylist-form/stylist-form.component').then(
+            (m) => m.StylistFormComponent
+          ),
+      },
+      {
+        path: 'stylists/edit/:id',
+        loadComponent: () =>
+          import('./admin/admin-stylists/stylist-form/stylist-form.component').then(
+            (m) => m.StylistFormComponent
+          ),
+      },
+      {
+        path: 'appointments',
+        loadComponent: () =>
+          import('./admin/admin-appointments/admin-appointments.component').then(
+            (m) => m.AdminAppointmentsComponent
+          ),
+      },
+      {
+        path: 'messages',
+        loadComponent: () =>
+          import('./admin/admin-messages/admin-messages.component').then(
+            (m) => m.AdminMessagesComponent
           ),
       },
     ],

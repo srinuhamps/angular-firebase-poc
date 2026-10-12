@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { map } from 'rxjs/operators';
 import { ProductsService } from '../../../core/services/products.service';
 import { Product, ProductCategory } from '../../../core/models/product.model';
+import { MediaPickerComponent } from '../../media-picker/media-picker.component';
 
 type FormData = Omit<Product, 'id'>;
 
@@ -25,7 +26,7 @@ const EMPTY_FORM: FormData = {
 @Component({
   selector: 'app-product-form',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, MediaPickerComponent],
   templateUrl: './product-form.component.html',
   styleUrl: './product-form.component.scss',
 })

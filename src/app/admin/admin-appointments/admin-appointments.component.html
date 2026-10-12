@@ -31,6 +31,7 @@
             <th>Service</th>
             <th>Stylist</th>
             <th>Total</th>
+            <th>Payment</th>
             <th>Status</th>
             <th>Actions</th>
           </tr>
@@ -53,6 +54,34 @@
               </td>
               <td>{{ a.stylistName }}</td>
               <td>${{ a.totalAmount }}</td>
+              <td class="cell--payment">
+                @if (a.paymentMethod === 'card-deposit') {
+                  @if (a.depositPaid) {
+                    <span class="pay-badge pay-badge--paid" title="Deposit received">
+                      ● Deposit paid · <strong>${{ a.depositAmount }}</strong>
+                    </span>
+                  } @else {
+                    <span class="pay-badge pay-badge--pending" title="PaymentIntent created but not yet confirmed">
+                      ○ Deposit pending · <strong>${{ a.depositAmount }}</strong>
+                    </span>
+                  }
+                  @if (a.paymentTransactionId || a.paymentIntentId) {
+                    <a
+                      class="pay-badge__link"
+                      target="_blank"
+                      rel="noopener"
+                      [href]="stripePaymentUrl(a.paymentTransactionId || a.paymentIntentId!)"
+                      title="Open in Stripe dashboard"
+                    >Stripe ↗</a>
+                  }
+                  <div class="pay-badge__sub">Balance at salon: ${{ a.totalAmount - (a.depositAmount || 0) }}</div>
+                  @if (a.paymentLastError) {
+                    <div class="pay-badge__err" [title]="a.paymentLastError">⚠ Payment error</div>
+                  }
+                } @else {
+                  <span class="pay-badge pay-badge--muted">Pay at salon · <strong>${{ a.totalAmount }}</strong></span>
+                }
+              </td>
               <td>
                 <span class="status-badge status-badge--{{ a.status }}">{{ a.status }}</span>
               </td>
@@ -67,13 +96,15 @@
                   <button class="tbl-btn tbl-btn--edit" (click)="setStatus(a, 'no-show')" [disabled]="updatingId() === a.id">No-show</button>
                   <button class="tbl-btn tbl-btn--del" (click)="setStatus(a, 'cancelled')" [disabled]="updatingId() === a.id">Cancel</button>
                 }
-                <button class="tbl-btn tbl-btn--del" (click)="delete(a)" [disabled]="updatingId() === a.id" title="Delete permanently">×</button>
+                @if (a.status === 'cancelled' || a.status === 'completed') {
+                  <span class="cell--actions-empty">—</span>
+                }
               </td>
             </tr>
             @if (a.notes) {
               <tr class="notes-row">
                 <td></td>
-                <td colspan="6"><span class="notes-row__label">Notes:</span> {{ a.notes }}</td>
+                <td colspan="7"><span class="notes-row__label">Notes:</span> {{ a.notes }}</td>
               </tr>
             }
           }

@@ -1,5 +1,6 @@
 import {
   ApplicationConfig,
+  inject,
   provideBrowserGlobalErrorListeners,
   provideZonelessChangeDetection,
 } from '@angular/core';
@@ -10,8 +11,7 @@ import {
   TitleStrategy,
 } from '@angular/router';
 import { provideHttpClient, withFetch } from '@angular/common/http';
-import { provideFirebaseApp } from '@angular/fire/app';
-import { getApp, getApps, initializeApp } from 'firebase/app';
+import { FirebaseApp, initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { getStorage, provideStorage } from '@angular/fire/storage';
 import { getAuth, provideAuth } from '@angular/fire/auth';
@@ -35,14 +35,16 @@ export const appConfig: ApplicationConfig = {
     ),
     provideHttpClient(withFetch()),
     // ── Firebase ────────────────────────────────────────────────────────────
-    provideFirebaseApp(() =>
-      getApps().length ? getApp() : initializeApp(environment.firebase)
-    ),
-    provideFirestore(() => getFirestore()),
-    provideStorage(() => getStorage()),
-    provideAuth(() => getAuth()),
-    // The Cloud Function region must match what's declared in functions/src/index.ts.
-    provideFunctions(() => getFunctions(getApp(), 'us-central1')),
+    // Single source of truth for Firebase app initialization. All other
+    // provideXxx() factories inject FirebaseApp from Angular DI so we never
+    // depend on the raw firebase/app module registry (which can duplicate
+    // across code-split chunks in production builds).
+    provideFirebaseApp(() => initializeApp(environment.firebase)),
+    provideFirestore(() => getFirestore(inject(FirebaseApp))),
+    provideStorage(() => getStorage(inject(FirebaseApp))),
+    provideAuth(() => getAuth(inject(FirebaseApp))),
+    // Cloud Function region must match what's declared in functions/src/index.ts.
+    provideFunctions(() => getFunctions(inject(FirebaseApp), 'us-central1')),
     // SEO — applies per-route title + meta tags on every navigation.
     { provide: TitleStrategy, useClass: SeoTitleStrategy },
   ],

@@ -12,7 +12,7 @@ import { join } from 'path';
 import https from 'https';
 
 // ── Config ─────────────────────────────────────────────────────────────────
-const BUCKET   = 'carolle-hair-studio.firebasestorage.app';
+const BUCKET   = 'labelle-braids-bb.firebasestorage.app';
 const CORS_JSON = JSON.parse(readFileSync('./cors.json', 'utf8'));
 
 // ── Read Firebase CLI cached token ─────────────────────────────────────────
@@ -47,9 +47,12 @@ if (!user?.tokens?.refresh_token) {
 const refreshToken = user.tokens.refresh_token;
 
 // ── Exchange refresh token for access token ─────────────────────────────────
-// Firebase CLI uses these public OAuth client credentials (open source in firebase-tools)
+// Firebase CLI uses these public OAuth client credentials (open source in firebase-tools).
+// Kept in sync with firebase-tools/lib/api.js — Google rotates the client secret
+// periodically. If OAuth "invalid_client" starts failing again, grep that file
+// for `clientSecret` and copy the new value.
 const CLIENT_ID     = '563584335869-fgrhgmd47bqnekij5i8b5pr03ho849e6.apps.googleusercontent.com';
-const CLIENT_SECRET = 'j9iVZfS8uo8KYFtRWvMr3wkZ';
+const CLIENT_SECRET = 'j9iVZfS8kkCEFUPaAeJV0sAi';
 
 function httpsPost(options, body) {
   return new Promise((resolve, reject) => {

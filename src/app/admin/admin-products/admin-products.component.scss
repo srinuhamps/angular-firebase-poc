@@ -22,10 +22,10 @@
 
 .admin-loading,
 .admin-empty {
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--color-text-muted);
   font-size: 0.9rem;
 
-  a { color: var(--color-gold, #d4af64); }
+  a { color: var(--color-accent); }
 }
 
 .admin-table-wrap {
@@ -37,12 +37,12 @@
 }
 
 .row--out td {
-  opacity: 0.5;
+  background: rgba(var(--ui-rgb), 0.03);
 }
 
 .cell--name {
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--color-cream);
 }
 
 .badge {
@@ -56,10 +56,10 @@
 }
 
 .featured-dot {
-  color: rgba(255, 255, 255, 0.3);
+  color: var(--color-text-muted);
   font-size: 1.1rem;
 
-  &--on { color: var(--color-gold, #d4af64); }
+  &--on { color: var(--color-accent); }
 }
 
 .cell--actions {

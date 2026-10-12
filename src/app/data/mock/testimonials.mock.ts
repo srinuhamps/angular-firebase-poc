@@ -13,7 +13,7 @@ export const MOCK_TESTIMONIALS: Testimonial[] = [
     serviceReceived: 'Knotless Box Braids',
     rating: 5,
     review:
-      "I've been searching for my go-to braid salon for years. Carolle is it. My knotless braids lasted over 3 months and looked freshly done the entire time. The attention to detail is unmatched. I won't go anywhere else.",
+      "I've been searching for my go-to braid salon for years. Carole is it. My knotless braids lasted over 3 months and looked freshly done the entire time. The attention to detail is unmatched. I won't go anywhere else.",
     date: new Date('2025-12-10'),
     isFeatured: true,
     isApproved: true,
@@ -25,7 +25,7 @@ export const MOCK_TESTIMONIALS: Testimonial[] = [
     serviceReceived: 'Goddess Locs',
     rating: 5,
     review:
-      "Carolle did my goddess locs and I am OBSESSED. They are so perfectly done — every single one. The shop is gorgeous, the vibe is luxurious, and Carolle herself makes you feel so at home. 10/10 experience.",
+      "Carole did my goddess locs and I am OBSESSED. They are so perfectly done — every single one. The shop is gorgeous, the vibe is luxurious, and Carole herself makes you feel so at home. 10/10 experience.",
     date: new Date('2025-11-22'),
     isFeatured: true,
     isApproved: true,
@@ -37,7 +37,7 @@ export const MOCK_TESTIMONIALS: Testimonial[] = [
     serviceReceived: 'Kids Box Braids',
     rating: 5,
     review:
-      "My daughter is tender-headed and salons are usually a nightmare. Not at Carolle's! She was so gentle, patient, and kept my daughter entertained the whole time. Her braids look absolutely beautiful.",
+      "My daughter is tender-headed and salons are usually a nightmare. Not at Carole's! She was so gentle, patient, and kept my daughter entertained the whole time. Her braids look absolutely beautiful.",
     date: new Date('2025-11-05'),
     isFeatured: true,
     isApproved: true,
@@ -49,7 +49,7 @@ export const MOCK_TESTIMONIALS: Testimonial[] = [
     serviceReceived: 'Bohemian Twists',
     rating: 5,
     review:
-      "I've been coming to Carolle for over 2 years now and every single visit exceeds my expectations. My passion twists are always flawless, and I always leave feeling like a queen. This place is a gem.",
+      "I've been coming to Carole for over 2 years now and every single visit exceeds my expectations. My passion twists are always flawless, and I always leave feeling like a queen. This place is a gem.",
     date: new Date('2025-10-18'),
     isFeatured: true,
     isApproved: true,

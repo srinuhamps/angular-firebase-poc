@@ -28,7 +28,7 @@ export interface SeoMeta {
   noIndex?: boolean;
 }
 
-const FALLBACK_NAME = 'Labelle Braids BB';
+const FALLBACK_NAME = 'Labelle Braid BB';
 
 const DEFAULT_DESCRIPTION =
   '{name} — luxury braiding, locs, weaving, and beauty supply. Book your appointment today.';

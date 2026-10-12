@@ -9,7 +9,9 @@ import {
   PLATFORM_ID,
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { filter, map } from 'rxjs';
 import { ThemeToggleComponent } from '../theme-toggle/theme-toggle.component';
 import { AuthService } from '../../../core/services/auth.service';
 import { BusinessInfoService } from '../../../core/services/business-info.service';
@@ -34,13 +36,24 @@ export class NavbarComponent implements OnInit, OnDestroy {
   private platformId  = inject(PLATFORM_ID);
   private authService = inject(AuthService);
   private bizService  = inject(BusinessInfoService);
+  private readonly router = inject(Router);
+  private readonly currentUrl = toSignal(
+    this.router.events.pipe(
+      filter((event): event is NavigationEnd => event instanceof NavigationEnd),
+      map((event) => event.urlAfterRedirects)
+    ),
+    { initialValue: this.router.url }
+  );
+  readonly overHero = computed(() =>
+    this.currentUrl().split(/[?#]/)[0] === '/' && !this.isScrolled() && !this.menuOpen()
+  );
 
   readonly isAdmin = computed(() => this.authService.user() !== null);
 
   /** Live business info; drives the brand logo in the navbar. */
   readonly info = signal<BusinessInfo | null>(null);
   readonly brand = computed(() => splitBrandName(this.info()?.name));
-  readonly fullName = computed(() => this.info()?.name ?? 'Labelle Braids BB');
+  readonly fullName = computed(() => this.info()?.name ?? 'Labelle Braid BB');
 
   readonly navLinks: NavLink[] = [
     { label: 'Home',     path: '/'        },

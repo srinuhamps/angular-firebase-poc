@@ -1,0 +1,129 @@
+<div class="admin-page">
+  <header class="admin-page__header">
+    <div>
+      <h1 class="admin-page__title">{{ editId() ? 'Edit Add-On' : 'Add Add-On' }}</h1>
+      <p class="admin-page__subtitle">
+        Modifiers a customer can bolt on to a booking. Prices and durations can
+        be negative (e.g. discounts or time savings).
+      </p>
+    </div>
+    <button type="button" class="action-btn action-btn--outline" (click)="cancel()">← Cancel</button>
+  </header>
+
+  <form class="svc-form" (ngSubmit)="save()" #f="ngForm">
+    <div class="form-grid">
+      <!-- Name -->
+      <div class="form-group form-group--full">
+        <label class="form-label" for="name">Name *</label>
+        <input
+          id="name" class="form-input" type="text" name="name"
+          [ngModel]="form().name" (ngModelChange)="setField('name', $event)"
+          placeholder="e.g. Blow Dry, Deep Treatment, Detangle" required
+        />
+      </div>
+
+      <!-- Price Delta -->
+      <div class="form-group">
+        <label class="form-label" for="priceDelta">Price Delta ($)</label>
+        <input
+          id="priceDelta" class="form-input" type="number" name="priceDelta" step="0.01"
+          [ngModel]="form().priceDelta" (ngModelChange)="setField('priceDelta', +$event)"
+        />
+        <p class="form-hint">
+          Positive to surcharge, negative for a discount (e.g. <code>15</code> or <code>-25</code>).
+        </p>
+      </div>
+
+      <!-- Duration Delta -->
+      <div class="form-group">
+        <label class="form-label" for="durationDelta">Duration Delta (min)</label>
+        <input
+          id="durationDelta" class="form-input" type="number" name="durationDelta" step="5"
+          [ngModel]="form().durationDelta" (ngModelChange)="setField('durationDelta', +$event)"
+        />
+        <p class="form-hint">
+          Positive to lengthen the appointment, negative to shorten.
+        </p>
+      </div>
+
+      <!-- Sort Order -->
+      <div class="form-group">
+        <label class="form-label" for="sortOrder">Sort Order</label>
+        <input
+          id="sortOrder" class="form-input" type="number" name="sortOrder" min="0"
+          [ngModel]="form().sortOrder" (ngModelChange)="setField('sortOrder', +$event)"
+        />
+      </div>
+
+      <!-- Applies To -->
+      <div class="form-group form-group--full">
+        <label class="form-label">Applies To</label>
+        <label class="check-label">
+          <input
+            type="checkbox" name="appliesToAll"
+            [ngModel]="form().appliesToAll" (ngModelChange)="setField('appliesToAll', $event)"
+          />
+          Applies to all services
+        </label>
+
+        @if (!form().appliesToAll) {
+          <div class="service-picker">
+            @if (services().length === 0) {
+              <p class="form-hint">Loading services…</p>
+            } @else {
+              @for (svc of services(); track svc.id) {
+                <label class="check-label check-label--compact">
+                  <input
+                    type="checkbox"
+                    [name]="'svc-' + svc.id"
+                    [checked]="isServiceChecked(svc.id)"
+                    (change)="toggleService(svc.id, $any($event.target).checked)"
+                  />
+                  <span>{{ svc.name }}</span>
+                </label>
+              }
+            }
+          </div>
+        }
+      </div>
+
+      <!-- Active -->
+      <div class="form-group form-group--checks">
+        <label class="check-label">
+          <input
+            type="checkbox" name="isActive"
+            [ngModel]="form().isActive" (ngModelChange)="setField('isActive', $event)"
+          />
+          Active (visible in booking wizard)
+        </label>
+      </div>
+    </div>
+
+    @if (error()) {
+      <p class="form-error" role="alert">{{ error() }}</p>
+    }
+
+    <div class="form-actions">
+      <button class="action-btn" type="submit" [disabled]="saving()">
+        @if (saving()) { Saving… } @else { Save Add-On }
+      </button>
+      <button class="action-btn action-btn--outline" type="button" [disabled]="saving()" (click)="cancel()">
+        Cancel
+      </button>
+    </div>
+  </form>
+
+  <!-- Unsaved-changes dialog -->
+  @if (showCancelDialog()) {
+    <div class="confirm-overlay" (click)="dismissDialog()">
+      <div class="confirm-dialog" (click)="$event.stopPropagation()" role="dialog" aria-modal="true" aria-labelledby="dlg-title">
+        <h2 class="confirm-dialog__title" id="dlg-title">Discard changes?</h2>
+        <p class="confirm-dialog__body">You have unsaved changes. If you leave now they will be lost.</p>
+        <div class="confirm-dialog__actions">
+          <button class="action-btn action-btn--danger" type="button" (click)="confirmCancel()">Discard</button>
+          <button class="action-btn action-btn--outline" type="button" (click)="dismissDialog()">Keep editing</button>
+        </div>
+      </div>
+    </div>
+  }
+</div>

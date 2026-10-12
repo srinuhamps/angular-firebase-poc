@@ -23,12 +23,12 @@
   align-items: flex-start;
   gap: 0.75rem;
   padding: 0.85rem 1rem;
-  background: #1a1512;
+  background: var(--surface-panel);
   border: 1px solid rgba(212, 175, 100, 0.3);
   border-left-width: 4px;
   border-radius: 8px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--color-cream);
   font-family: var(--font-body, 'Roboto', sans-serif);
   animation: toast-in 0.22s ease-out;
 
@@ -50,16 +50,16 @@
     margin-top: 0.05rem;
   }
 
-  &--success &__icon { background: rgba(129, 199, 132, 0.18); color: #81c784; }
-  &--error   &__icon { background: rgba(229, 115, 115, 0.18); color: #e57373; }
-  &--warning &__icon { background: rgba(255, 205, 56, 0.18);  color: #ffcd38; }
-  &--info    &__icon { background: rgba(212, 175, 100, 0.18); color: var(--color-gold, #d4af64); }
+  &--success &__icon { background: rgba(129, 199, 132, 0.18); color: var(--color-success); }
+  &--error   &__icon { background: rgba(229, 115, 115, 0.18); color: var(--color-danger); }
+  &--warning &__icon { background: rgba(255, 205, 56, 0.18);  color: var(--color-warning); }
+  &--info    &__icon { background: rgba(212, 175, 100, 0.18); color: var(--color-accent); }
 
   &__body { flex: 1; min-width: 0; }
 
   &__title {
     margin: 0 0 0.2rem;
-    color: #fff;
+    color: var(--color-cream);
     font-size: 0.88rem;
     font-weight: 600;
     letter-spacing: 0.02em;
@@ -69,7 +69,7 @@
     margin: 0;
     font-size: 0.85rem;
     line-height: 1.45;
-    color: rgba(255, 255, 255, 0.78);
+    color: var(--color-text-dim);
     word-wrap: break-word;
   }
 
@@ -77,14 +77,14 @@
     flex-shrink: 0;
     background: transparent;
     border: none;
-    color: rgba(255, 255, 255, 0.45);
+    color: var(--color-text-muted);
     font-size: 1.15rem;
     line-height: 1;
     cursor: pointer;
     padding: 0 0.15rem;
     transition: color 0.15s;
 
-    &:hover { color: #fff; }
+    &:hover { color: var(--color-cream); }
   }
 }
 

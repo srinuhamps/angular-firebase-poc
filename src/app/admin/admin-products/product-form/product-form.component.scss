@@ -46,7 +46,7 @@
 }
 
 .confirm-dialog {
-  background: #1e1812;
+  background: var(--surface-panel);
   border: 1px solid rgba(212, 175, 100, 0.25);
   border-radius: 12px;
   padding: 2rem 2.25rem;
@@ -57,13 +57,13 @@
   &__title {
     font-family: var(--font-heading, 'Roboto Slab', serif);
     font-size: 1.2rem;
-    color: var(--color-gold, #d4af64);
+    color: var(--color-accent);
     margin: 0 0 0.75rem;
   }
 
   &__body {
     font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.65);
+    color: var(--color-text-dim);
     margin: 0 0 1.5rem;
     line-height: 1.55;
   }
@@ -113,7 +113,7 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--color-text-dim);
   font-size: 0.88rem;
   cursor: pointer;
 

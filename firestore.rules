@@ -1,7 +1,7 @@
 rules_version = '2';
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Carolle Hair Studio — Firestore security rules
+// Labelle Braid BB — Firestore security rules
 //
 // Public site (unauthenticated) can READ catalog data and CREATE appointments.
 // Admin (signed-in via Firebase Auth) can do everything else.
@@ -29,6 +29,12 @@ service cloud.firestore {
       allow write: if isSignedIn();
     }
 
+    // ── Service add-ons (upsell modifiers picked during booking) ─────────────
+    match /serviceAddons/{id} {
+      allow read: if true;
+      allow write: if isSignedIn();
+    }
+
     match /products/{id} {
       allow read: if true;
       allow write: if isSignedIn();
@@ -40,6 +46,14 @@ service cloud.firestore {
     }
 
     match /gallery/{id} {
+      allow read: if true;
+      allow write: if isSignedIn();
+    }
+
+    // ── Media library — index of images uploaded via the admin Media Gallery ─
+    // Mirrors files in Firebase Storage under /media/**. Public read so pages
+    // can render the URLs; only admin can add/edit/delete entries.
+    match /media/{id} {
       allow read: if true;
       allow write: if isSignedIn();
     }
@@ -68,11 +82,16 @@ service cloud.firestore {
         isString(request.resource.data.customerName,  120) &&
         isString(request.resource.data.customerEmail, 200) &&
         isString(request.resource.data.customerPhone,  40) &&
-        // Service & stylist refs (id strings — model is denormalized so name/price are also stored)
+        // Service refs (id strings — model is denormalized so name/price are also stored)
         isString(request.resource.data.serviceId,      80) &&
         isString(request.resource.data.serviceName,   200) &&
-        isString(request.resource.data.stylistId,      80) &&
-        isString(request.resource.data.stylistName,   200) &&
+        // Stylist is optional — assigned offline by admin
+        (!('stylistId' in request.resource.data) ||
+         request.resource.data.stylistId is string &&
+         request.resource.data.stylistId.size() <= 80) &&
+        (!('stylistName' in request.resource.data) ||
+         request.resource.data.stylistName is string &&
+         request.resource.data.stylistName.size() <= 200) &&
         isString(request.resource.data.startTime,      20) &&
         isString(request.resource.data.endTime,        20) &&
         request.resource.data.date is timestamp &&
@@ -87,7 +106,22 @@ service cloud.firestore {
         request.resource.data.depositPaid == false &&
         // Optional notes capped
         (!('notes' in request.resource.data) || request.resource.data.notes == null ||
-         request.resource.data.notes is string && request.resource.data.notes.size() <= 2000);
+         request.resource.data.notes is string && request.resource.data.notes.size() <= 2000) &&
+        // Optional add-ons — must be a list (max 20). Element shape not deeply
+        // validated because Firestore rules can't iterate arrays; server-side
+        // logic reconciles against the canonical serviceAddons docs anyway.
+        (!('addons' in request.resource.data) ||
+         request.resource.data.addons is list &&
+         request.resource.data.addons.size() <= 20) &&
+        // SMS opt-in — must be boolean if present; smsPhone must be short E.164-ish
+        (!('smsOptIn' in request.resource.data) ||
+         request.resource.data.smsOptIn is bool) &&
+        (!('smsPhone' in request.resource.data) ||
+         request.resource.data.smsPhone is string &&
+         request.resource.data.smsPhone.size() <= 20) &&
+        // Server-managed reminder fields must NOT be set by the client
+        !('reminderSent'   in request.resource.data) &&
+        !('reminderSentAt' in request.resource.data);
     }
 
     // ── Contact messages: guests can CREATE, only admin can read/update/delete ─

@@ -1,12 +1,15 @@
 <div class="admin-page">
   <header class="admin-page__header">
     <div>
-      <h1 class="admin-page__title">{{ editId() ? 'Edit Service' : 'Add Service' }}</h1>
+      <h1 class="admin-page__title">
+        {{ editId() ? 'Edit' : 'Add' }} Service
+      </h1>
     </div>
     <button type="button" class="action-btn action-btn--outline" (click)="cancel()">← Cancel</button>
   </header>
 
   <form class="svc-form" (ngSubmit)="save()" #f="ngForm">
+
     <div class="form-grid">
       <!-- Name -->
       <div class="form-group form-group--full">
@@ -14,7 +17,8 @@
         <input
           id="name" class="form-input" type="text" name="name"
           [ngModel]="form().name" (ngModelChange)="setField('name', $event)"
-          placeholder="e.g. Box Braids – Full Head" required
+          placeholder="e.g. Small Knotless Braids"
+          required
         />
       </div>
 
@@ -25,8 +29,8 @@
           id="category" class="form-input form-input--select" name="category"
           [ngModel]="form().category" (ngModelChange)="setField('category', $event)"
         >
-          @for (cat of categories; track cat) {
-            <option [value]="cat">{{ cat }}</option>
+          @for (cat of categories; track cat.value) {
+            <option [value]="cat.value">{{ cat.label }}</option>
           }
         </select>
       </div>
@@ -78,13 +82,35 @@
         ></textarea>
       </div>
 
-      <!-- Image URL -->
+      <!-- Cover Image (single — used as card thumbnail) -->
       <div class="form-group form-group--full">
-        <label class="form-label" for="imageUrl">Image URL</label>
+        <label class="form-label">Cover Image <span class="form-label-hint">(card thumbnail)</span></label>
+        <app-media-picker
+          category="service"
+          label="Cover Image"
+          [value]="form().imageUrl"
+          (valueChange)="setField('imageUrl', $event)"
+        />
+      </div>
+
+      <!-- Gallery Images -->
+      <div class="form-group form-group--full">
+        <label class="form-label">Gallery Images <span class="form-label-hint">(shown in Details view — first becomes cover if no Cover Image set)</span></label>
+        <app-multi-media-picker
+          category="service"
+          label="Gallery Images"
+          [value]="form().mediaUrls ?? []"
+          (valueChange)="setField('mediaUrls', $event)"
+        />
+      </div>
+
+      <!-- Video URL -->
+      <div class="form-group form-group--full">
+        <label class="form-label" for="videoUrl">Video URL <span class="form-label-hint">(optional — YouTube, Vimeo, or .mp4 link)</span></label>
         <input
-          id="imageUrl" class="form-input" type="url" name="imageUrl"
-          [ngModel]="form().imageUrl" (ngModelChange)="setField('imageUrl', $event)"
-          placeholder="https://…"
+          id="videoUrl" class="form-input" type="url" name="videoUrl"
+          [ngModel]="form().videoUrl ?? ''" (ngModelChange)="setField('videoUrl', $event)"
+          placeholder="https://www.youtube.com/embed/…"
         />
       </div>
 
@@ -98,6 +124,72 @@
         />
       </div>
 
+      <!-- Available Add-Ons -->
+      <div class="form-group form-group--full">
+        <label class="form-label">Available Add-Ons</label>
+        <p class="form-hint">
+          Tick the modifiers a customer can bolt onto this service during
+          booking (e.g. Shampoo, Ombre color). Manage the master list on
+          <a routerLink="/admin/addons">Admin › Add-Ons</a>.
+        </p>
+
+        @if (globalAddons().length > 0) {
+          <div class="addon-picker__globals">
+            <span class="addon-picker__globals-label">Always available (global):</span>
+            @for (a of globalAddons(); track a.id) {
+              <span class="addon-chip">
+                {{ a.name }}
+                @if (formatAddonDelta(a); as delta) { <em class="addon-chip__delta">({{ delta }})</em> }
+              </span>
+            }
+          </div>
+        }
+
+        @if (pickableAddons().length === 0) {
+          <p class="form-hint form-hint--muted">
+            @if (globalAddons().length === 0) {
+              No add-ons exist yet.
+              <a routerLink="/admin/addons/new">Create one</a> to link it here.
+            } @else {
+              All existing add-ons apply to every service automatically, so
+              there is nothing to link on a per-service basis.
+            }
+          </p>
+        } @else {
+          <div class="addon-picker__toolbar">
+            <label class="check-label check-label--select-all">
+              <input
+                type="checkbox"
+                [checked]="allAddonsSelected()"
+                (change)="toggleSelectAllAddons($any($event.target).checked)"
+              />
+              <span>Select All</span>
+            </label>
+            <span class="addon-picker__count">
+              {{ selectedAddonCount() }} of {{ pickableAddons().length }} selected
+            </span>
+          </div>
+          <div class="service-picker">
+            @for (a of pickableAddons(); track a.id) {
+              <label class="addon-option" [class.addon-option--checked]="isAddonChecked(a.id)">
+                <input
+                  type="checkbox"
+                  [name]="'addon-' + a.id"
+                  [checked]="isAddonChecked(a.id)"
+                  (change)="toggleAddon(a.id, $any($event.target).checked)"
+                />
+                <span class="addon-option__name">
+                  <span class="addon-option__label">{{ a.name }}</span>
+                  @if (formatAddonDelta(a); as delta) {
+                    <span class="addon-option__delta">{{ delta }}</span>
+                  }
+                </span>
+              </label>
+            }
+          </div>
+        }
+      </div>
+
       <!-- Toggles -->
       <div class="form-group form-group--checks">
         <label class="check-label">
@@ -107,6 +199,7 @@
           />
           Available
         </label>
+
         <label class="check-label">
           <input
             type="checkbox" name="isFeatured"

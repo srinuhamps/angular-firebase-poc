@@ -1,0 +1,17 @@
+<div class="stripe-payment">
+  <div class="stripe-payment__field">
+    <label class="stripe-payment__label" for="stripe-card">Card details</label>
+    <div id="stripe-card" #cardEl class="stripe-payment__mount" [class.is-loading]="loading()"></div>
+    @if (loading()) {
+      <p class="stripe-payment__loading">Loading secure payment form…</p>
+    }
+  </div>
+
+  @if (error()) {
+    <p class="stripe-payment__error" role="alert">✕ {{ error() }}</p>
+  }
+
+  <p class="stripe-payment__hint">
+    🔒 Secured by Stripe. Your card details never touch our servers.
+  </p>
+</div>

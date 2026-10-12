@@ -1,0 +1,74 @@
+@use '../admin-shared' as adm;
+
+.admin-page {
+  @include adm.page-base;
+}
+
+.admin-page__header {
+  @include adm.page-header;
+}
+
+.admin-page__title {
+  @include adm.page-title;
+}
+
+.admin-page__subtitle {
+  @include adm.page-subtitle;
+}
+
+.action-btn {
+  @include adm.action-btn;
+}
+
+.admin-loading,
+.admin-empty {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+
+  a { color: var(--color-accent); }
+}
+
+.admin-table-wrap {
+  @include adm.table-wrap;
+}
+
+.admin-table {
+  @include adm.table-base;
+}
+
+.row--unavailable td {
+  background: rgba(var(--ui-rgb), 0.03);
+}
+
+.cell--name {
+  font-weight: 500;
+  color: var(--color-cream);
+}
+
+.cell--applies {
+  color: var(--color-text-dim);
+  font-size: 0.85rem;
+  max-width: 22ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.toggle-btn {
+  @include adm.toggle-btn;
+
+  &--on { @include adm.toggle-btn-on; }
+}
+
+.cell--actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.tbl-btn {
+  @include adm.tbl-btn;
+
+  &--edit { @include adm.tbl-btn-edit; }
+  &--del  { @include adm.tbl-btn-del;  }
+}

@@ -1,0 +1,102 @@
+<div class="media-picker">
+  <!-- ─── Trigger row: thumbnail preview + Browse / Clear buttons ─────── -->
+  <div class="media-picker__row">
+    <div class="media-picker__preview" [class.media-picker__preview--empty]="!value()">
+      @if (value()) {
+        <img [src]="value()" [alt]="label()" class="media-picker__preview-img" />
+      } @else {
+        <span class="media-picker__preview-empty">No image</span>
+      }
+    </div>
+
+    <div class="media-picker__buttons">
+      <button type="button" class="media-picker__btn media-picker__btn--primary" (click)="openPicker()">
+        {{ value() ? 'Change Image' : 'Choose Image' }}
+      </button>
+      @if (value()) {
+        <button type="button" class="media-picker__btn media-picker__btn--ghost" (click)="clear()">
+          Clear
+        </button>
+      }
+    </div>
+  </div>
+
+  <!-- ─── Manual URL fallback ─────────────────────────────────────────── -->
+  <details class="media-picker__manual">
+    <summary>Or paste a URL manually</summary>
+    <input
+      type="url"
+      class="media-picker__manual-input"
+      placeholder="https://…"
+      [value]="value()"
+      (input)="onManualUrlChange($any($event.target).value)"
+    />
+  </details>
+
+  <!-- ─── Modal ───────────────────────────────────────────────────────── -->
+  @if (open()) {
+    <div class="media-picker__overlay" (click)="closePicker()">
+      <div
+        class="media-picker__modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="media-picker-title"
+        (click)="$event.stopPropagation()"
+      >
+        <header class="media-picker__modal-header">
+          <h2 id="media-picker-title" class="media-picker__modal-title">
+            Choose {{ category() }} image
+          </h2>
+          <button
+            type="button"
+            class="media-picker__close"
+            aria-label="Close picker"
+            (click)="closePicker()"
+          >×</button>
+        </header>
+
+        <div class="media-picker__toolbar">
+          <input
+            type="search"
+            class="media-picker__search"
+            placeholder="Search by title…"
+            [value]="search()"
+            (input)="search.set($any($event.target).value)"
+          />
+        </div>
+
+        <div class="media-picker__body">
+          @if (loading()) {
+            <p class="media-picker__msg">Loading images…</p>
+          } @else if (errorMsg()) {
+            <p class="media-picker__msg media-picker__msg--error">{{ errorMsg() }}</p>
+          } @else if (items().length === 0) {
+            <p class="media-picker__msg">
+              No {{ category() }} images uploaded yet.
+              Go to <strong>Admin → Gallery</strong>, pick the
+              <strong>{{ category() === 'product' ? 'Products' : 'Services' }}</strong> category,
+              and upload some.
+            </p>
+          } @else if (filteredItems().length === 0) {
+            <p class="media-picker__msg">No images match your search.</p>
+          } @else {
+            <div class="media-picker__grid">
+              @for (item of filteredItems(); track item.id) {
+                <button
+                  type="button"
+                  class="media-picker__thumb"
+                  [class.media-picker__thumb--active]="item.url === value()"
+                  (click)="select(item)"
+                  [attr.aria-label]="'Select ' + item.title"
+                >
+                  <img [src]="item.url" [alt]="item.title" loading="lazy" />
+                  <span class="media-picker__thumb-title">{{ item.title }}</span>
+                </button>
+              }
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  }
+</div>

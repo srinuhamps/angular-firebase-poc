@@ -26,8 +26,8 @@ export interface Holiday {
  * plain-style remainder. Used by the navbar / footer / hero so the cursive
  * accent always wraps the first word of the live business name.
  *
- * "Carolle Hair Studio" → { script: "Carolle", sub: "Hair Studio", subWords: ["Hair", "Studio"] }
- * "Labelle Braids BB"   → { script: "Labelle", sub: "Braids BB",  subWords: ["Braids", "BB"] }
+ * "Labelle Braid BB"    → { script: "Labelle", sub: "Braid BB",   subWords: ["Braid", "BB"] }
+ * "Sample Studio Name"  → { script: "Sample",  sub: "Studio Name", subWords: ["Studio", "Name"] }
  */
 export function splitBrandName(name: string | null | undefined): {
   script: string;
@@ -64,6 +64,8 @@ export interface BusinessInfo {
   facebookUrl: string;
   twitterUrl?: string;
   tiktokUrl?: string;
+  snapchatUrl?: string;
+  youtubeUrl?: string;
   // Operations
   businessHours: BusinessHours[];
   holidays: Holiday[];

@@ -26,12 +26,99 @@
     overflow: hidden;
     aspect-ratio: 16/10;
     flex-shrink: 0;
+
+    &.is-clickable {
+      cursor: zoom-in;
+
+      &:focus-visible {
+        outline: 3px solid var(--color-accent);
+        outline-offset: -3px;
+      }
+    }
   }
 
   &__img {
     width: 100%; height: 100%;
     object-fit: cover;
     transition: transform 0.7s var(--ease-smooth);
+  }
+
+  &__image-stack {
+    position: absolute;
+    inset: 0;
+    perspective: 900px;
+  }
+
+  &__stack-image {
+    position: absolute;
+    top: 8%;
+    left: 8%;
+    width: 84%;
+    height: 84%;
+    padding: 0;
+    overflow: hidden;
+    border: 2px solid rgba(255, 255, 255, 0.75);
+    border-radius: var(--radius-md);
+    background: var(--surface-panel);
+    box-shadow: 0 10px 24px rgba(20, 16, 12, 0.22);
+    cursor: pointer;
+    transform: translate3d(
+      calc((var(--stack-index) - (var(--stack-total) - 1) / 2) * 0.8rem),
+      calc((var(--stack-total) - 1 - var(--stack-index)) * 0.18rem),
+      calc(var(--stack-index) * -1px)
+    ) rotate(calc((var(--stack-index) - (var(--stack-total) - 1) / 2) * 2deg));
+    transition: transform 260ms ease, box-shadow 260ms ease;
+
+    &.is-active {
+      transform: translate3d(0, -1rem, 20px) rotate(0deg) scale(1.03);
+      box-shadow: 0 18px 30px rgba(20, 16, 12, 0.32);
+      z-index: 20;
+    }
+
+    &:focus-visible {
+      outline: 3px solid var(--color-accent);
+      outline-offset: 3px;
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+  }
+
+  &__placeholder {
+    width: 100%; height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    background: var(--surface-raised);
+    color: var(--color-accent);
+  }
+
+  &__image-hint {
+position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    box-sizing: border-box;
+    pointer-events: none;
+    padding: 0.4rem;
+    background: rgb(105 105 105 / 3%);
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 500;
+    border-radius: 0px;
+    letter-spacing: 0.04em;
+    line-height: 1.2;
+    text-align: center;
+    text-transform: uppercase;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.85);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
   }
 
   &__badge {
@@ -54,16 +141,17 @@
   }
 
   &__category {
-    position: absolute;
-    bottom: 0.75rem; right: 0.75rem;
+    align-self: flex-start;
     font-size: 0.65rem;
     font-weight: 700;
     letter-spacing: 0.15em;
     text-transform: uppercase;
-    color: var(--color-black);
+    color: #161616;
     background: var(--color-gold);
     padding: 0.25rem 0.65rem;
     border-radius: var(--radius-full);
+    max-width: 100%;
+    overflow-wrap: anywhere;
   }
 
   // Body
@@ -108,7 +196,7 @@
     font-size: 0.8rem;
     color: var(--color-text-dim);
 
-    svg { color: var(--color-gold); flex-shrink: 0; }
+    svg { color: var(--color-accent); flex-shrink: 0; }
   }
 
   &__price {
@@ -128,7 +216,7 @@
     font-family: var(--font-heading);
     font-size: 1.35rem;
     font-weight: 600;
-    color: var(--color-gold);
+    color: var(--color-accent);
     line-height: 1;
   }
 
@@ -143,6 +231,191 @@
     .disabled {
       opacity: 0.45;
       pointer-events: none;
+    }
+  }
+}
+
+// ── Details modal (native <dialog>) ───────────────────────────────────────────
+// Uses <dialog> + showModal() so the modal renders in the browser's top layer,
+// escaping any `transform`d ancestor (e.g. the .reveal wrappers on service grids)
+// that would otherwise trap `position: fixed` inside a containing block.
+.service-details {
+  // Reset UA styles + force viewport centering (some global CSS zeroes out margins,
+  // which breaks the default `margin: auto` centering of top-layer dialogs).
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: inherit;
+  width: min(640px, calc(100vw - 2rem));
+  height: fit-content;
+  max-width: none;
+  max-height: calc(100vh - 2rem);
+  overflow: visible;
+
+  &::backdrop {
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(6px);
+  }
+
+  &__panel {
+    position: relative;
+    background: var(--color-dark);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    max-height: calc(100vh - 2rem);
+    overflow-y: auto;
+    box-shadow: var(--shadow-lg);
+    text-align: left;
+  }
+
+  &__close {
+    position: absolute;
+    top: 0.75rem; right: 0.75rem;
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #fff;
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    z-index: 2;
+
+    &:hover {
+      background: rgba(212, 175, 100, 0.2);
+      border-color: rgba(212, 175, 100, 0.55);
+    }
+  }
+
+  &__img-wrap {
+    position: relative;
+    aspect-ratio: 16/9;
+    overflow: hidden;
+    background: #000;
+  }
+  &__img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  &__placeholder {
+    width: 100%; height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    color: var(--color-accent);
+  }
+  &__badge { position: absolute; top: 1rem; left: 1rem; }
+
+  &__prev,
+  &__next {
+    position: absolute;
+    top: 50%;
+    width: 2.5rem;
+    height: 2.5rem;
+    transform: translateY(-50%);
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    border-radius: 50%;
+    background: rgba(20, 16, 12, 0.68);
+    color: #fff;
+    font-size: 2rem;
+    line-height: 1;
+    cursor: pointer;
+    backdrop-filter: blur(8px);
+  }
+
+  &__prev { left: 1rem; }
+  &__next { right: 1rem; }
+
+  &__count {
+    position: absolute;
+    right: 1rem;
+    bottom: 1rem;
+    padding: 0.4rem 0.65rem;
+    border-radius: var(--radius-full);
+    background: rgba(20, 16, 12, 0.68);
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+  }
+
+  &__body { padding: 1.5rem 1.75rem 1.75rem; }
+
+  &__name {
+    font-family: var(--font-heading);
+    font-size: 1.6rem;
+    margin: 0.35rem 0 1rem;
+    color: var(--color-cream);
+  }
+
+  &__meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid var(--color-border-light);
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+    flex-wrap: wrap;
+  }
+  &__meta-item { display: inline-flex; align-items: center; gap: 0.4rem; white-space: nowrap; }
+  &__price strong { color: var(--color-accent); margin-left: 0.35rem; font-size: 1.05rem; }
+
+  &__desc {
+    color: var(--color-text);
+    line-height: 1.65;
+    margin: 0 0 1.25rem;
+    white-space: pre-line;
+  }
+
+  &__tags {
+    list-style: none; padding: 0;
+    display: flex; flex-wrap: wrap; gap: 0.4rem;
+    margin: 0 0 1.5rem;
+  }
+  &__tag {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0.25rem 0.6rem;
+    border-radius: 999px;
+    background: rgba(212, 175, 100, 0.08);
+    color: var(--color-accent);
+    border: 1px solid rgba(212, 175, 100, 0.25);
+  }
+
+  &__unavailable {
+    color: var(--color-danger);
+    font-size: 0.85rem;
+    margin: 0 0 1rem;
+  }
+
+  &__actions {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+
+    .btn { flex: 1 1 auto; justify-content: center; }
+  }
+
+  // ── Mobile ────────────────────────────────────────────────────────────────
+  @media (max-width: 640px) {
+    width: calc(100vw - 1rem);
+    max-height: calc(100vh - 1rem);
+
+    &__panel { max-height: calc(100vh - 1rem); border-radius: var(--radius-md); }
+    &__img-wrap { aspect-ratio: 4/3; }
+    &__body { padding: 1.25rem 1.1rem 1.25rem; }
+    &__name { font-size: 1.35rem; }
+    &__meta { gap: 0.5rem 1rem; }
+    &__actions {
+      flex-direction: column-reverse;
+      .btn { width: 100%; }
     }
   }
 }
